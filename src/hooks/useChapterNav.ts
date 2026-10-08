@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSettings } from "../app/SettingsProvider";
 import { CHAPTER_COUNT, chapterId } from "../app/chapters";
 import { readParam, replaceUrl } from "../lib/url";
@@ -9,20 +9,17 @@ const DEEP_LINK_DELAY_MS = 300;
 /** Scroll to a chapter, leaving room for the sticky header. */
 export function useChapterScroll() {
   const { reduced } = useSettings();
-  return useCallback(
-    (i: number, instant?: boolean) => {
-      const el = document.getElementById(chapterId(i));
-      if (!el) return;
-      const header =
-        document.querySelector("header")?.getBoundingClientRect().height ??
-        DEFAULT_HEADER_PX;
-      window.scrollTo({
-        top: el.getBoundingClientRect().top + window.scrollY - header,
-        behavior: instant || reduced ? "auto" : "smooth"
-      });
-    },
-    [reduced]
-  );
+  return (i: number, instant?: boolean) => {
+    const el = document.getElementById(chapterId(i));
+    if (!el) return;
+    const header =
+      document.querySelector("header")?.getBoundingClientRect().height ??
+      DEFAULT_HEADER_PX;
+    window.scrollTo({
+      top: el.getBoundingClientRect().top + window.scrollY - header,
+      behavior: instant || reduced ? "auto" : "smooth"
+    });
+  };
 }
 
 /** 0-based chapter from `?ch=`, or 0 when absent or invalid. */
@@ -43,9 +40,7 @@ export function useChapterDeepLink(go: (i: number, instant?: boolean) => void) {
     if (target === 0) return;
     const t = setTimeout(() => go(target, true), DEEP_LINK_DELAY_MS);
     return () => clearTimeout(t);
-    // load-time only: later changes to `go` must not re-trigger the jump
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [target, go]);
 }
 
 /** Mirror the active chapter into `?ch=`. */

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export type Speed = 0.5 | 1 | 2
 export const SPEEDS: readonly Speed[] = [0.5, 1, 2]
@@ -45,11 +45,11 @@ export function useSimClock<S>(initial: S | (() => S), model: ClockModel<S>): Si
     speedRef.current = speed
   })
 
-  const set = useCallback((next: S | ((s: S) => S)) => {
+  const set = (next: S | ((s: S) => S)) => {
     const v = typeof next === 'function' ? (next as (s: S) => S)(stateRef.current) : next
     stateRef.current = v
     setStateRaw(v)
-  }, [])
+  }
 
   useEffect(() => {
     if (!running) return
@@ -71,22 +71,16 @@ export function useSimClock<S>(initial: S | (() => S), model: ClockModel<S>): Si
     return () => cancelAnimationFrame(raf)
   }, [running])
 
-  const play = useCallback(
-    (prepare?: (s: S) => S) => {
-      if (prepare) set(prepare)
-      setRunning(true)
-    },
-    [set],
-  )
-  const pause = useCallback(() => setRunning(false), [])
-  const reset = useCallback(
-    (init?: S) => {
-      setRunning(false)
-      const base = initialRef.current
-      set(init ?? (typeof base === 'function' ? (base as () => S)() : base))
-    },
-    [set],
-  )
+  const play = (prepare?: (s: S) => S) => {
+    if (prepare) set(prepare)
+    setRunning(true)
+  }
+  const pause = () => setRunning(false)
+  const reset = (init?: S) => {
+    setRunning(false)
+    const base = initialRef.current
+    set(init ?? (typeof base === 'function' ? (base as () => S)() : base))
+  }
 
   return { state, running, speed, setSpeed, set, play, pause, reset }
 }

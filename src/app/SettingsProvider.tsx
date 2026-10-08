@@ -2,7 +2,6 @@ import {
   createContext,
   useContext,
   useEffect,
-  useMemo,
   useState,
   type ReactNode
 } from "react";
@@ -46,15 +45,12 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     syncModeToUrl(mode);
   }, [mode]);
 
-  const value = useMemo(
-    () => ({
-      mode,
-      setMode,
-      reduced: REDUCED_MOTION,
-      accent: accentOf(mode)
-    }),
-    [mode]
-  );
+  const value = {
+    mode,
+    setMode,
+    reduced: REDUCED_MOTION,
+    accent: accentOf(mode)
+  };
 
   return (
     <SettingsContext.Provider value={value}>

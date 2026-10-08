@@ -1,4 +1,4 @@
-import { useMemo, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { tokenize, TOK_COLOR } from '../sim/syntax'
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
 
 /** Code panel: line numbers, ▸ marker, accent active line(s). */
 export function CodePanel({ file, lines, active, accent, open, onToggle, renderLine, fontSize = 13, className = '' }: Props) {
-  const toks = useMemo(() => lines.map(tokenize), [lines])
+  const toks = lines.map(tokenize)
   return (
     <div className={`flex min-w-0 flex-col bg-code-bg ${className}`}>
       <div className="flex items-center justify-between gap-2 border-b border-line-lane px-5 py-3">

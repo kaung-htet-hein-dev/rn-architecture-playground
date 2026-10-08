@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { tokenize, TOK_COLOR, type Tok } from "../../sim/syntax";
 import type { Params } from "../../sim/playground";
 import { CodePanel } from "../CodePanel";
@@ -33,7 +32,7 @@ export function ParamCode({
   P,
   onParam
 }: Props) {
-  const parsed = useMemo(() => lines.map(parseLine), [lines]);
+  const parsed = lines.map(parseLine);
   const renderLine = (_line: string, li: number) =>
     parsed[li].map((piece, j) => {
       if ("param" in piece) {

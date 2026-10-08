@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useSettings } from "../../app/SettingsProvider";
 import { useSimClock } from "../../sim/clock";
 import { C, type Mode } from "../../sim/colors";
@@ -69,12 +69,9 @@ export function usePlayground() {
   const pr = presetById(preset);
   const presetEdits = edits[preset];
   const P = paramsFor(preset, presetEdits);
-  const traces = useMemo(
-    () => buildTraces(preset, presetEdits, mode, compare, rate),
-    [preset, presetEdits, mode, compare, rate]
-  );
+  const traces = buildTraces(preset, presetEdits, mode, compare, rate);
   const T = maxTotal(traces);
-  const points = useMemo(() => stepPoints(traces), [traces]);
+  const points = stepPoints(traces);
 
   const clock = useSimClock<Playback>(
     () => {
