@@ -1,49 +1,11 @@
-import { useState } from 'react'
 import { motion } from 'motion/react'
+import { RELEASES } from '../content/timeline'
+import { useReleaseDates } from '../hooks/useReleaseDates'
+import { C } from '../sim/colors'
 
-const DEFAULT_DATES = ['Mar 2022', 'Apr 2024', 'Oct 2024', 'Jun 2025', 'Oct 2025']
-const KEY = 'atb-dates'
-
-const TL: [string, string][] = [
-  ['0.68', 'New Architecture available, but you have to turn it on.'],
-  ['0.74', 'Bridgeless mode becomes the default when the New Architecture is on.'],
-  ['0.76', 'New Architecture on by default for new and upgraded apps.'],
-  ['0.80', 'Legacy architecture frozen: no new features or fixes.'],
-  ['0.82', 'New Architecture only. The old one can no longer be turned back on.'],
-]
-
-function loadDates(): string[] {
-  try {
-    const d: unknown = JSON.parse(localStorage.getItem(KEY) || 'null')
-    if (Array.isArray(d) && d.length === 5 && d.every((x) => typeof x === 'string' && x.length <= 40)) return d
-  } catch {
-    /* ignore */
-  }
-  return DEFAULT_DATES.slice()
-}
-
-/** Editable release timeline; dates persist in localStorage['atb-dates']. */
+/** Editable release timeline. */
 export function Timeline() {
-  const [dates, setDates] = useState(loadDates)
-
-  const set = (i: number, v: string) => {
-    const d = dates.slice()
-    d[i] = v
-    setDates(d)
-    try {
-      localStorage.setItem(KEY, JSON.stringify(d))
-    } catch {
-      /* ignore */
-    }
-  }
-  const reset = () => {
-    setDates(DEFAULT_DATES.slice())
-    try {
-      localStorage.removeItem(KEY)
-    } catch {
-      /* ignore */
-    }
-  }
+  const { dates, setDate, reset, maxLength } = useReleaseDates()
 
   return (
     <div className="flex flex-col gap-5">
@@ -57,8 +19,8 @@ export function Timeline() {
         </div>
       </div>
       <ol className="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,180px),1fr))] gap-x-4 gap-y-5 p-0">
-        {TL.map(([v, t], i) => {
-          const c = i < 2 ? '#f2b35b' : '#5fd3e6'
+        {RELEASES.map(([v, t], i) => {
+          const c = i < 2 ? C.old : C.new
           return (
             <motion.li
               key={v}
@@ -79,9 +41,9 @@ export function Timeline() {
               />
               <input
                 value={dates[i]}
-                onChange={(e) => set(i, e.target.value)}
+                onChange={(e) => setDate(i, e.target.value)}
                 aria-label={`Release date for React Native ${v}`}
-                maxLength={40}
+                maxLength={maxLength}
                 className="box-border w-full rounded-[5px] border border-dashed border-[#3a4450] bg-transparent px-2 py-1.5 font-mono text-[13px] leading-none font-medium text-text-bright outline-none focus:border-solid focus:border-text-dim"
               />
               <span className="font-mono text-xl leading-none font-semibold" style={{ color: c }}>

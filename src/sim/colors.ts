@@ -33,6 +33,8 @@ export const C = {
 
 export type Mode = 'old' | 'new'
 
+export const isMode = (v: unknown): v is Mode => v === 'old' || v === 'new'
+
 export const accentOf = (mode: Mode) => (mode === 'new' ? C.new : C.old)
 
 export type SimStatus = 'idle' | 'running' | 'paused' | 'complete' | 'overloaded' | 'error'

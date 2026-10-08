@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useSyncExternalStore } from 'react'
 
 export function useMediaQuery(query: string): boolean {
-  const [match, setMatch] = useState(() => typeof window !== 'undefined' && window.matchMedia(query).matches)
-  useEffect(() => {
-    const mq = window.matchMedia(query)
-    const on = () => setMatch(mq.matches)
-    on()
-    mq.addEventListener('change', on)
-    return () => mq.removeEventListener('change', on)
-  }, [query])
-  return match
+  const subscribe = useCallback(
+    (notify: () => void) => {
+      const mq = window.matchMedia(query)
+      mq.addEventListener('change', notify)
+      return () => mq.removeEventListener('change', notify)
+    },
+    [query],
+  )
+  return useSyncExternalStore(subscribe, () => window.matchMedia(query).matches, () => false)
 }
 
 /** Below 760px: diagram first, code collapsed (PROMPT rule 7). */

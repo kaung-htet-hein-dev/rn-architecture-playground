@@ -1,6 +1,5 @@
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -8,7 +7,9 @@ import {
   type ReactNode
 } from "react";
 import { MotionConfig } from "motion/react";
-import { accentOf, type Mode } from "../sim/colors";
+import { readStore, writeStore } from "../lib/storage";
+import { readParam, replaceUrl } from "../lib/url";
+import { accentOf, isMode, type Mode } from "../sim/colors";
 
 interface Settings {
   mode: Mode;
@@ -20,31 +21,7 @@ interface Settings {
 const SettingsContext = createContext<Settings | null>(null);
 
 const MODE_KEY = "atb-mode";
-
-function readParam(name: string): string | null {
-  try {
-    return new URLSearchParams(window.location.search).get(name);
-  } catch {
-    return null;
-  }
-}
-function readStore(key: string): string | null {
-  try {
-    return localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-function writeStore(key: string, v: string) {
-  try {
-    localStorage.setItem(key, v);
-  } catch {
-    /* storage unavailable */
-  }
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const isMode = (v: unknown): v is Mode => v === "old" || v === "new";
+const REDUCED_MOTION = true;
 
 function initialMode(): Mode {
   const p = readParam("mode");
@@ -53,32 +30,30 @@ function initialMode(): Mode {
   return isMode(s) ? s : "old";
 }
 
-/** Keep `?mode=` in the URL without a navigation and discard old motion overrides. */
-function syncUrl(mode: Mode) {
-  try {
-    const url = new URL(window.location.href);
+/** Keep `?mode=` in the URL and discard old motion overrides. */
+function syncModeToUrl(mode: Mode) {
+  replaceUrl((url) => {
     url.searchParams.set("mode", mode);
     url.searchParams.delete("motion");
-    window.history.replaceState(window.history.state, "", url);
-  } catch {
-    /* ignore */
-  }
+  });
 }
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-  const [mode, setModeState] = useState<Mode>(initialMode);
-  const reduced = true;
+  const [mode, setMode] = useState<Mode>(initialMode);
 
   useEffect(() => {
     writeStore(MODE_KEY, mode);
-    syncUrl(mode);
+    syncModeToUrl(mode);
   }, [mode]);
 
-  const setMode = useCallback((m: Mode) => setModeState(m), []);
-
   const value = useMemo(
-    () => ({ mode, setMode, reduced, accent: accentOf(mode) }),
-    [mode, setMode]
+    () => ({
+      mode,
+      setMode,
+      reduced: REDUCED_MOTION,
+      accent: accentOf(mode)
+    }),
+    [mode]
   );
 
   return (

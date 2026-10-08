@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { motion } from 'motion/react'
+import { C } from '../sim/colors'
 
 /** Fade-up reveal for course blocks; collapses to nothing under reduced motion via MotionConfig. */
 export function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
@@ -70,6 +71,5 @@ export function ChapterSection({ id, label, children, first, last, gap = 44 }: S
 
 /** Inline colored term, e.g. <T c="js">JS thread</T> */
 export function T({ c, children }: { c: 'js' | 'shadow' | 'ui' | 'old' | 'new'; children: ReactNode }) {
-  const color = { js: '#b39dff', shadow: '#79d49c', ui: '#f291c4', old: '#f2b35b', new: '#5fd3e6' }[c]
-  return <span style={{ color }}>{children}</span>
+  return <span style={{ color: C[c] }}>{children}</span>
 }

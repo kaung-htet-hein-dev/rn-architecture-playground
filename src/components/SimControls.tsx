@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { motion } from 'motion/react'
 import { SPEEDS, type Speed } from '../sim/clock'
+import { AccentButton } from './ui/AccentButton'
 
 interface Props {
   accent: string
@@ -27,15 +27,9 @@ export function SimControls({ accent, playLabel, onPlay, onStep, stepDisabled, s
       aria-label={label ? `${label} controls` : 'Simulation controls'}
       className="flex flex-wrap items-center gap-2.5 border-t border-line px-5 py-3.5"
     >
-      <motion.button
-        type="button"
-        onClick={onPlay}
-        whileTap={{ scale: 0.96 }}
-        className="h-[34px] min-w-[84px] rounded-[6px] border px-3.5 text-[13px] leading-none font-semibold transition-colors duration-250"
-        style={{ borderColor: accent, background: accent + '14', color: accent }}
-      >
+      <AccentButton accent={accent} onClick={onPlay} className="h-[34px] min-w-[84px] rounded-[6px] px-3.5">
         {playLabel}
-      </motion.button>
+      </AccentButton>
       <button type="button" className="btn" onClick={onStep} disabled={stepDisabled}>
         {stepLabel}
       </button>

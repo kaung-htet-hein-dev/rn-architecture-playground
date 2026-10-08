@@ -13,6 +13,7 @@ import { FRAME_MS, type Frame, type Params, type PresetId, type TimelineEvent, t
 export * from './types'
 export * from './presets'
 export * from './derive'
+export * from './layout'
 export * from './url'
 
 const GENERATORS: Record<PresetId, PresetGen> = {

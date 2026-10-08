@@ -8,23 +8,22 @@ interface Props {
   active: [number, number] | null
   accent: string
   open: boolean
-  onToggle: () => void
+  /** omit to hide the Show/Hide button (playground) */
+  onToggle?: () => void
   /** optional custom renderer per line (playground editable params) */
   renderLine?: (line: string, index: number) => ReactNode
   fontSize?: number
   className?: string
-  /** hide the Show/Hide button (playground) */
-  hideToggle?: boolean
 }
 
 /** Code panel: line numbers, ▸ marker, accent active line(s). */
-export function CodePanel({ file, lines, active, accent, open, onToggle, renderLine, fontSize = 13, className = '', hideToggle }: Props) {
+export function CodePanel({ file, lines, active, accent, open, onToggle, renderLine, fontSize = 13, className = '' }: Props) {
   const toks = useMemo(() => lines.map(tokenize), [lines])
   return (
     <div className={`flex min-w-0 flex-col bg-code-bg ${className}`}>
       <div className="flex items-center justify-between gap-2 border-b border-line-lane px-5 py-3">
         <span className="font-mono text-xs leading-none font-medium text-text-dim">{file}</span>
-        {!hideToggle && (
+        {onToggle && (
           <button type="button" className="btn-ghost" onClick={onToggle} aria-expanded={open}>
             {open ? 'Hide code' : 'Show code'}
           </button>
