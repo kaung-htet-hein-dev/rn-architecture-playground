@@ -34,7 +34,7 @@ src/
     startup.ts      eager vs lazy plan from the course page
     playground/     trace generators per preset → { tasks, messages, uiPatches, modules, trees, stalls, frames, metrics }
   components/
-    TopBar, ModeToggle, MotionToggle, ChapterProgress
+    TopBar, ModeToggle, ChapterProgress
     SimPanel (ThreadLanes + CodePanel + SimControls + MentorCaption + TreeViews)
     ThreadLanes, Packet, JsiLine, CodePanel (syntax tokens, active line, editable params), SimControls, StateChip
     PhoneFrame, ScrollRace, StartupBars, Quiz, Timeline, Glossary
