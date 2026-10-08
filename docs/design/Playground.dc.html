@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#0f1216;color:#e7eaee;-webkit-font-smoothing:antialiased}
+a{color:#e7eaee;text-decoration-color:#4a5562;text-underline-offset:3px}
+a:hover{color:#ffffff}
+select option{background:#151a20;color:#eef1f4}
+</style>
+</helmet>
+<div style="height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:#0f1216;color:#e7eaee;font-family:'IBM Plex Sans',system-ui,sans-serif" data-screen-label="Playground">
+  <header style="flex:none;min-height:52px;display:flex;align-items:center;gap:14px;padding:0 14px;border-bottom:1px solid #262e38;background:#0f1216;flex-wrap:wrap">
+    <a href="{{ courseHref }}" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#eef1f4">
+      <span style="display:flex;gap:3px"><span style="width:6px;height:16px;border-radius:2px;background:#f2b35b"></span><span style="width:6px;height:16px;border-radius:2px;background:#5fd3e6"></span></span>
+      <span style="font:600 14px/1 'IBM Plex Sans'">Across the Bridge</span>
+    </a>
+    <span style="font:500 12px/1 'IBM Plex Mono';color:#a1aab5;letter-spacing:.06em">PLAYGROUND</span>
+    <span style="flex:1"></span>
+    <div role="group" aria-label="Architecture" style="display:flex;border:1px solid #333d49;border-radius:7px;padding:2px;gap:2px">
+      <button onClick="{{ setOld }}" style="height:28px;padding:0 12px;border-radius:5px;border:0;cursor:pointer;font:600 12.5px/1 'IBM Plex Sans';background:{{ tgOld.bg }};color:{{ tgOld.fg }}">Old</button>
+      <button onClick="{{ setNew }}" style="height:28px;padding:0 12px;border-radius:5px;border:0;cursor:pointer;font:600 12.5px/1 'IBM Plex Sans';background:{{ tgNew.bg }};color:{{ tgNew.fg }}">New</button>
+    </div>
+    <button onClick="{{ toggleCompare }}" style="height:32px;padding:0 12px;border-radius:7px;border:1px solid {{ cmp.bd }};background:{{ cmp.bg }};color:{{ cmp.fg }};font:600 12.5px/1 'IBM Plex Sans';cursor:pointer">{{ cmp.label }}</button>
+    <button onClick="{{ toggleMotion }}" style="height:32px;padding:0 10px;border-radius:7px;border:1px solid #333d49;background:transparent;color:#c4cbd3;font:500 12px/1 'IBM Plex Mono';cursor:pointer">{{ motionLabel }}</button>
+  </header>
+
+  <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:none;display:flex;border-bottom:1px solid #262e38">
+      <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="3">
+        <button onClick="{{ tb.go }}" style="flex:1;height:44px;border:0;border-bottom:2px solid {{ tb.bd }};background:transparent;color:{{ tb.fg }};font:600 13px/1 'IBM Plex Sans';cursor:pointer">{{ tb.t }}</button>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <div style="flex:1;min-height:0;display:grid;grid-template-columns:{{ gridCols }}">
+    <aside style="display:{{ dLeft }};flex-direction:column;min-height:0;overflow:auto;border-right:1px solid #262e38">
+      <div style="padding:14px;display:flex;flex-direction:column;gap:14px">
+        <label style="display:flex;flex-direction:column;gap:6px">
+          <span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.1em;color:#8a94a0">PRESET</span>
+          <select value="{{ preset }}" onChange="{{ setPreset }}" style="height:40px;background:#151a20;color:#eef1f4;border:1px solid #333d49;border-radius:7px;padding:0 10px;font:500 13.5px/1 'IBM Plex Sans';outline:none">
+            <sc-for list="{{ presets }}" as="p" hint-placeholder-count="7"><option value="{{ p.id }}">{{ p.name }}</option></sc-for>
+          </select>
+        </label>
+        <p style="margin:0;font:400 14px/1.55 'IBM Plex Sans';color:#c4cbd3;text-wrap:pretty">{{ desc }}</p>
+        <div style="border:1px solid #262e38;border-radius:8px;background:#0f1317;overflow:hidden">
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;padding:8px 12px;border-bottom:1px solid #222a33;font:500 11.5px/1.3 'IBM Plex Mono';color:#a1aab5"><span>{{ file }}</span><span style="color:#8a94a0">edit boxed values</span></div>
+          <div style="padding:8px 0;overflow-x:auto;font:400 12.5px/1.8 'IBM Plex Mono',monospace">
+            <sc-for list="{{ code }}" as="L" hint-placeholder-count="7">
+              <div style="display:flex;background:{{ L.bg }};white-space:pre;min-width:max-content;padding-right:12px;transition:background .15s">
+                <span style="width:26px;flex:none;text-align:right;color:{{ L.numC }};padding-right:4px;user-select:none">{{ L.n }}</span>
+                <span style="width:14px;flex:none;color:{{ acc }};text-align:center">{{ L.mark }}</span>
+                <span><sc-for list="{{ L.toks }}" as="tk" hint-placeholder-count="1"><sc-if value="{{ tk.isText }}" hint-placeholder-val="{{ true }}"><span style="color:{{ tk.c }}">{{ tk.t }}</span></sc-if><sc-if value="{{ tk.isParam }}" hint-placeholder-val="{{ false }}"><input value="{{ tk.v }}" onChange="{{ tk.set }}" spellcheck="false" style="width:{{ tk.w }}ch;box-sizing:content-box;padding:0 4px;margin:0 1px;border:1px solid #5fd3e6aa;border-radius:4px;background:#5fd3e614;color:#eef1f4;font:500 12.5px/1.5 'IBM Plex Mono';outline:none"></sc-if></sc-for></span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:4px 0 8px">
+          <div style="width:220px;height:400px;border-radius:30px;border:2px solid #333d49;background:#0b0e11;padding:9px;box-sizing:border-box">
+            <div onWheel="{{ onWheel }}" style="position:relative;height:100%;border-radius:22px;overflow:hidden;background:#13181e">
+              <sc-if value="{{ ph.isTap }}" hint-placeholder-val="{{ true }}">
+                <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px">
+                  <span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.1em;color:#8a94a0">COUNT</span>
+                  <span style="font:600 56px/1 'IBM Plex Sans';color:#eef1f4">{{ ph.count }}</span>
+                  <button onClick="{{ tapPhone }}" style="height:44px;padding:0 20px;border-radius:22px;border:0;background:{{ ph.btnBg }};color:#0f1216;font:600 14px/1 'IBM Plex Sans';cursor:pointer">{{ ph.btn }}</button>
+                  <span style="font:500 11px/1 'IBM Plex Mono';color:{{ ph.noteC }}">{{ ph.note }}</span>
+                </div>
+              </sc-if>
+              <sc-if value="{{ ph.isStartup }}" hint-placeholder-val="{{ false }}">
+                <sc-if value="{{ ph.splash }}" hint-placeholder-val="{{ true }}">
+                  <div onClick="{{ tapPhone }}" style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;cursor:pointer">
+                    <span style="width:44px;height:44px;border-radius:12px;background:#2a323c"></span>
+                    <span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">{{ ph.note }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ ph.home }}" hint-placeholder-val="{{ false }}">
+                  <div style="height:100%;display:flex;flex-direction:column;gap:8px;padding:14px 10px;box-sizing:border-box">
+                    <span style="font:600 16px/1 'IBM Plex Sans';color:#eef1f4;padding:8px 4px 6px">Home</span>
+                    <sc-for list="{{ ph.rows }}" as="r" hint-placeholder-count="5"><div style="height:42px;border-radius:8px;background:#1b2129;display:flex;align-items:center;padding:0 10px;font:500 12px/1 'IBM Plex Sans';color:#c4cbd3">{{ r }}</div></sc-for>
+                  </div>
+                </sc-if>
+              </sc-if>
+              <sc-if value="{{ ph.isScroll }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;top:0;left:0;right:0;height:50px;z-index:2;background:#1b2129;border-bottom:1px solid #2a323c;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:0 14px">
+                  <span style="font:600 13px/1 'IBM Plex Sans';color:#eef1f4">Feed</span>
+                  <span style="font:400 10.5px/1 'IBM Plex Mono';color:{{ ph.noteC }}">header y = {{ ph.shown }} · list y = {{ ph.scroll }}</span>
+                </div>
+                <div style="position:absolute;left:10px;right:10px;top:58px;display:flex;flex-direction:column;gap:8px;transform:translateY(-{{ ph.scroll }}px)">
+                  <sc-for list="{{ ph.rows }}" as="r" hint-placeholder-count="12"><div style="height:44px;flex:none;border-radius:8px;background:#1b2129;display:flex;align-items:center;padding:0 10px;font:500 12px/1 'IBM Plex Sans';color:#c4cbd3">{{ r }}</div></sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ ph.isAnim }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ tapPhone }}" style="height:100%;display:flex;flex-direction:column;justify-content:center;gap:18px;padding:0 16px;cursor:pointer">
+                  <span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">{{ ph.note }}</span>
+                  <div style="position:relative;height:44px;border-radius:22px;background:#1b2129">
+                    <div style="position:absolute;top:4px;left:calc(4px + {{ ph.x }} * (100% - 44px));width:36px;height:36px;border-radius:50%;background:#eef1f4"></div>
+                  </div>
+                  <span style="font:400 11px/1.4 'IBM Plex Mono';color:{{ ph.noteC }}">{{ ph.note2 }}</span>
+                </div>
+              </sc-if>
+              <sc-if value="{{ ph.isMeasure }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ tapPhone }}" style="position:absolute;inset:0;cursor:pointer">
+                  <div style="position:absolute;top:150px;left:20px;right:20px;height:44px;border-radius:10px;background:#2a323c;display:flex;align-items:center;justify-content:center;font:600 13px/1 'IBM Plex Sans';color:#eef1f4">Save</div>
+                  <sc-if value="{{ ph.tip }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute;top:{{ ph.tipY }}px;left:36px;right:36px;height:30px;border-radius:7px;background:{{ ph.tipBg }};display:flex;align-items:center;justify-content:center;font:600 12px/1 'IBM Plex Sans';color:#0f1216">Saved</div>
+                  </sc-if>
+                  <span style="position:absolute;bottom:14px;left:0;right:0;text-align:center;font:400 11px/1 'IBM Plex Mono';color:{{ ph.noteC }}">{{ ph.note }}</span>
+                </div>
+              </sc-if>
+              <sc-if value="{{ ph.isHeavy }}" hint-placeholder-val="{{ false }}">
+                <div style="height:100%;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:0 16px">
+                  <button onClick="{{ tapPhone }}" style="height:44px;border-radius:10px;border:0;background:#2a323c;color:#eef1f4;font:600 13px/1 'IBM Plex Sans';cursor:pointer">{{ ph.btn }}</button>
+                  <button style="height:44px;border-radius:10px;border:1px solid #333d49;background:transparent;color:#eef1f4;font:600 13px/1 'IBM Plex Sans'">Tap me</button>
+                  <span style="font:400 11.5px/1.5 'IBM Plex Mono';color:{{ ph.noteC }};text-align:center">{{ ph.note }}</span>
+                </div>
+              </sc-if>
+              <sc-if value="{{ ph.isPayload }}" hint-placeholder-val="{{ false }}">
+                <div style="height:100%;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:0 16px">
+                  <button onClick="{{ tapPhone }}" style="height:44px;border-radius:10px;border:0;background:#2a323c;color:#eef1f4;font:600 13px/1 'IBM Plex Sans';cursor:pointer">{{ ph.btn }}</button>
+                  <span style="font:400 12px/1.5 'IBM Plex Mono';color:{{ ph.noteC }};text-align:center">{{ ph.note }}</span>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+          <span style="font:400 12px/1.4 'IBM Plex Sans';color:#a1aab5;text-align:center">{{ phoneHint }}</span>
+        </div>
+      </div>
+    </aside>
+
+    <section style="display:{{ dCenter }};flex-direction:column;min-height:0;min-width:0;overflow:auto">
+      <div style="padding:14px 16px 20px;display:flex;flex-direction:column;gap:22px;min-width:560px">
+        <div style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:0 12px">
+          <span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.1em;color:#8a94a0">THREADS OVER TIME</span>
+          <div style="position:relative;height:14px">
+            <sc-for list="{{ ticks }}" as="tk" hint-placeholder-count="6"><span style="position:absolute;left:{{ tk.l }}%;font:400 10.5px/1 'IBM Plex Mono';color:#8a94a0;transform:translateX(-50%)">{{ tk.t }}</span></sc-for>
+          </div>
+        </div>
+        <sc-for list="{{ groups }}" as="g" hint-placeholder-count="1">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="display:flex;align-items:center;gap:8px;font:600 13px/1 'IBM Plex Sans';color:{{ g.c }}"><span style="width:8px;height:8px;border-radius:2px;background:{{ g.c }}"></span>{{ g.name }}</span>
+              <span style="font:400 11.5px/1 'IBM Plex Mono';color:#a1aab5">{{ g.sub }}</span>
+            </div>
+            <div style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:0 12px">
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ g.lanes }}" as="ln" hint-placeholder-count="5">
+                  <div style="height:40px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:4px;border-bottom:1px solid #1e252d;min-width:0">
+                    <span style="display:flex;align-items:center;gap:6px;font:600 12px/1 'IBM Plex Sans';color:#e7eaee"><span style="width:7px;height:7px;border-radius:2px;background:{{ ln.c }}"></span>{{ ln.name }}</span>
+                    <sc-if value="{{ ln.hasBar }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:flex;align-items:center;gap:6px"><div style="flex:1;height:5px;background:#262e38;border-radius:3px;overflow:hidden"><div style="height:100%;width:{{ ln.barW }}%;background:{{ ln.barC }}"></div></div><span style="font:500 10px/1 'IBM Plex Mono';color:{{ ln.barC }};white-space:nowrap">{{ ln.r1 }}</span></div>
+                    </sc-if>
+                    <sc-if value="{{ ln.noBar }}" hint-placeholder-val="{{ true }}"><span style="font:400 10.5px/1.1 'IBM Plex Mono';color:{{ ln.r1C }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ ln.r1 }}</span></sc-if>
+                  </div>
+                </sc-for>
+                <div style="height:18px;display:flex;align-items:center;font:400 10px/1 'IBM Plex Mono';color:#8a94a0">frames · 16.6 ms</div>
+              </div>
+              <div style="position:relative;height:218px;border-left:1px solid #262e38">
+                <sc-for list="{{ g.seps }}" as="sp" hint-placeholder-count="5"><div style="position:absolute;left:0;right:0;top:{{ sp }}px;height:1px;background:#1e252d"></div></sc-for>
+                <sc-for list="{{ g.blocks }}" as="b" hint-placeholder-count="8">
+                  <div title="{{ b.label }}" style="position:absolute;top:{{ b.top }}px;height:22px;left:{{ b.l }}%;width:{{ b.w }}%;min-width:3px;box-sizing:border-box;border-radius:4px;border:1px solid {{ b.bd }};background:{{ b.bg }};overflow:hidden;display:flex;align-items:center;padding:0 5px;font:500 10.5px/1 'IBM Plex Mono';color:{{ b.fg }};white-space:nowrap">{{ b.label }}</div>
+                </sc-for>
+                <sc-for list="{{ g.packets }}" as="pk" hint-placeholder-count="0">
+                  <div onClick="{{ pk.pick }}" title="{{ pk.label }}" style="position:absolute;top:{{ pk.top }}px;height:9px;left:{{ pk.l }}%;width:{{ pk.w }}%;min-width:6px;border-radius:3px;background:{{ pk.bg }};border:1px solid {{ pk.bd }};box-sizing:border-box;cursor:pointer"></div>
+                </sc-for>
+                <sc-for list="{{ g.arrows }}" as="ar" hint-placeholder-count="0">
+                  <div onClick="{{ ar.pick }}" title="{{ ar.label }}" style="position:absolute;left:{{ ar.l }}%;top:{{ ar.top }}px;height:{{ ar.h }}px;width:9px;margin-left:-4px;cursor:pointer;display:flex;justify-content:center"><div style="width:2px;height:100%;background:{{ ar.c }}"></div></div>
+                  <div style="position:absolute;left:{{ ar.l }}%;top:{{ ar.dot }}px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:{{ ar.c }};pointer-events:none"></div>
+                </sc-for>
+                <sc-for list="{{ g.frames }}" as="fr" hint-placeholder-count="0">
+                  <div style="position:absolute;top:204px;height:10px;left:{{ fr.l }}%;width:{{ fr.w }}%;box-sizing:border-box;border-right:1px solid #0f1216;background:{{ fr.bg }}"></div>
+                </sc-for>
+                <div style="position:absolute;top:-6px;bottom:0;left:{{ cursorX }}%;width:2px;margin-left:-1px;background:#eef1f4;pointer-events:none"></div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font:400 11.5px/1.4 'IBM Plex Mono';color:#a1aab5;padding-left:162px">
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:8px;border-radius:2px;background:#f2b35b"></span>bridge message (click to inspect)</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:2px;height:12px;background:#5fd3e6"></span>JSI call or event (no JSON)</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:8px;background:#f0694f"></span>dropped frame</span>
+        </div>
+      </div>
+    </section>
+
+    <aside style="display:{{ dRight }};flex-direction:column;min-height:0;overflow:auto;border-left:1px solid #262e38">
+      <div style="padding:14px;display:flex;flex-direction:column;gap:22px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.1em;color:#8a94a0">METRICS</span>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px 14px;align-items:baseline">
+            <span></span>
+            <sc-for list="{{ mHead }}" as="mh" hint-placeholder-count="1"><span style="font:600 11px/1 'IBM Plex Mono';color:{{ mh.c }};text-align:right">{{ mh.t }}</span></sc-for>
+            <sc-if value="{{ mSingle }}" hint-placeholder-val="{{ true }}"><span></span></sc-if>
+            <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="4">
+              <span style="font:400 13px/1.3 'IBM Plex Sans';color:#c4cbd3">{{ m.l }}</span>
+              <sc-for list="{{ m.vals }}" as="v" hint-placeholder-count="1"><span style="font:600 15px/1 'IBM Plex Mono';color:{{ v.c }};text-align:right;white-space:nowrap">{{ v.t }}</span></sc-for>
+              <sc-if value="{{ mSingle }}" hint-placeholder-val="{{ true }}"><span></span></sc-if>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.1em;color:#8a94a0">MESSAGE INSPECTOR</span>
+          <sc-if value="{{ insp.has }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1px solid {{ insp.bd }};border-radius:8px;background:#151a20;padding:12px;display:flex;flex-direction:column;gap:8px">
+              <span style="font:600 13px/1.2 'IBM Plex Sans';color:{{ insp.c }}">{{ insp.kind }}</span>
+              <sc-for list="{{ insp.rows }}" as="ir" hint-placeholder-count="3">
+                <div style="display:flex;justify-content:space-between;gap:10px;font:400 12px/1.4 'IBM Plex Mono'"><span style="color:#8a94a0">{{ ir.k }}</span><span style="color:#e7eaee;text-align:right;word-break:break-word">{{ ir.v }}</span></div>
+              </sc-for>
+              <sc-if value="{{ insp.hasPayload }}" hint-placeholder-val="{{ false }}">
+                <pre style="margin:0;padding:8px;border-radius:6px;background:#0f1216;border:1px solid #262e38;font:400 11.5px/1.5 'IBM Plex Mono';color:#f2b35b;white-space:pre-wrap;word-break:break-all;max-height:140px;overflow:auto">{{ insp.payload }}</pre>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ insp.none }}" hint-placeholder-val="{{ true }}"><span style="font:400 13px/1.5 'IBM Plex Sans';color:#a1aab5">No message has crossed yet. Step forward, or click a packet or arrow in the lanes.</span></sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.1em;color:#8a94a0">NATIVE MODULES</span>
+          <sc-if value="{{ hasMods }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <sc-for list="{{ mods }}" as="md" hint-placeholder-count="3">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px;border-radius:5px;background:#151a20;font:400 12px/1 'IBM Plex Mono'"><span style="color:#e7eaee">{{ md.n }}</span><span style="display:flex;align-items:center;gap:6px;color:{{ md.c }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ md.c }}"></span>{{ md.s }}</span></div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noMods }}" hint-placeholder-val="{{ false }}"><span style="font:400 13px/1.5 'IBM Plex Sans';color:#a1aab5">This preset doesn’t call a native module.</span></sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.1em;color:#8a94a0">TREES</span>
+          <sc-for list="{{ trees }}" as="tr" hint-placeholder-count="3">
+            <div style="border:1px solid {{ tr.bd }};border-radius:8px;padding:10px;background:#151a20">
+              <div style="display:flex;justify-content:space-between;font:500 11px/1 'IBM Plex Mono';color:#a1aab5;margin-bottom:6px"><span>{{ tr.title }}</span><span style="color:{{ tr.tagC }}">{{ tr.tag }}</span></div>
+              <sc-for list="{{ tr.nodes }}" as="nd" hint-placeholder-count="3"><div style="font:400 11.5px/1.65 'IBM Plex Mono';color:{{ nd.fg }};padding-left:{{ nd.pad }}px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ nd.label }}</div></sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div style="flex:none;border-top:1px solid #262e38;background:#12161b;padding:10px 14px 12px;display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap">
+      <div style="display:flex;gap:6px">
+        <button onClick="{{ stepBack }}" aria-label="Step back" style="height:36px;padding:0 12px;border-radius:6px;border:1px solid #333d49;background:#1b2129;color:#e7eaee;font:500 13px/1 'IBM Plex Sans';cursor:pointer">‹ Back</button>
+        <button onClick="{{ play }}" style="height:36px;min-width:84px;padding:0 14px;border-radius:6px;border:1px solid {{ acc }};background:{{ accBg }};color:{{ acc }};font:600 13px/1 'IBM Plex Sans';cursor:pointer">{{ playLabel }}</button>
+        <button onClick="{{ stepFwd }}" aria-label="Step forward" style="height:36px;padding:0 12px;border-radius:6px;border:1px solid #333d49;background:#1b2129;color:#e7eaee;font:500 13px/1 'IBM Plex Sans';cursor:pointer">Step ›</button>
+      </div>
+      <input type="range" min="0" max="1000" value="{{ scrub }}" onChange="{{ setScrub }}" aria-label="Scrubber" style="flex:1 1 200px;min-width:140px;accent-color:{{ acc }}">
+      <span style="font:500 12px/1 'IBM Plex Mono';color:#c4cbd3;min-width:120px;text-align:right">{{ timeLabel }}</span>
+      <div style="display:flex;border:1px solid #333d49;border-radius:6px;overflow:hidden">
+        <sc-for list="{{ speeds }}" as="sp" hint-placeholder-count="3"><button onClick="{{ sp.go }}" style="height:34px;padding:0 9px;border:0;background:{{ sp.bg }};color:{{ sp.fg }};font:500 12px/1 'IBM Plex Mono';cursor:pointer">{{ sp.t }}</button></sc-for>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;opacity:{{ rateOp }}" title="{{ rateTip }}">
+        <span style="font:500 12px/1 'IBM Plex Mono';color:#a1aab5;white-space:nowrap">Event rate</span>
+        <input type="range" min="10" max="120" step="5" value="{{ rate }}" onChange="{{ setRate }}" style="width:110px;accent-color:#a1aab5">
+        <span style="font:500 12px/1 'IBM Plex Mono';color:#e7eaee;width:44px">{{ rate }}/s</span>
+      </label>
+      <span style="display:inline-flex;align-items:center;gap:6px;font:500 11px/1 'IBM Plex Mono';letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:4px;color:{{ chip.fg }};background:{{ chip.bg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ chip.fg }}"></span>{{ chip.label }}</span>
+    </div>
+    <div style="display:flex;gap:12px;align-items:stretch">
+      <span style="flex:none;width:3px;border-radius:2px;background:{{ capC }}"></span>
+      <p style="margin:0;font:400 15px/1.5 'IBM Plex Sans';color:#e7eaee;text-wrap:pretty;min-height:45px">{{ caption }}</p>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  static FR = 16.6;
+  static PRESETS = [
+    { id: 'tap', name: 'Button tap → native module', file: 'Counter.tsx', p: { style: 'medium', step: 1 }, mods: ['Haptics', 'Storage', 'Camera'],
+      desc: 'A press that vibrates and updates a counter. Follow it from the screen into JS, out to a native module, and back to the screen.',
+      tree: [[0, 'Counter'], [1, 'Pressable', 'View', 12], [2, 'Text', 'Text', 14]],
+      code: ['function Counter() {', '  const [count, setCount] = useState(0);', '  const onPress = () => {', "    Haptics.impact('§style§');", '    setCount(c => c + §step§);', '  };', '  return <Pressable onPress={onPress}><Text>{count}</Text></Pressable>;', '}'] },
+    { id: 'startup', name: 'App startup', file: 'index.tsx', p: { modules: 12 }, mods: null,
+      desc: 'From launch to first screen. Change how many native modules the app links and watch who pays for them.',
+      tree: [[0, 'App'], [1, 'Home'], [2, 'Header', 'View', 2], [2, 'List', 'ScrollView', 3], [3, 'Row ×4', 'View', 4]],
+      code: ['// native modules linked into this app', 'const LINKED_MODULES = §modules§;', '', "AppRegistry.registerComponent('App', () => App);", 'function App() {', "  const theme = Storage.getString('theme');", "  Analytics.track('open');", '  return <Home theme={theme} />;', '}'] },
+    { id: 'scroll', name: 'onScroll with setState', file: 'Feed.tsx', p: { work: 6 }, mods: [], rate: true,
+      desc: 'A header that shows the scroll position, updated from JS on every scroll event. Raise the event rate or the handler’s work.',
+      tree: [[0, 'Feed'], [1, 'ScrollView', 'ScrollView', 7], [2, 'Header', 'Text', 31], [2, 'Row ×20', 'View', 40]],
+      code: ['function Feed() {', '  const [y, setY] = useState(0);', '  const onScroll = (e) => {', '    setY(e.nativeEvent.contentOffset.y);', '    formatHeader(y); // ~§work§ ms of JS', '  };', '  return <ScrollView onScroll={onScroll} scrollEventThrottle={16} />;', '}'] },
+    { id: 'anim', name: 'Animation: native driver', file: 'Card.tsx', p: { duration: 300, native: 'false', busy: 120 }, mods: [],
+      desc: 'A slide-in animation while JS is busy parsing data. Flip useNativeDriver between false and true.',
+      tree: [[0, 'Card'], [1, 'Animated.View', 'View', 7]],
+      code: ['const x = useRef(new Animated.Value(0)).current;', 'Animated.timing(x, {', '  toValue: 1,', '  duration: §duration§,', '  useNativeDriver: §native§,', '}).start();', '// meanwhile, JS parses a big response', 'JSON.parse(feedText); // ~§busy§ ms'] },
+    { id: 'measure', name: 'Measuring layout', file: 'Tooltip.tsx', p: { gap: 8 }, mods: [],
+      desc: 'A tooltip that positions itself under a button by measuring it. Watch where it appears first.',
+      tree: [[0, 'Screen'], [1, 'Button', 'View', 12], [1, 'Tooltip'], [2, 'View', 'View', 40], [3, 'Text', 'Text', 41]],
+      code: ['function Tooltip({ anchor }) {', '  const [top, setTop] = useState(0);', '  useLayoutEffect(() => {', '    anchor.current.measure((x, y, w, h) =>', '      setTop(y + h + §gap§));', '  }, []);', '  return <View style={{ top }}><Text>Saved</Text></View>;', '}'] },
+    { id: 'heavy', name: 'Heavy JS loop freezes taps', file: 'Report.tsx', p: { iterations: 50000000 }, mods: [], rate: true,
+      desc: 'A big loop runs on the JS thread while the user keeps tapping. Event rate sets how fast they tap.',
+      tree: [[0, 'Report'], [1, 'Button', 'View', 3], [1, 'Button', 'View', 5], [1, 'Text', 'Text', 8]],
+      code: ['function Report() {', '  const onBuild = () => {', '    let sum = 0;', '    for (let i = 0; i < §iterations§; i++) sum += i;', '    setReport(sum);', '  };', '  const onTap = () => setTaps(t => t + 1);', '}'] },
+    { id: 'payload', name: 'Large payload to native', file: 'Sync.tsx', p: { rows: 2000 }, mods: ['Db'],
+      desc: 'Saving a few thousand rows through a native database module. Change the row count.',
+      tree: [[0, 'SyncScreen'], [1, 'Button', 'View', 3], [1, 'Toast', 'Text', 9]],
+      code: ['const rows = makeRows(§rows§); // ~140 bytes per row', 'await Db.saveRows(rows);', "showToast('Saved');"] }
+  ];
+  static POOL = ['Storage', 'Analytics', 'Camera', 'Maps', 'Bluetooth', 'Payments', 'Contacts', 'Location', 'Biometrics', 'Haptics', 'Calendar', 'Notifications', 'Share', 'Clipboard', 'Audio', 'Video', 'NFC', 'Sensors', 'Keychain', 'WebView'];
+
+  state = { preset: 'tap', mode: 'old', compare: false, c: 0, playing: false, started: false, speed: 1, rate: 60,
+    params: {}, tab: 'threads', mobile: false, reduced: false, sel: null };
+
+  componentDidMount() {
+    try {
+      const q = new URLSearchParams(location.search);
+      const patch = {};
+      if (q.get('mode') === 'new') patch.mode = 'new';
+      if (q.get('compare')) patch.compare = true;
+      const pr = q.get('preset'); if (pr && Component.PRESETS.some(p => p.id === pr)) patch.preset = pr;
+      const rq = +q.get('rate'); if (rq >= 10 && rq <= 120) patch.rate = rq;
+      patch.reduced = q.get('motion') === 'reduced' || (q.get('motion') !== 'full' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      if (['code', 'threads', 'inspect'].includes(q.get('tab'))) patch.tab = q.get('tab');
+      this.setState(patch, () => {
+        const tf = parseFloat(q.get('at'));
+        if (!isNaN(tf) && tf >= 0 && tf <= 1) this.setState({ c: this.total() * Math.max(0, Math.min(1, tf)), started: tf > 0 });
+      });
+    } catch (e) {}
+    this.onResize();
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); window.removeEventListener('keydown', this.onKey); cancelAnimationFrame(this.raf); }
+  onResize = () => { const m = window.innerWidth < 1180; if (m !== this.state.mobile) this.setState({ mobile: m }); };
+  onKey = (e) => {
+    if (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); this.stepFwd(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); this.stepBack(); }
+    else if (e.key === ' ') { e.preventDefault(); this.play(); }
+  };
+
+  pr() { return Component.PRESETS.find(p => p.id === this.state.preset); }
+  P() { const pr = this.pr(); return { ...pr.p, ...(this.state.params[pr.id] || {}) }; }
+  trace(mode) {
+    const pr = this.pr(), P = this.P(), key = [pr.id, mode, JSON.stringify(P), this.state.rate].join('|');
+    this._c = this._c || {};
+    if (!this._c[key]) { const ks = Object.keys(this._c); if (ks.length > 24) this._c = {}; this._c[key] = this.gen(pr.id, mode, P, this.state.rate); }
+    return this._c[key];
+  }
+  traces() { return this.state.compare ? [this.trace('old'), this.trace('new')] : [this.trace(this.state.mode)]; }
+  total() { return Math.max(...this.traces().map(t => t.total)); }
+  primary() { const ts = this.traces(); return this.state.compare ? ts[this.state.mode === 'new' ? 1 : 0] : ts[0]; }
+
+  gen(id, mode, P, rate) {
+    const old = mode === 'old', FR = Component.FR;
+    const E = [], M = [], UI = [], MOD = [], TR = [], ST = [], Q = [];
+    const cl = (v, a, b, d) => { const n = parseFloat(String(v).replace(/[_,\s]/g, '')); return isNaN(n) ? d : Math.max(a, Math.min(b, n)); };
+    const task = (lane, t, d, label, o) => { E.push(Object.assign({ lane, t, d, label }, o || {})); return t + d; };
+    const send = (t, from, to, label, payload, o) => {
+      o = o || {};
+      if (old) { const bytes = o.bytes || (payload ? payload.length : 40); const d = o.d != null ? o.d : 3 + bytes / 8000; M.push(Object.assign({}, o, { kind: 'msg', t, d, from, to, label, payload, bytes })); return t + d; }
+      M.push(Object.assign({}, o, { kind: 'call', t, d: 0.4, from, to, label, sig: o.sig || label })); return t + 0.4;
+    };
+    let metric = { l: 'Response time', v: 0, u: 'ms' }, t = 0;
+
+    if (id === 'tap') {
+      const step = cl(P.step, -99, 99, 1), style = String(P.style).replace(/[^\w-]/g, '');
+      UI.push({ t: 0, pressed: true });
+      t = task('ui', 0, 2, 'touch', { ln: 6, cap: 'Your finger lands. The UI thread sees a press on the Pressable and has to ask JS what to do.' });
+      t = old ? send(t, 'ui', 'js', 'touchEnd', '{"type":"topTouchEnd","target":12}', { cap: 'Old: the touch is serialized to JSON and waits in the bridge queue for the next batch.' })
+        : send(t, 'ui', 'js', 'press', null, { sig: 'dispatchEvent("press", 12)', sched: true, cap: 'New: the touch becomes a C++ event scheduled onto the JS thread. JS reads it through JSI as a normal object, with no JSON.' });
+      t = task('js', t, 1.5, 'onPress', { ln: 2, stack: ['onPress'], cap: 'React Native’s touch system in JS turns the touch into a press and calls your onPress.' });
+      const tm = t;
+      t = task('js', t, 1, 'Haptics.impact', { ln: 3, stack: ['onPress', 'Haptics.impact'], cap: old ? 'Calling the module only queues another message. The vibration happens later, on the native side.' : 'Haptics is a Turbo Module. This first call creates it. impact() returns nothing, so native runs it on its own queue and JS moves on.' });
+      if (old) { const a = send(t, 'js', 'native', 'Haptics.impact', '{"moduleID":41,"methodID":2,"args":["' + style + '"],"callID":3}'); const b = task('native', a, 2.5, 'impact()', { cap: 'Native parses the JSON, finds module 41 and method 2 in its startup table, and vibrates.' }); UI.push({ t: b, buzz: true }); }
+      else { send(tm + 0.5, 'js', 'native', 'Haptics.impact', null, { sig: "Haptics.impact('" + style + "')" }); MOD.push({ t: tm + 0.5, n: 'Haptics', s: 'loading' }, { t: tm + 2, n: 'Haptics', s: 'ready' }); const b = task('native', tm + 0.9, 2.5, 'load + impact()'); UI.push({ t: b, buzz: true }); }
+      t = task('js', t, 3, 'render Counter', { ln: 4, stack: ['setCount', 'Counter()'], cap: 'setCount adds ' + step + ', and React re-renders Counter.' }); TR.push({ t, k: 'e' });
+      if (old) { t = send(t, 'js', 'shadow', 'updateView', '["updateView",14,"RCTText",{"text":"' + step + '"}]'); t = task('shadow', t, 2, 'layout (Yoga)', { cap: 'The Shadow thread recalculates layout for the changed text.' }); TR.push({ t, k: 's' }); t = send(t, 'shadow', 'ui', 'frames', '[{"tag":14,"frame":[16,40,120,24]}]', { d: 1.5 }); }
+      else { t = task('js', t, 1.2, 'commit + layout', { stack: ['commit'], cap: 'Fabric commits the new shadow tree in C++. Layout runs right here, on the JS thread.' }); TR.push({ t, k: 's' }); t = send(t, 'js', 'ui', 'mount', null, { sig: 'mount(1 mutation)' }); }
+      t = task('ui', t, 1.5, 'mount: set text', { cap: 'The UI thread updates the real text view. The next frame shows the new count.' }); TR.push({ t, k: 'h' });
+      UI.push({ t, count: step, pressed: false });
+      metric = { l: 'Tap → screen', v: t, u: 'ms' };
+    }
+
+    if (id === 'startup') {
+      const N = Math.round(cl(P.modules, 2, 40, 12));
+      const names = Array.from({ length: N }, (_, i) => Component.POOL[i] || 'Module' + (i + 1));
+      UI.push({ t: 0, screen: 'splash' });
+      t = task('ui', 0, 8, 'launch', { cap: 'The app process starts. The UI thread comes up first.' });
+      if (old) {
+        names.forEach((n, i) => { const d = 4 + (i * 7) % 9; MOD.push({ t, n, s: 'loading' }, { t: t + d, n, s: 'ready' }); t = task('native', t, d, n, Object.assign({ ln: 1 }, i === 0 ? { cap: 'Old: every linked native module is created now, before any of your JS runs, used or not.' } : {})); });
+        t = task('js', t, 40, 'load bundle', { ln: 3, stack: ['(bundle)'], cap: 'Only now does the JS bundle load and run.' });
+        t = task('js', t, 2, 'App()', { ln: 4, stack: ['App'] }); TR.push({ t, k: 'e' });
+        const s1 = send(t, 'js', 'native', 'Storage.getString', '{"moduleID":12,"methodID":0,"args":["theme"],"callID":1}', { cap: 'Even reading a saved setting is a message. The value comes back later, so the first render can’t use it.' });
+        task('native', s1, 1, 'getString');
+        t = send(t + 0.5, 'js', 'shadow', 'createView ×6', '[["createView",2,"RCTView",{}],["createView",3,"RCTScrollView",{}],…]', { bytes: 1800 });
+        t = task('shadow', t, 4, 'layout (Yoga)'); TR.push({ t, k: 's' });
+        t = send(t, 'shadow', 'ui', 'frames', '[{"tag":2,"frame":[0,0,390,844]},…]', { d: 2 });
+      } else {
+        t = task('js', t, 40, 'load bundle', { ln: 3, stack: ['(bundle)'], cap: 'New: the JS bundle loads right away. No native module has been created yet.' });
+        t = task('js', t, 1, 'App()', { ln: 4, stack: ['App'] });
+        [['Storage', 5, 5, "Storage.getString('theme')"], ['Analytics', 4, 6, "Analytics.track('open')"]].forEach(([n, d, ln, sig], i) => {
+          send(t, 'js', 'native', n, null, { sig });
+          MOD.push({ t, n, s: 'loading' }, { t: t + d, n, s: 'ready' });
+          task('native', t + 0.4, d, n + ' init', i === 0 ? { cap: 'First call to Storage. This is the moment its Turbo Module is created, and JS gets the value back on the same line.' } : {});
+          task('js', t, d + 0.4, sig, { ln, stack: ['App', sig] });
+          t += d + 0.4;
+        });
+        t = task('js', t, 3, 'render + commit', { ln: 7, stack: ['App', 'commit'] }); TR.push({ t, k: 'e' }, { t, k: 's' });
+        t = send(t, 'js', 'ui', 'mount', null, { sig: 'mount(6 mutations)' });
+      }
+      t = task('ui', t, 5, 'mount views', { cap: old ? 'First screen is on. Everything before this point was startup.' : 'First screen is on. ' + (N - 2) + ' other modules still haven’t been created, and won’t be until something uses them.' }); TR.push({ t, k: 'h' });
+      UI.push({ t, screen: 'home' });
+      metric = { l: 'Startup time', v: t, u: 'ms' };
+      this._mods = names;
+    }
+
+    if (id === 'scroll') {
+      const W = cl(P.work, 0.5, 40, 6), iv = 1000 / rate, evs = [];
+      for (let i = 0; i * iv < 300; i++) evs.push(4 + i * iv);
+      evs.forEach((et, i) => { task('ui', et, 0.6, 'scroll', i === 0 ? { cap: 'The user scrolls. Native moves the list by itself and sends scroll events to JS.' } : {}); UI.push({ t: et, scroll: (i + 1) * 12 }); });
+      const lat = old ? 3.6 : 1;
+      let jsFree = 0, maxLag = 0, capM = false, idx = 0;
+      while (idx < evs.length) {
+        const start = Math.max(jsFree, evs[idx] + lat);
+        let j = idx; while (j + 1 < evs.length && evs[j + 1] + lat <= start) j++;
+        const sk = j - idx, et = evs[j], y = (j + 1) * 12;
+        let cap;
+        if (sk && !capM) { capM = true; cap = 'While JS was busy, ' + sk + ' newer scroll events arrived. Both architectures merge them into the latest one, so JS skips stale positions.'; }
+        else if (idx === 0) cap = old ? 'The event is serialized to JSON and delivered with the next bridge flush. JS parses it and runs your handler: ' + W + ' ms of work plus about 1 ms of JSON.' : 'The event is scheduled onto the JS thread and read through JSI, with no JSON. Your handler runs: ' + W + ' ms of work.';
+        if (old) M.push({ kind: 'msg', t: et + 0.6, d: start - et - 0.6, from: 'ui', to: 'js', label: 'onScroll', payload: '{"type":"topScroll","target":7,"contentOffset":{"y":' + y + '}}', bytes: 160 });
+        else send(et + 0.6, 'ui', 'js', 'onScroll', null, { sig: 'onScroll(y: ' + y + ')', sched: true });
+        jsFree = task('js', start, W + (old ? 1 : 0), sk ? 'onScroll (+' + sk + ' merged)' : 'onScroll', { ln: [3, 4], stack: ['onScroll', 'setY', 'formatHeader'], cap });
+        const a = old ? send(jsFree, 'js', 'ui', 'updateView', '["updateView",31,{"text":"y = ' + y + '"}]', { d: 2 }) : send(jsFree, 'js', 'ui', 'mount', null, { sig: 'mount(header text)' });
+        const b = task('ui', a, 0.5, 'apply'); UI.push({ t: b, shown: y });
+        for (let k = idx; k <= j; k++) { if (b - evs[k] > FR) ST.push([evs[k] + FR, b]); maxLag = Math.max(maxLag, b - evs[k]); }
+        idx = j + 1;
+      }
+      metric = { l: 'Worst header lag', v: maxLag, u: 'ms' };
+    }
+
+    if (id === 'anim') {
+      const D = cl(P.duration, 50, 1000, 300), B = cl(P.busy, 0, 600, 120), nat = String(P.native).trim() === 'true', bs = 40;
+      task('js', 0, 2, 'timing().start()', { ln: [1, 5], stack: ['Animated.timing', 'start'], cap: nat ? 'useNativeDriver is true: the whole animation is described once and handed to native.' : 'useNativeDriver is false: JS will compute every single frame of this animation itself.' });
+      if (B) task('js', bs, B, 'JSON.parse(feed)', { ln: 7, stack: ['JSON.parse'], cap: 'Meanwhile JS starts parsing a big response. It will be busy for ' + B + ' ms.' });
+      if (nat) {
+        const s0 = old ? send(2, 'js', 'ui', 'startAnimation', '{"type":"timing","toValue":1,"duration":' + D + ',"nodeTag":7}') : send(2, 'js', 'ui', 'startAnimation', null, { sig: 'startAnimation(config)' });
+        for (let ft = s0; ft <= s0 + D + 0.1; ft += FR) { const pr = Math.min(1, (ft - s0) / D); const e = task('ui', ft, 1.2, 'frame', ft === s0 ? { cap: 'The UI thread now runs every frame on its own. JS being busy doesn’t matter.' } : {}); UI.push({ t: e, x: pr }); }
+        metric = { l: 'Longest freeze', v: 0, u: 'ms' };
+      } else {
+        let jsF = 2, first = true, after = false, frozen = 0;
+        for (let ft = 2 + FR; ft <= 2 + D + FR; ft += FR) {
+          const pr = Math.min(1, (ft - 2) / D);
+          if (B && ft >= bs && ft < bs + B) { ST.push([ft, ft + FR]); frozen += FR; after = true; continue; }
+          const s = Math.max(ft, jsF);
+          let cap; if (first) cap = 'Every frame, JS computes the next position and sends it to the UI thread.'; else if (after) { cap = 'JS was busy, so no frames were computed for ' + B + ' ms. The animation froze, then jumped ahead.'; after = false; }
+          first = false;
+          jsF = task('js', s, 0.8, 'frame x', { stack: ['Animated', 'update'], cap });
+          const a = old ? send(jsF, 'js', 'ui', 'updateProps', '{"tag":7,"props":{"transform":[{"translateX":' + Math.round(pr * 160) + '}]}}', { d: 2.5 }) : send(jsF, 'js', 'ui', 'updateProps', null, { sig: 'updateProps(x: ' + Math.round(pr * 160) + ')' });
+          const e = task('ui', a, 0.6, 'apply'); UI.push({ t: e, x: pr });
+        }
+        metric = { l: 'Longest freeze', v: Math.min(B, D), u: 'ms' };
+      }
+    }
+
+    if (id === 'measure') {
+      const G = cl(P.gap, 0, 80, 8), Y = 194 + G;
+      t = task('js', 0, 4, 'render Tooltip', { ln: 6, stack: ['Tooltip'], cap: 'React renders the tooltip with top: 0, because nobody knows the button’s position yet.' }); TR.push({ t, k: 'e' });
+      if (old) {
+        t = send(t, 'js', 'shadow', 'createView', '[["createView",40,"RCTView",{"top":0}]]'); t = task('shadow', t, 3, 'layout (Yoga)'); TR.push({ t, k: 's' });
+        t = send(t, 'shadow', 'ui', 'frames', '[{"tag":40,"frame":[36,0,148,30]}]', { d: 2 });
+        const m1 = task('ui', t, 1.5, 'mount (top: 0)', { cap: 'Old: the tooltip reaches the screen before JS can measure anything, so for now it sits at the top.' }); TR.push({ t: m1, k: 'h' });
+        UI.push({ t: m1, tip: true, tipY: 0 });
+        t = task('js', m1 + 0.5, 1, 'measure()', { ln: [2, 3], stack: ['useLayoutEffect', 'measure'], cap: 'The layout effect calls measure(). Over the bridge, that’s a request and a reply.' });
+        t = send(t, 'js', 'ui', 'measure', '["measure",12,{"callbackId":4}]'); t = task('ui', t, 1, 'measure #12');
+        t = send(t, 'ui', 'js', 'result', '{"callbackId":4,"args":[20,150,180,44]}');
+        t = task('js', t, 3, 'setTop → render', { ln: 4, stack: ['measure callback', 'setTop', 'Tooltip'] }); TR.push({ t, k: 'e' });
+        t = send(t, 'js', 'shadow', 'updateView', '["updateView",40,{"top":' + Y + '}]'); t = task('shadow', t, 2, 'layout'); TR.push({ t, k: 's' });
+        t = send(t, 'shadow', 'ui', 'frames', '[{"tag":40,"frame":[36,' + Y + ',148,30]}]', { d: 2 });
+        t = task('ui', t, 1.5, 'move tooltip', { cap: 'The tooltip jumps into place several frames later. That jump is the flicker users notice.' }); TR.push({ t, k: 'h' });
+        UI.push({ t, tipY: Y }); ST.push([m1, t]);
+        metric = { l: 'Frames in wrong place', v: Math.ceil((t - m1) / FR), u: 'frames' };
+      } else {
+        t = task('js', t, 1.5, 'commit + layout', { stack: ['commit'], cap: 'New: Fabric commits the tree and runs layout in C++, before anything is mounted.' }); TR.push({ t, k: 's' });
+        send(t, 'js', 'shadow', 'measure', null, { sig: 'measure(12) → {y: 150, h: 44}' });
+        t = task('js', t, 0.6, 'measure()', { ln: [2, 3], stack: ['useLayoutEffect', 'measure'], cap: 'useLayoutEffect runs before mount. measure() reads the C++ shadow tree synchronously through JSI.' });
+        t = task('js', t, 3, 'setTop → render', { ln: 4, stack: ['setTop', 'Tooltip'] }); TR.push({ t, k: 'e' });
+        t = task('js', t, 1.2, 'commit'); TR.push({ t, k: 's' });
+        t = send(t, 'js', 'ui', 'mount', null, { sig: 'mount(1 view)' });
+        t = task('ui', t, 1.5, 'mount (correct top)', { cap: 'The tooltip is mounted once, already in the right place. No flicker.' }); TR.push({ t, k: 'h' });
+        UI.push({ t, tip: true, tipY: Y });
+        metric = { l: 'Frames in wrong place', v: 0, u: 'frames' };
+      }
+    }
+
+    if (id === 'heavy') {
+      const N = cl(P.iterations, 0, 1e10, 5e7), B = Math.max(2, Math.min(800, N / 250000));
+      UI.push({ t: 0, building: true, sent: 0, done: 0 });
+      task('ui', 0, 1, 'tap: Build', { cap: 'You tap “Build report”.' });
+      const a = old ? send(1, 'ui', 'js', 'press', '{"type":"press","target":3}') : send(1, 'ui', 'js', 'press', null, { sig: 'dispatchEvent(press, 3)', sched: true });
+      const loopEnd = task('js', a, B, 'onBuild: for loop', { ln: [1, 4], stack: ['onBuild', 'for (…)'], cap: 'The loop runs ' + Math.round(N).toLocaleString('en-US') + ' times. That keeps the JS thread busy for ' + Math.round(B) + ' ms, and nothing else in JS can run.' });
+      const iv = 1000 / rate, taps = [];
+      for (let tt = a + 15; tt < loopEnd - 2 && taps.length < 12; tt += iv) taps.push(tt);
+      taps.forEach((tt, i) => {
+        task('ui', tt, 0.8, 'tap', i === 0 ? { cap: 'The user taps “Tap me”. The UI thread is fine: it registers the tap right away.' } : {});
+        UI.push({ t: tt, sent: i + 1 });
+        if (old) M.push({ kind: 'msg', t: tt + 0.8, d: loopEnd - tt - 0.8, from: 'ui', to: 'js', label: 'press', payload: '{"type":"press","target":5}', bytes: 28, cap: i === 1 ? 'The tap waits in the bridge queue. JS can’t take it until the loop ends.' : undefined });
+        else { send(tt + 0.8, 'ui', 'js', 'press', null, { sig: 'dispatchEvent(press, 5)', sched: true, cap: i === 1 ? 'New: the event is scheduled onto the JS thread without JSON, but JS is still inside the loop. It waits its turn.' : undefined }); Q.push({ t: tt + 1.2, u: loopEnd, label: 'onTap' }); }
+      });
+      t = loopEnd; let worst = 0;
+      taps.forEach((tt, i) => { worst = Math.max(worst, t - tt); t = task('js', t, 0.6, 'onTap', { ln: 6, stack: ['onTap', 'setTaps'], cap: i === 0 ? 'The loop is done. Only now do the waiting taps run, one after another.' : undefined }); });
+      t = task('js', t, 2, 'render', { stack: ['Report()'] }); TR.push({ t, k: 'e' });
+      t = old ? send(t, 'js', 'ui', 'updateView', '["updateView",8,{"text":"Taps: ' + taps.length + '"}]', { d: 2 }) : send(t, 'js', 'ui', 'mount', null, { sig: 'mount(text)' });
+      t = task('ui', t, 1, 'apply', { cap: 'Same story in both architectures: taps waited up to ' + Math.round(worst) + ' ms. Move heavy work off the JS thread, or split it into chunks.' }); TR.push({ t, k: 'h' });
+      UI.push({ t, done: taps.length, building: false });
+      metric = { l: 'Longest tap wait', v: worst, u: 'ms' };
+    }
+
+    if (id === 'payload') {
+      const R = Math.round(cl(P.rows, 1, 50000, 2000)), bytes = R * 140, kb = Math.round(bytes / 1024);
+      UI.push({ t: 0, status: 'Saving ' + R.toLocaleString('en-US') + ' rows…' });
+      t = task('js', 0, 2, 'makeRows', { ln: 0, stack: ['makeRows'], cap: 'You build ' + R.toLocaleString('en-US') + ' rows, about ' + kb + ' KB of data.' });
+      if (old) {
+        t = task('js', t, bytes / 15000, 'JSON.stringify', { ln: 1, stack: ['saveRows', 'JSON.stringify'], cap: 'Old: all ' + kb + ' KB become one big JSON string, on the JS thread.' });
+        t = send(t, 'js', 'native', 'Db.saveRows', '{"module":"Db","method":"saveRows","args":[[{"id":1,"title":"Row 1","qty":3},{"id":2,…}, … ' + R + ' rows]]}', { bytes, cap: 'The whole string crosses the bridge as one message.' });
+        t = task('native', t, bytes / 15000, 'JSON parse', { cap: 'Native parses the entire string back into objects before it can save anything.' });
+        t = task('native', t, 6, 'write to disk');
+        t = send(t, 'native', 'js', 'resolve', '{"callId":9,"result":true}');
+      } else {
+        t = task('js', t, bytes / 250000 + 0.5, 'pack ArrayBuffer', { ln: 1, stack: ['saveRows', 'pack'], cap: 'New: the rows are packed into an ArrayBuffer, raw bytes that JS and C++ can both read.' });
+        send(t, 'js', 'native', 'Db.saveRows', null, { sig: 'Db.saveRows(buffer)', ref: bytes });
+        MOD.push({ t, n: 'Db', s: 'loading' }, { t: t + 1, n: 'Db', s: 'ready' });
+        t = task('native', t + 0.4, bytes / 400000 + 1.5, 'read buffer', { cap: 'Native reads the same memory JS wrote. Nothing is copied into text.' });
+        t = task('native', t, 6, 'write to disk');
+        t = send(t, 'native', 'js', 'resolve', null, { sig: 'resolve(true)' });
+      }
+      t = task('js', t, 1, 'showToast', { ln: 2, stack: ['showToast'], cap: old ? 'Saved. Most of that time went into writing and reading JSON.' : 'Saved. What’s left is mostly the disk write itself.' });
+      UI.push({ t, status: 'Saved ✓' });
+      metric = { l: 'Time to saved', v: t, u: 'ms' };
+    }
+
+    const all = E.map(e => e.t + e.d).concat(M.map(m => m.t + m.d));
+    const end = Math.max(...all, 10);
+    const total = Math.ceil((end + 12) / 10) * 10;
+    const frames = [];
+    for (let f = 0; f * FR < total; f++) {
+      const a = f * FR, b = a + FR; let used = 0;
+      E.forEach(e => { if (e.lane === 'ui') used += Math.max(0, Math.min(b, e.t + e.d) - Math.max(a, e.t)); });
+      const stalled = ST.some(([s, s2]) => s < b - 1 && s2 > a + 1);
+      frames.push({ a, b, used, dropped: used > FR || stalled });
+    }
+    let qMax = 0;
+    for (let x = 0; x < total; x += 1) { const q = M.filter(m => m.kind === 'msg' && m.t <= x && x < m.t + m.d).length + Q.filter(q2 => q2.t <= x && x < q2.u).length; if (q > qMax) qMax = q; }
+    const evs = E.concat(M).sort((x, y) => x.t - y.t);
+    const points = [...new Set(evs.map(e => Math.round(e.t * 100) / 100))].sort((x, y) => x - y);
+    return { E, M, UI, MOD, TR, ST, Q, frames, total, end, metric, qMax, evs, points, mode, mods: id === 'startup' ? this._mods : null };
+  }
+
+  run = () => { this.last = null; this.racc = 0; cancelAnimationFrame(this.raf); this.raf = requestAnimationFrame(this.tick); };
+  tick = (ts) => {
+    if (!this.state.playing) return;
+    const dt = this.last == null ? 16 : Math.min(80, ts - this.last); this.last = ts;
+    const T = this.total();
+    let c = this.state.c;
+    if (this.state.reduced) {
+      this.racc += dt * this.state.speed;
+      if (this.racc < 900) { this.raf = requestAnimationFrame(this.tick); return; }
+      this.racc = 0;
+      const pts = this.points(); const nx = pts.find(p => p > c + 0.05);
+      c = nx == null ? T : nx + 0.05;
+    } else c += dt * this.state.speed * T / 9000;
+    if (c >= T) { this.setState({ c: T, playing: false }); return; }
+    this.setState({ c });
+    this.raf = requestAnimationFrame(this.tick);
+  };
+  points() { const s = new Set(); this.traces().forEach(t => t.points.forEach(p => s.add(p))); return [...s].sort((a, b) => a - b); }
+  play = () => {
+    if (this.state.playing) { this.setState({ playing: false }); return; }
+    const T = this.total();
+    this.setState({ playing: true, started: true, c: this.state.c >= T ? 0 : this.state.c, sel: null }, this.run);
+  };
+  restart = () => { this.setState({ c: 0, playing: true, started: true, sel: null }, this.run); };
+  stepFwd = () => { const pts = this.points(); const nx = pts.find(p => p > this.state.c + 0.05); this.setState({ playing: false, started: true, sel: null, c: nx == null ? this.total() : nx + 0.05 }); };
+  stepBack = () => { const pts = this.points().filter(p => p < this.state.c - 0.1); this.setState({ playing: false, sel: null, c: pts.length ? pts[pts.length - 1] + 0.05 : 0 }); };
+  setParam(k, v) { const id = this.state.preset; this.setState(s => ({ params: { ...s.params, [id]: { ...(s.params[id] || {}), [k]: v } }, sel: null }), () => { const T = this.total(); if (this.state.c > T) this.setState({ c: T }); }); }
+
+  tok(line) {
+    const out = [];
+    const re = /(\/\/.*$)|('[^']*'|"[^"]*")|(<\/?[A-Za-z][\w.]*|\/?>)|\b(function|const|let|return|await|async|for|true|false|new)\b|(\b\d[\d_.]*\b)/g;
+    let i = 0, m;
+    while ((m = re.exec(line))) {
+      if (m.index > i) out.push({ t: line.slice(i, m.index), c: '#c4cbd3' });
+      out.push({ t: m[0], c: m[1] ? '#6b7480' : m[2] ? '#b5c98f' : m[3] ? '#eef1f4' : m[4] ? '#8fa6c9' : '#c4cbd3' });
+      i = m.index + m[0].length;
+    }
+    if (i < line.length) out.push({ t: line.slice(i), c: '#c4cbd3' });
+    return out;
+  }
+  at(tr, c) {
+    const live = tr.E.filter(e => e.t <= c && c < e.t + e.d);
+    const past = tr.evs.filter(e => e.t <= c);
+    let cap = null; for (let i = past.length - 1; i >= 0; i--) if (past[i].cap) { cap = past[i].cap; break; }
+    let ln = null; const lj = live.find(e => e.ln !== undefined); if (lj) ln = lj.ln; else for (let i = past.length - 1; i >= 0; i--) if (past[i].ln !== undefined) { ln = past[i].ln; break; }
+    const ui = {}; tr.UI.filter(u => u.t <= c).forEach(u => Object.assign(ui, u));
+    const dropped = tr.frames.filter(f => f.b <= c + 0.01 && f.dropped).length;
+    const recentDrop = tr.frames.some(f => f.dropped && f.b <= c + 0.01 && f.b > c - 34);
+    const qNow = tr.M.filter(m => m.kind === 'msg' && m.t <= c && c < m.t + m.d).length + tr.Q.filter(q => q.t <= c && c < q.u).length;
+    const ser = tr.M.filter(m => m.kind === 'msg' && m.t <= c).reduce((a, m) => a + m.bytes, 0);
+    return { live, cap, ln, ui, dropped, recentDrop, qNow, ser };
+  }
+  fmt(v, u) { return u === 'frames' ? Math.round(v) + '' : (v < 10 ? v.toFixed(1) : Math.round(v)) + ' ms'; }
+
+  renderVals() {
+    const st = this.state, pr = this.pr(), P = this.P();
+    const isNew = st.mode === 'new', acc = isNew ? '#5fd3e6' : '#f2b35b';
+    const ts = this.traces(), T = Math.max(...ts.map(t => t.total)), c = Math.min(st.c, T);
+    const prim = this.primary(), A = this.at(prim, c);
+    const X = (t) => t / T * 100;
+    const LC = { js: '#b39dff', br: '#f2b35b', shadow: '#79d49c', ui: '#f291c4', native: '#9fb0c3' };
+    const LI = { js: 0, br: 1, shadow: 2, ui: 3, native: 4 }, LH = 40;
+
+    const groups = ts.map((tr, gi) => {
+      const o = tr.mode === 'old', Ag = tr === prim ? A : this.at(tr, c), brC = o ? '#f2b35b' : '#5fd3e6';
+      const blocks = tr.E.map(e => {
+        const col = LC[e.lane], past = e.t <= c, act = past && c < e.t + e.d;
+        return { l: X(e.t), w: Math.max(0.3, X(e.d)), top: LI[e.lane] * LH + 9, label: e.label, bg: act ? col : past ? col + '40' : 'transparent', bd: past ? col : col + '40', fg: act ? '#0f1216' : past ? '#eef1f4' : '#8a94a0' };
+      });
+      const rowsEnd = [], packets = [], arrows = [];
+      tr.M.forEach((m, i) => {
+        const past = m.t <= c, isSel = st.sel && st.sel.g === gi && st.sel.i === i;
+        if (m.kind === 'msg') {
+          let r = rowsEnd.findIndex(e => e <= m.t); if (r < 0) { r = rowsEnd.length < 3 ? rowsEnd.length : rowsEnd.indexOf(Math.min(...rowsEnd)); }
+          rowsEnd[r] = m.t + m.d;
+          const live = past && c < m.t + m.d;
+          packets.push({ l: X(m.t), w: Math.max(0.5, X(m.d)), top: LH + 5 + r * 10, label: m.label + ' · ' + m.bytes + ' B', bg: live ? '#f2b35b' : past ? '#f2b35b66' : 'transparent', bd: isSel ? '#eef1f4' : past ? '#f2b35b' : '#f2b35b44', pick: () => this.setState({ sel: { g: gi, i } }) });
+        } else {
+          const a = LI[m.from === 'core' ? 'shadow' : m.from], b = LI[m.to];
+          arrows.push({ l: X(m.t), top: Math.min(a, b) * LH + LH / 2, h: Math.abs(a - b) * LH, dot: b * LH + LH / 2 - 4, c: isSel ? '#eef1f4' : past ? '#5fd3e6' : '#5fd3e640', label: m.sig, pick: () => this.setState({ sel: { g: gi, i } }) });
+        }
+      });
+      const frames = tr.frames.filter(f => f.a <= c).map(f => ({ l: X(f.a), w: X(Math.min(f.b, c) - f.a), bg: f.dropped ? '#f0694f' : '#3a4a3f' }));
+      const jsLive = Ag.live.find(e => e.lane === 'js');
+      const stack = jsLive ? (jsLive.stack || [jsLive.label]).join(' › ') : 'idle';
+      const busy = (lane) => { const e = Ag.live.find(x => x.lane === lane); return e ? e.label : 'idle'; };
+      const fr = tr.frames.find(f => f.a <= c && c < f.b) || tr.frames[tr.frames.length - 1];
+      let used = 0; if (fr) tr.E.forEach(e => { if (e.lane === 'ui') used += Math.max(0, Math.min(Math.min(fr.b, c), e.t + e.d) - Math.max(fr.a, e.t)); });
+      const frameBad = fr && fr.dropped && fr.a <= c;
+      const lanes = [
+        { name: 'JS thread', c: LC.js, noBar: true, hasBar: false, r1: stack + (Ag.qNow && !o ? ' · queue ' + Ag.qNow : ''), r1C: jsLive ? '#b39dff' : '#8a94a0' },
+        o ? { name: 'Bridge', c: '#f2b35b', noBar: true, hasBar: false, r1: Ag.qNow + ' in queue', r1C: Ag.qNow >= 4 ? '#f0694f' : Ag.qNow ? '#f2b35b' : '#8a94a0' }
+          : { name: 'JSI', c: '#5fd3e6', noBar: true, hasBar: false, r1: 'no JSON · values via JSI', r1C: '#8a94a0' },
+        { name: o ? 'Shadow thread' : 'Shadow / C++', c: LC.shadow, noBar: true, hasBar: false, r1: busy('shadow'), r1C: busy('shadow') === 'idle' ? '#8a94a0' : '#79d49c' },
+        { name: 'UI thread', c: LC.ui, noBar: false, hasBar: true, barW: Math.min(100, used / Component.FR * 100), barC: frameBad ? '#f0694f' : '#f291c4', r1: frameBad ? 'dropped' : used.toFixed(1) + ' / 16.6' },
+        { name: 'Native modules', c: LC.native, noBar: true, hasBar: false, r1: busy('native'), r1C: busy('native') === 'idle' ? '#8a94a0' : '#9fb0c3' }
+      ];
+      return { name: o ? 'Old architecture' : 'New Architecture', c: brC, sub: o ? 'bridge: async JSON queue' : 'JSI: direct calls', lanes, blocks, packets, arrows, frames, seps: [40, 80, 120, 160, 200] };
+    });
+
+    const nice = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500];
+    const stp = nice.find(n => T / n <= 7) || 1000;
+    const ticks = []; for (let v = 0; v <= T; v += stp) ticks.push({ l: X(v), t: v + (v === 0 ? '' : '') });
+    if (ticks.length) ticks[ticks.length - 1].t += ' ms';
+
+    const lnSet = A.ln == null ? null : Array.isArray(A.ln) ? A.ln : [A.ln, A.ln];
+    const code = pr.code.map((line, i) => {
+      const on = !!lnSet && i >= lnSet[0] && i <= lnSet[1];
+      const toks = [];
+      line.split('§').forEach((pt, j) => {
+        if (j % 2) { const v = String(P[pt]); toks.push({ isParam: true, isText: false, v, w: Math.max(2, v.length + 0.5), set: (e) => this.setParam(pt, e.target.value), t: '', c: '' }); }
+        else if (pt) this.tok(pt).forEach(tk => toks.push({ isParam: false, isText: true, t: tk.t, c: tk.c, v: '', w: 0 }));
+      });
+      if (!toks.length) toks.push({ isParam: false, isText: true, t: ' ', c: '#c4cbd3', v: '', w: 0 });
+      return { n: i + 1, toks, bg: on ? acc + '1f' : 'transparent', numC: on ? acc : '#4f5864', mark: on && i === lnSet[0] ? '▸' : '' };
+    });
+
+    const ui = A.ui;
+    const ph = { isTap: pr.id === 'tap', isStartup: pr.id === 'startup', isScroll: pr.id === 'scroll', isAnim: pr.id === 'anim', isMeasure: pr.id === 'measure', isHeavy: pr.id === 'heavy', isPayload: pr.id === 'payload', noteC: '#a1aab5' };
+    if (ph.isTap) { ph.count = ui.count || 0; ph.btn = 'Vibrate · +' + P.step; ph.btnBg = ui.pressed ? '#a1aab5' : '#eef1f4'; ph.note = ui.buzz ? 'bzz · ' + P.style : ' '; ph.noteC = acc; }
+    if (ph.isStartup) { ph.splash = ui.screen !== 'home'; ph.home = ui.screen === 'home'; ph.note = st.started ? 'starting…' : 'tap to launch'; ph.rows = ['Recent orders', 'Messages', 'Saved places', 'Settings', 'Help']; }
+    if (ph.isScroll) { ph.scroll = ui.scroll || 0; ph.shown = ui.shown || 0; ph.noteC = (ui.scroll || 0) - (ui.shown || 0) > 24 ? '#f0694f' : '#a1aab5'; ph.rows = Array.from({ length: 14 }, (_, i) => 'Post #' + (210 - i)); }
+    if (ph.isAnim) { ph.x = ui.x || 0; ph.note = 'useNativeDriver: ' + P.native; const jsb = A.live.some(e => e.lane === 'js' && e.label.indexOf('JSON') === 0); ph.note2 = jsb ? (String(P.native).trim() === 'true' ? 'JS busy · still smooth' : 'JS busy · frozen') : ' '; ph.noteC = jsb && String(P.native).trim() !== 'true' ? '#f0694f' : acc; }
+    if (ph.isMeasure) { ph.tip = !!ui.tip; ph.tipY = ui.tipY || 0; ph.tipBg = ui.tip && ui.tipY === 0 ? '#f0694f' : '#eef1f4'; ph.note = ui.tip ? (ui.tipY === 0 ? 'wrong place' : 'positioned') : 'tap to show tooltip'; ph.noteC = ui.tip && ui.tipY === 0 ? '#f0694f' : '#a1aab5'; }
+    if (ph.isHeavy) { ph.btn = ui.building ? 'Building…' : 'Build report'; ph.note = 'taps sent ' + (ui.sent || 0) + ' · handled ' + (ui.done || 0); ph.noteC = (ui.sent || 0) > (ui.done || 0) ? '#f0694f' : '#a1aab5'; }
+    if (ph.isPayload) { ph.btn = 'Save ' + P.rows + ' rows'; ph.note = ui.status || 'Ready'; ph.noteC = ui.status === 'Saved ✓' ? acc : '#a1aab5'; }
+
+    // metrics
+    const mt = ts.map(tr => ({ tr, a: tr === prim ? A : this.at(tr, c) }));
+    const vals = (fn) => mt.map(({ tr, a }) => fn(tr, a));
+    const metrics = [
+      { l: 'Dropped frames', vals: vals((tr, a) => ({ t: a.dropped + '', c: a.dropped ? '#f0694f' : '#eef1f4' })) },
+      { l: 'Queue depth (now / max)', vals: vals((tr, a) => ({ t: a.qNow + ' / ' + tr.qMax, c: a.qNow >= 4 ? '#f0694f' : '#eef1f4' })) },
+      { l: prim.metric.l, vals: vals((tr) => ({ t: c >= tr.end - 0.01 ? this.fmt(tr.metric.v, tr.metric.u) : '…', c: tr.mode === 'old' ? '#f2b35b' : '#5fd3e6' })) },
+      { l: 'Bytes serialized', vals: vals((tr, a) => ({ t: a.ser > 2048 ? Math.round(a.ser / 1024) + ' KB' : a.ser + ' B', c: '#eef1f4' })) }
+    ];
+    const mHead = st.compare ? [{ t: 'OLD', c: '#f2b35b' }, { t: 'NEW', c: '#5fd3e6' }] : [{ t: isNew ? 'NEW' : 'OLD', c: acc }];
+
+    // inspector
+    let msg = null, mg = 0;
+    if (st.sel && ts[st.sel.g]) { msg = ts[st.sel.g].M[st.sel.i]; mg = st.sel.g; }
+    if (!msg) { const ms = prim.M.filter(m => m.t <= c); msg = ms[ms.length - 1] || null; }
+    const nm = { ui: 'UI', js: 'JS', native: 'Native', shadow: 'Shadow' };
+    const insp = { has: !!msg, none: !msg, rows: [], payload: '', hasPayload: false, kind: '', c: acc, bd: '#262e38' };
+    if (msg) {
+      if (msg.kind === 'msg') Object.assign(insp, { kind: 'Bridge message · async', c: '#f2b35b', bd: '#f2b35b55', hasPayload: true, payload: msg.payload,
+        rows: [{ k: 'route', v: nm[msg.from] + ' → bridge → ' + nm[msg.to] }, { k: 'sent at', v: msg.t.toFixed(1) + ' ms' }, { k: 'in flight', v: msg.d.toFixed(1) + ' ms' }, { k: 'size', v: msg.bytes > 2048 ? Math.round(msg.bytes / 1024) + ' KB' : msg.bytes + ' bytes' }, { k: 'format', v: 'JSON text' }] });
+      else Object.assign(insp, { kind: msg.sched ? 'JSI event · scheduled on JS thread' : 'JSI call · direct', c: '#5fd3e6', bd: '#5fd3e655',
+        rows: [{ k: 'call', v: msg.sig }, { k: 'route', v: nm[msg.from] + ' → ' + nm[msg.to] + (msg.sched ? ' (queued for JS thread)' : '') }, { k: 'at', v: msg.t.toFixed(1) + ' ms' }, { k: 'bytes copied', v: msg.ref ? '0 (buffer shared)' : '0' }, { k: 'format', v: 'C++ values' }] });
+    }
+
+    // modules
+    const names = prim.mods || pr.mods || [];
+    const mods = names.slice(0, 20).map(n => {
+      let s = prim.mode === 'old' && pr.id !== 'startup' ? 'ready' : 'not loaded';
+      prim.MOD.filter(m => m.n === n && m.t <= c).forEach(m => { s = m.s; });
+      return { n, s, c: s === 'ready' ? (prim.mode === 'old' ? '#f2b35b' : '#5fd3e6') : s === 'loading' ? '#eef1f4' : '#6b7480' };
+    });
+    if (names.length > 20) mods.push({ n: '+' + (names.length - 20) + ' more', s: '', c: '#6b7480' });
+
+    // trees
+    const hasTR = prim.TR.length > 0;
+    const built = (k) => !hasTR || prim.TR.some(x => x.k === k && x.t <= c);
+    const lastTR = prim.TR.filter(x => x.t <= c).slice(-1)[0];
+    const upd = (k) => lastTR && lastTR.k === k && c - lastTR.t < T * 0.08;
+    const o2 = prim.mode === 'old';
+    const tdef = [
+      ['e', 'Element tree · JS', pr.tree.map(n => [n[0], '<' + n[1] + '>'])],
+      ['s', o2 ? 'Shadow tree · Shadow thread' : 'Shadow tree · C++', pr.tree.filter(n => n[2]).map(n => [n[0], o2 ? 'RCT' + n[2] + ' #' + n[3] : n[2] + 'ShadowNode'])],
+      ['h', 'Host views · UI', pr.tree.filter(n => n[2]).map(n => [n[0], n[2] + ' #' + n[3]])]
+    ];
+    const trees = tdef.map(([k, title, nodes]) => {
+      const b = built(k), u = upd(k);
+      return { title, bd: u ? acc : '#262e38', tag: u ? 'updated' : b ? '' : 'not built', tagC: u ? acc : '#6b7480',
+        nodes: nodes.map(n => ({ pad: n[0] * 12, label: (n[0] ? '└ ' : '') + n[1], fg: b ? (u ? acc : '#c4cbd3') : '#4f5864' })) };
+    });
+
+    const complete = c >= T - 0.01;
+    const over = A.qNow >= 4 || A.recentDrop;
+    const chip = over && st.started && !complete ? { label: 'overloaded', fg: '#f0694f', bg: '#f0694f1f' }
+      : st.playing ? { label: 'running', fg: acc, bg: acc + '1f' }
+      : complete ? { label: 'complete', fg: '#eef1f4', bg: '#2a323c' }
+      : !st.started && c === 0 ? { label: 'idle', fg: '#a1aab5', bg: '#1b2129' } : { label: 'paused', fg: '#c4cbd3', bg: '#1b2129' };
+    const caption = !st.started && c === 0 ? pr.desc + ' Press Play, step with the arrow keys, or tap the phone.' : (A.cap || pr.desc);
+
+    const m = st.mobile;
+    return {
+      acc, accBg: acc + '14', mobile: m,
+      courseHref: 'Across the Bridge.dc.html?mode=' + st.mode,
+      tgOld: { bg: isNew ? 'transparent' : '#f2b35b', fg: isNew ? '#a1aab5' : '#1a1408' },
+      tgNew: { bg: isNew ? '#5fd3e6' : 'transparent', fg: isNew ? '#071a1e' : '#a1aab5' },
+      setOld: () => this.setState({ mode: 'old', sel: null }), setNew: () => this.setState({ mode: 'new', sel: null }),
+      cmp: { label: st.compare ? 'Comparing' : 'Compare', bd: st.compare ? '#eef1f4' : '#333d49', bg: st.compare ? '#eef1f4' : 'transparent', fg: st.compare ? '#0f1216' : '#e7eaee' },
+      toggleCompare: () => this.setState({ compare: !st.compare, sel: null }),
+      motionLabel: st.reduced ? 'Motion: reduced' : 'Motion: full', toggleMotion: () => this.setState({ reduced: !st.reduced }),
+      tabs: [['code', 'Code'], ['threads', 'Threads'], ['inspect', 'Inspect']].map(([k, t]) => ({ t, bd: st.tab === k ? acc : 'transparent', fg: st.tab === k ? '#eef1f4' : '#a1aab5', go: () => this.setState({ tab: k }) })),
+      gridCols: m ? 'minmax(0,1fr)' : '340px minmax(0,1fr) 320px',
+      dLeft: !m || st.tab === 'code' ? 'flex' : 'none', dCenter: !m || st.tab === 'threads' ? 'flex' : 'none', dRight: !m || st.tab === 'inspect' ? 'flex' : 'none',
+      preset: st.preset, presets: Component.PRESETS.map(p => ({ id: p.id, name: p.name })),
+      setPreset: (e) => { cancelAnimationFrame(this.raf); this.setState({ preset: e.target.value, c: 0, playing: false, started: false, sel: null }); },
+      desc: pr.desc, file: pr.file, code, ph, tapPhone: this.restart,
+      onWheel: () => { if (pr.id === 'scroll' && !st.playing) this.restart(); },
+      phoneHint: pr.id === 'scroll' ? 'Scroll on the phone to start' : 'Tap the phone to run it again',
+      ticks, groups, cursorX: X(c),
+      metrics, mHead, mSingle: !st.compare, insp, mods, hasMods: mods.length > 0, noMods: mods.length === 0, trees,
+      play: this.play, stepFwd: this.stepFwd, stepBack: this.stepBack,
+      playLabel: st.playing ? 'Pause' : complete ? 'Replay' : st.started ? 'Resume' : 'Play',
+      scrub: Math.round(c / T * 1000), setScrub: (e) => this.setState({ c: +e.target.value / 1000 * T, playing: false, started: true, sel: null }),
+      timeLabel: c.toFixed(1) + ' / ' + T + ' ms',
+      speeds: [0.5, 1, 2].map(v => ({ t: v + '×', bg: v === st.speed ? '#2a323c' : 'transparent', fg: v === st.speed ? '#eef1f4' : '#a1aab5', go: () => this.setState({ speed: v }) })),
+      rate: st.rate, setRate: (e) => this.setState({ rate: +e.target.value, sel: null }),
+      rateOp: pr.rate ? 1 : 0.45, rateTip: pr.rate ? 'Events per second' : 'Used by the scroll and heavy-loop presets',
+      chip, caption, capC: over && st.started ? '#f0694f' : acc
+    };
+  }
+}
+</script>
+</body>
+</html>

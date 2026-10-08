@@ -1,0 +1,57 @@
+/* Design tokens from REQUIREMENTS.md §7, exposed to Tailwind via @theme. */
+@theme {
+  --color-bg: #0f1216;
+  --color-panel: #13181e;
+  --color-surface: #171d24;
+  --color-raised: #1f262f;
+  --color-raised-hover: #27303a;
+  --color-code-bg: #12171c;
+  --color-line: #2d3642;
+  --color-line-soft: #232b35;
+  --color-line-strong: #3d4856;
+  --color-line-lane: #27303a;
+  --color-track: #303944;
+
+  --color-text: #e7eaee;
+  --color-text-bright: #eef1f4;
+  --color-text-prose: #d5dae0;
+  --color-text-muted: #cbd1d8;
+  --color-text-dim: #b1b9c3;
+  --color-text-faint: #9aa4b0;
+  --color-text-ghost: #808a96;
+  --color-text-gutter: #626b77;
+
+  --color-old: #f2b35b;
+  --color-old-tint: #2a2216;
+  --color-old-ink: #1a1408;
+  --color-new: #5fd3e6;
+  --color-new-tint: #11262b;
+  --color-new-ink: #071a1e;
+  --color-load: #f0694f;
+  --color-load-tint: #2c1714;
+  --color-ok: #79d49c;
+  --color-ok-text: #9fe0b4;
+  --color-bad-text: #f5a08f;
+
+  --color-js: #b39dff;
+  --color-shadow: #79d49c;
+  --color-ui: #f291c4;
+  --color-native: #9fb0c3;
+
+  --color-syn-keyword: #8fa6c9;
+  --color-syn-string: #b5c98f;
+  --color-syn-comment: #808a96;
+  --color-syn-tag: #eef1f4;
+  --color-syn-default: #cbd1d8;
+
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius-card: 12px;
+  --radius-sub: 10px;
+  --radius-lane: 8px;
+  --radius-btn: 6px;
+  --radius-chip: 4px;
+
+  --ease-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}

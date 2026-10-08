@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex;flex-direction:column;border:1px solid #262e38;border-radius:12px;background:#12161b;overflow:hidden;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#e7eaee">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid #262e38;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="display:inline-flex;align-items:center;gap:6px;font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:4px;color:{{ chip.fg }};background:{{ chip.bg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ chip.fg }}"></span>{{ chip.label }}</span>
+      <span style="font:500 12px/1.2 'IBM Plex Mono';color:#a1aab5">same list, same scroll, two architectures</span>
+    </div>
+    <span style="font:400 12px/1 'IBM Plex Mono';color:#8a94a0;white-space:nowrap">t = {{ simTime }} s</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:24px;justify-content:center;padding:24px 16px">
+    <sc-for list="{{ phones }}" as="ph" hint-placeholder-count="2">
+      <div style="flex:1 1 300px;max-width:440px;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;justify-content:center">
+        <div style="width:212px;flex:none;display:flex;flex-direction:column;gap:10px;align-items:center">
+          <div style="display:flex;align-items:center;gap:8px;font:600 13px/1 'IBM Plex Sans';color:{{ ph.c }}"><span style="width:8px;height:8px;border-radius:2px;background:{{ ph.c }}"></span>{{ ph.name }}</div>
+          <div style="position:relative;width:212px;height:400px;border-radius:30px;border:2px solid {{ ph.frame }};background:#0b0e11;padding:10px;box-sizing:border-box;box-shadow:{{ ph.glow }};transition:box-shadow .12s">
+            <div style="position:relative;height:100%;border-radius:22px;overflow:hidden;background:#13181e">
+              <div style="position:absolute;top:0;left:0;right:0;height:52px;z-index:2;background:#1b2129;border-bottom:1px solid #2a323c;display:flex;flex-direction:column;justify-content:center;padding:0 14px;gap:5px">
+                <span style="font:600 13px/1 'IBM Plex Sans';color:#eef1f4">Orders</span>
+                <span style="font:400 10.5px/1 'IBM Plex Mono';color:#a1aab5">JS rendered to y = {{ ph.ry }}</span>
+              </div>
+              <sc-for list="{{ ph.rows }}" as="r" hint-placeholder-count="7">
+                <div style="position:absolute;left:10px;right:10px;top:{{ r.top }}px;height:44px;border-radius:8px;background:{{ r.bg }};display:flex;flex-direction:column;justify-content:center;gap:5px;padding:0 10px;box-sizing:border-box">
+                  <span style="font:500 11.5px/1 'IBM Plex Sans';color:{{ r.fg }}">{{ r.t1 }}</span>
+                  <span style="font:400 10px/1 'IBM Plex Mono';color:{{ r.fg2 }}">{{ r.t2 }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="flex:1 1 160px;min-width:160px;display:flex;flex-direction:column;gap:14px;padding-top:28px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.08em;color:#8a94a0">DROPPED FRAMES</span>
+            <span style="font:600 28px/1 'IBM Plex Mono';color:{{ ph.dropC }}">{{ ph.dropped }}</span>
+            <span style="font:400 12px/1.4 'IBM Plex Sans';color:#a1aab5">{{ ph.dropPct }} of {{ frames }} frames</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.08em;color:#8a94a0">{{ ph.qLabel }}</span>
+            <div style="display:flex;flex-wrap:wrap;gap:3px;min-height:10px;max-width:170px">
+              <sc-for list="{{ ph.qbox }}" as="qb" hint-placeholder-count="0"><span style="width:8px;height:8px;border-radius:2px;background:{{ qb }}"></span></sc-for>
+            </div>
+            <span style="font:500 13px/1.3 'IBM Plex Mono';color:{{ ph.qC }}">{{ ph.qText }}</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.08em;color:#8a94a0">JS IS BEHIND BY</span>
+            <span style="font:600 18px/1 'IBM Plex Mono';color:{{ ph.lagC }}">{{ ph.lag }} ms</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.08em;color:#8a94a0">COST PER EVENT</span>
+            <span style="font:400 12.5px/1.45 'IBM Plex Mono';color:#c4cbd3">{{ ph.cost }}</span>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:12px 14px;border-top:1px solid #262e38">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button onClick="{{ play }}" style="height:34px;min-width:84px;padding:0 14px;border-radius:6px;border:1px solid {{ acc }};background:{{ accBg }};color:{{ acc }};font:600 13px/1 'IBM Plex Sans';cursor:pointer">{{ playLabel }}</button>
+      <button onClick="{{ stepFwd }}" style="height:34px;padding:0 12px;border-radius:6px;border:1px solid #333d49;background:#1b2129;color:#e7eaee;font:500 13px/1 'IBM Plex Sans';cursor:pointer" style-hover="background:#222a33">Step 1 frame</button>
+      <div style="display:flex;border:1px solid #333d49;border-radius:6px;overflow:hidden">
+        <sc-for list="{{ speeds }}" as="sp" hint-placeholder-count="3"><button onClick="{{ sp.go }}" style="height:32px;padding:0 10px;border:0;background:{{ sp.bg }};color:{{ sp.fg }};font:500 12px/1 'IBM Plex Mono';cursor:pointer">{{ sp.t }}</button></sc-for>
+      </div>
+      <button onClick="{{ reset }}" style="height:34px;padding:0 12px;border-radius:6px;border:1px solid #333d49;background:#1b2129;color:#e7eaee;font:500 13px/1 'IBM Plex Sans';cursor:pointer" style-hover="background:#222a33">Reset</button>
+    </div>
+    <label style="flex:1 1 260px;display:flex;align-items:center;gap:12px;min-width:220px">
+      <span style="font:500 12px/1 'IBM Plex Mono';color:#a1aab5;white-space:nowrap">JS load</span>
+      <input type="range" min="0" max="100" value="{{ load }}" onChange="{{ setLoad }}" style="flex:1;accent-color:{{ loadC }}">
+      <span style="font:600 12px/1 'IBM Plex Mono';color:{{ loadC }};width:96px;text-align:right">{{ work }} ms work</span>
+    </label>
+  </div>
+  <div style="display:flex;gap:12px;padding:12px 14px 16px;border-top:1px solid #1e252d;min-height:76px;box-sizing:border-box;background:#0f1317">
+    <span style="flex:none;width:3px;border-radius:2px;background:{{ capC }}"></span>
+    <p style="margin:0;font:400 15px/1.6 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty;max-width:860px">{{ caption }}</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:720},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;old&quot;,&quot;new&quot;],&quot;default&quot;:&quot;old&quot;,&quot;tsType&quot;:&quot;'old'|'new'&quot;},&quot;reduced&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  static FRAME = 16.6; static PX = 4; static END = 600; static ROW = 52;
+  state = this.fresh(25);
+  fresh(load) {
+    return { f: 0, load, playing: false, speed: 1, once: false,
+      o: { avail: 0, ry: 0, dropped: 0, flash: 0, batch: 1, ser: 0, merged: 0 },
+      n: { avail: 0, ry: 0, dropped: 0, flash: 0, batch: 1, ser: 0, merged: 0 } };
+  }
+  componentDidMount() {
+    try {
+      if (new URLSearchParams(location.search).get('demo')) {
+        let st = { ...this.state, load: 72 };
+        for (let i = 0; i < 260; i++) st = this.adv(st);
+        this.setState(st);
+      }
+    } catch (e) {}
+  }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); }
+  work(load) { return 1 + load * 0.2; }
+  rowsFor(y, ry) { return Math.min(10, Math.max(1, Math.ceil((y - ry) / Component.ROW))); }
+  side(d, y, w, old) {
+    const F = Component.FRAME, o = { ...d };
+    const rows = this.rowsFor(y, o.ry);
+    o.ser = old ? 1 + rows * 1.2 : 0;
+    o.batch = 1 + rows;
+    const cost = w + o.ser;
+    o.avail += F;
+    if (o.avail >= cost) { o.avail = Math.min(o.avail - cost, F); o.ry = y; o.flash = Math.max(0, o.flash - 1); }
+    else { o.dropped++; o.merged++; o.flash = 3; }
+    return o;
+  }
+  adv(st) {
+    const f = st.f + 1, y = f * Component.PX, w = this.work(st.load);
+    return { ...st, f, o: this.side(st.o, y, w, true), n: this.side(st.n, y, w, false) };
+  }
+  run = () => { this.last = null; this.acc = 0; cancelAnimationFrame(this.raf); this.raf = requestAnimationFrame(this.tick); };
+  tick = (ts) => {
+    if (!this.state.playing) return;
+    const dt = this.last == null ? 16 : Math.min(80, ts - this.last); this.last = ts;
+    this.acc += dt * this.state.speed;
+    let st = this.state, k = 0;
+    while (this.acc >= Component.FRAME * 2 && st.f < Component.END) { st = this.adv(st); this.acc -= Component.FRAME * 2; k++; }
+    if (st.f >= Component.END) { this.setState({ ...st, playing: false }); return; }
+    if (k) this.setState(st);
+    this.raf = requestAnimationFrame(this.tick);
+  };
+  play = () => {
+    if (this.state.playing) { this.setState({ playing: false }); return; }
+    const base = this.state.f >= Component.END ? this.fresh(this.state.load) : this.state;
+    this.setState({ ...base, speed: this.state.speed, playing: true }, this.run);
+  };
+  stepFwd = () => { if (this.state.f < Component.END) this.setState({ ...this.adv(this.state), playing: false }); };
+  reset = () => { cancelAnimationFrame(this.raf); this.setState({ ...this.fresh(this.state.load), speed: this.state.speed }); };
+
+  rows(scrollY, ry) {
+    const out = [], H = 52, top0 = 60, view = 340;
+    const first = Math.max(0, Math.floor(scrollY / H) - 1);
+    for (let i = first; i < first + 9; i++) {
+      const top = top0 + i * H - scrollY;
+      if (top > view + 10 || top < -H) continue;
+      const filled = i * H < ry + view + H;
+      out.push(filled
+        ? { top, bg: '#1b2129', fg: '#e7eaee', fg2: '#a1aab5', t1: 'Order #' + (1040 + i), t2: (i % 4) + 1 + ' items · $' + (12 + (i * 7) % 40) + '.00' }
+        : { top, bg: '#171c22', fg: '#171c22', fg2: '#171c22', t1: '·', t2: '·' });
+    }
+    return out;
+  }
+  renderVals() {
+    const st = this.state, F = Component.FRAME, w = this.work(st.load);
+    const isNew = this.props.mode === 'new', reduced = !!this.props.reduced;
+    const acc = isNew ? '#5fd3e6' : '#f2b35b';
+    const scrollY = reduced ? Math.floor(st.f / 15) * 15 * Component.PX : st.f * Component.PX;
+    const lagOf = (d) => (st.f * Component.PX - d.ry) / Component.PX * F;
+    const oOver = st.f > 0 && lagOf(st.o) > 80;
+    const nOver = st.f > 0 && lagOf(st.n) > 80;
+    const complete = st.f >= Component.END;
+    const mk = (key, name, c, sel) => {
+      const d = st[key], q = st.f ? d.batch : 0, old = key === 'o';
+      const lagMs = Math.round(lagOf(d));
+      const over = key === 'o' ? oOver : nOver;
+      const flash = !reduced && d.flash > 0 && st.playing;
+      return {
+        name, c, frame: sel ? c : '#333d49',
+        glow: flash ? '0 0 0 3px #f0694f, 0 0 24px #f0694f66' : over ? '0 0 0 2px #f0694f66' : 'none',
+        ry: d.ry, rows: this.rows(scrollY, reduced ? Math.floor(d.ry / 60) * 60 : d.ry),
+        dropped: d.dropped, dropC: d.dropped > 0 ? '#f0694f' : '#eef1f4',
+        dropPct: st.f ? Math.round(d.dropped / st.f * 100) + '%' : '0%',
+        qLabel: old ? 'NEXT BRIDGE BATCH' : 'NEXT UPDATE',
+        qbox: Array.from({ length: q }, (_, i) => (old && i >= 5 ? '#f0694f' : c)),
+        qText: old ? q + ' JSON messages · ' + d.ser.toFixed(1) + ' ms' : q + ' rows · no JSON',
+        qC: old && q > 5 ? '#f0694f' : '#c4cbd3',
+        lag: Math.max(0, lagMs), lagC: lagMs > 100 ? '#f0694f' : '#eef1f4',
+        cost: (old ? d.ser.toFixed(1) : '0') + ' ms JSON + ' + w.toFixed(1) + ' ms work'
+      };
+    };
+    const phones = [mk('o', 'Old architecture', '#f2b35b', !isNew), mk('n', 'New Architecture', '#5fd3e6', isNew)];
+    let caption, capC = acc;
+    if (st.f === 0) caption = 'Press Play to start scrolling both lists, then drag the JS load slider to the right. Each frame, both phones get a scroll event and JS renders the rows that came into view. Events that arrive while JS is busy are merged into the latest one, on both phones.';
+    else if (complete) caption = 'Done. Old dropped ' + st.o.dropped + ' frames, New dropped ' + st.n.dropped + '. Drag the slider and press Replay to compare at a different load.';
+    else if (oOver && nOver) { caption = 'At this load both phones fall behind. The New Architecture removes the JSON, but your own JS work still has to fit in 16.6 ms.'; capC = '#f0694f'; }
+    else if (oOver) { caption = 'The old phone is falling behind. Every event pays for JSON both ways: the scroll event in, and the row updates out. The further behind JS gets, the more rows each batch carries (' + st.o.batch + ' messages, ' + st.o.ser.toFixed(1) + ' ms of JSON), so it costs even more. Blank rows appear.'; capC = '#f0694f'; }
+    else caption = 'Both phones keep up. Each event’s cost fits inside one 16.6 ms frame, so JS clears it before the next one arrives.';
+    const chip = st.playing ? (oOver || nOver ? { label: 'overloaded', fg: '#f0694f', bg: '#f0694f1f' } : { label: 'running', fg: acc, bg: acc + '1f' })
+      : complete ? { label: 'complete', fg: '#eef1f4', bg: '#2a323c' }
+      : st.f === 0 ? { label: 'idle', fg: '#a1aab5', bg: '#1b2129' }
+      : (oOver || nOver) ? { label: 'overloaded · paused', fg: '#f0694f', bg: '#f0694f1f' } : { label: 'paused', fg: '#c4cbd3', bg: '#1b2129' };
+    const loadC = w + 2.2 > F ? (w > F ? '#f0694f' : '#f2b35b') : '#c4cbd3';
+    return {
+      chip, acc, accBg: acc + '14', phones, caption, capC,
+      simTime: (st.f * F / 1000).toFixed(2), frames: st.f,
+      load: st.load, work: w.toFixed(1), loadC,
+      setLoad: (e) => this.setState({ load: +e.target.value }),
+      play: this.play, stepFwd: this.stepFwd, reset: this.reset,
+      playLabel: st.playing ? 'Pause' : complete ? 'Replay' : st.f === 0 ? 'Play' : 'Resume',
+      speeds: [0.5, 1, 2].map(v => ({ t: v + '×', bg: v === st.speed ? '#2a323c' : 'transparent', fg: v === st.speed ? '#eef1f4' : '#a1aab5', go: () => this.setState({ speed: v }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

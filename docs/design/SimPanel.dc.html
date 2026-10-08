@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex;flex-direction:column;border:1px solid #262e38;border-radius:12px;background:#12161b;overflow:hidden;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#e7eaee">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid #262e38;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px;min-width:0">
+      <span style="display:inline-flex;align-items:center;gap:6px;font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:4px;color:{{ chip.fg }};background:{{ chip.bg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ chip.fg }}"></span>{{ chip.label }}</span>
+      <span style="font:500 12px/1.2 'IBM Plex Mono',monospace;color:#a1aab5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ title }}</span>
+    </div>
+    <div style="display:flex;gap:4px;align-items:center">
+      <sc-for list="{{ segs }}" as="sg" hint-placeholder-count="6">
+        <button onClick="{{ sg.go }}" title="{{ sg.tip }}" style="width:16px;height:6px;border:0;border-radius:3px;padding:0;cursor:pointer;background:{{ sg.bg }}"></button>
+      </sc-for>
+    </div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap">
+    <div style="flex:1 1 520px;min-width:0;padding:16px;display:flex;flex-direction:column;gap:14px">
+      <sc-if value="{{ hasPhases }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:6px;border:1px solid {{ ph.bd }};background:{{ ph.bg }};color:{{ ph.fg }};font:500 13px/1 'IBM Plex Sans'"><span style="font:500 11px/1 'IBM Plex Mono'">{{ ph.n }}</span>{{ ph.t }}</div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <div style="position:relative;display:grid;grid-template-columns:{{ gridCols }};gap:8px;height:{{ laneH }}px">
+        <sc-for list="{{ lanes }}" as="ln" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;min-width:0;border:1px solid {{ ln.border }};border-radius:8px;background:{{ ln.bg }};transition:background .25s,border-color .25s;overflow:hidden">
+            <div style="padding:10px 10px 8px;border-bottom:1px solid #222a33;min-height:44px;box-sizing:border-box">
+              <div style="display:flex;align-items:center;gap:6px;min-width:0"><span style="width:8px;height:8px;border-radius:2px;background:{{ ln.color }};flex:none"></span><span style="font:600 12.5px/1.2 'IBM Plex Sans';color:{{ ln.nameColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ ln.name }}</span></div>
+              <sc-if value="{{ ln.showSub }}" hint-placeholder-val="{{ true }}"><div style="font:400 11px/1.3 'IBM Plex Mono';color:#8a94a0;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ ln.sub }}</div></sc-if>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px;padding:34px 8px 8px;min-height:0;overflow:hidden">
+              <sc-if value="{{ ln.isJsi }}" hint-placeholder-val="{{ false }}"><div style="font:400 11px/1.4 'IBM Plex Mono';color:#8a94a0;text-align:center">no JSON</div></sc-if>
+              <sc-for list="{{ ln.queue }}" as="qi" hint-placeholder-count="0">
+                <div style="font:500 10.5px/1 'IBM Plex Mono';color:#f2b35b;background:#f2b35b14;border:1px solid #f2b35b44;border-radius:4px;padding:5px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ qi }}</div>
+              </sc-for>
+              <div style="flex:1"></div>
+              <sc-for list="{{ ln.acts }}" as="ac" hint-placeholder-count="0">
+                <div style="font:500 11.5px/1.4 'IBM Plex Mono';padding:6px 7px;border-radius:5px;color:{{ ac.fg }};background:{{ ac.bg }};border:1px solid {{ ac.bd }};word-break:break-word">{{ ac.text }}</div>
+              </sc-for>
+              <sc-if value="{{ ln.hasScreen }}" hint-placeholder-val="{{ false }}">
+                <div style="border:1px solid #333d49;border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;background:#0f1216">
+                  <span style="font:500 10px/1 'IBM Plex Mono';color:#8a94a0;letter-spacing:.08em">SCREEN</span>
+                  <span style="font:600 22px/1 'IBM Plex Sans';color:#eef1f4">{{ ln.screen }}</span>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-for>
+        <div style="position:absolute;left:10%;right:10%;top:62px;height:0;border-top:1px dashed {{ wireC }};pointer-events:none"></div>
+        <sc-if value="{{ pk.show }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:50px;left:{{ pk.x }}%;transform:translateX(-50%);max-width:{{ pk.maxW }}px;font:500 11px/1 'IBM Plex Mono';color:#1a1408;background:#f2b35b;border-radius:5px;padding:6px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 0 0 3px #f2b35b26;pointer-events:none">{{ pk.label }}</div>
+        </sc-if>
+        <sc-if value="{{ rf.show }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:61px;left:{{ rf.l }}%;width:{{ rf.w }}%;height:2px;background:#5fd3e6;box-shadow:0 0 8px #5fd3e699;pointer-events:none"></div>
+          <div style="position:absolute;top:56px;left:{{ rf.hx }}%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#5fd3e6;pointer-events:none"></div>
+          <div style="position:absolute;top:40px;left:{{ rf.mx }}%;transform:translateX(-50%);max-width:{{ pk.maxW }}px;font:500 11px/1 'IBM Plex Mono';color:#5fd3e6;background:#0f1216;padding:2px 6px;border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none">{{ rf.label }}</div>
+        </sc-if>
+      </div>
+      <sc-if value="{{ hasTrees }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+          <sc-for list="{{ trees }}" as="tr" hint-placeholder-count="3">
+            <div style="border:1px solid {{ tr.bd }};border-radius:8px;padding:10px;min-width:0;background:#151a20;transition:border-color .25s">
+              <div style="display:flex;justify-content:space-between;gap:6px;font:500 11px/1.2 'IBM Plex Mono';color:#a1aab5;margin-bottom:8px"><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ tr.title }}</span><span style="color:{{ tr.tagC }}">{{ tr.tag }}</span></div>
+              <sc-for list="{{ tr.nodes }}" as="nd" hint-placeholder-count="3">
+                <div style="font:400 11.5px/1.7 'IBM Plex Mono';color:{{ nd.fg }};padding-left:{{ nd.pad }}px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ nd.label }}</div>
+              </sc-for>
+              <sc-if value="{{ tr.empty }}" hint-placeholder-val="{{ true }}"><div style="font:400 11.5px/1.7 'IBM Plex Mono';color:#6b7480">not built yet</div></sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+    <div style="flex:1 1 340px;min-width:0;display:flex;flex-direction:column;background:#0f1317;box-shadow:-1px 0 0 #262e38,0 -1px 0 #262e38">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid #222a33">
+        <span style="font:500 12px/1 'IBM Plex Mono';color:#a1aab5">{{ file }}</span>
+        <button onClick="{{ toggleCode }}" style="height:28px;padding:0 10px;border-radius:6px;border:1px solid #333d49;background:transparent;color:#c4cbd3;font:500 12px/1 'IBM Plex Sans';cursor:pointer" style-hover="background:#1b2129">{{ codeBtn }}</button>
+      </div>
+      <sc-if value="{{ codeOpen }}" hint-placeholder-val="{{ true }}">
+        <div style="padding:12px 0;overflow-x:auto;font:400 13px/1.75 'IBM Plex Mono',monospace">
+          <sc-for list="{{ lines }}" as="L" hint-placeholder-count="7">
+            <div style="display:flex;background:{{ L.bg }};white-space:pre;min-width:max-content;padding-right:16px;transition:background .2s">
+              <span style="width:30px;flex:none;text-align:right;color:{{ L.numC }};padding-right:6px;user-select:none">{{ L.n }}</span>
+              <span style="width:16px;flex:none;color:{{ L.markC }};text-align:center">{{ L.mark }}</span>
+              <span><sc-for list="{{ L.toks }}" as="tk" hint-placeholder-count="1"><span style="color:{{ tk.c }}">{{ tk.t }}</span></sc-for></span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid #262e38">
+    <button onClick="{{ play }}" style="height:34px;min-width:84px;padding:0 14px;border-radius:6px;border:1px solid {{ acc }};background:{{ accBg }};color:{{ acc }};font:600 13px/1 'IBM Plex Sans';cursor:pointer">{{ playLabel }}</button>
+    <button onClick="{{ stepFwd }}" style="height:34px;padding:0 12px;border-radius:6px;border:1px solid #333d49;background:#1b2129;color:#e7eaee;font:500 13px/1 'IBM Plex Sans';cursor:pointer" style-hover="background:#222a33">Step</button>
+    <div style="display:flex;border:1px solid #333d49;border-radius:6px;overflow:hidden">
+      <sc-for list="{{ speeds }}" as="sp" hint-placeholder-count="3">
+        <button onClick="{{ sp.go }}" style="height:32px;padding:0 10px;border:0;background:{{ sp.bg }};color:{{ sp.fg }};font:500 12px/1 'IBM Plex Mono';cursor:pointer">{{ sp.t }}</button>
+      </sc-for>
+    </div>
+    <button onClick="{{ reset }}" style="height:34px;padding:0 12px;border-radius:6px;border:1px solid #333d49;background:#1b2129;color:#e7eaee;font:500 13px/1 'IBM Plex Sans';cursor:pointer" style-hover="background:#222a33">Reset</button>
+    <span style="flex:1"></span>
+    <span style="font:400 12px/1 'IBM Plex Mono';color:#8a94a0">{{ stepLabel }}</span>
+  </div>
+  <div style="display:flex;gap:12px;padding:12px 14px 16px;border-top:1px solid #1e252d;min-height:76px;box-sizing:border-box;background:#0f1317">
+    <span style="flex:none;width:3px;border-radius:2px;background:{{ acc }}"></span>
+    <p style="margin:0;font:400 15px/1.6 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty;max-width:860px">{{ caption }}</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:620},&quot;scenario&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;tap&quot;,&quot;map&quot;,&quot;jsi&quot;,&quot;codegen&quot;,&quot;fabric&quot;],&quot;default&quot;:&quot;tap&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;old&quot;,&quot;new&quot;],&quot;default&quot;:&quot;old&quot;,&quot;tsType&quot;:&quot;'old'|'new'&quot;},&quot;reduced&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;compact&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { step: -1, p: 0, playing: false, speed: 1, once: false, codeOpen: null };
+
+  static LN = {
+    js: { name: 'JS thread', sub: 'runs your React code', c: '#b39dff' },
+    bridge: { name: 'Bridge', sub: 'queue of JSON text', c: '#f2b35b', k: 'bridge', narrow: true },
+    jsi: { name: 'JSI', sub: 'direct C++ calls', c: '#5fd3e6', k: 'jsi', narrow: true },
+    shadow: { name: 'Shadow thread', sub: 'layout with Yoga', c: '#79d49c' },
+    ui: { name: 'UI thread', sub: 'draws, gets touches', c: '#f291c4' },
+    native: { name: 'Native module', sub: 'platform code', c: '#9fb0c3' },
+    core: { name: 'C++ core', sub: 'Fabric, shared tree', c: '#5fd3e6' },
+    spec: { name: 'TS spec', sub: 'you write this', c: '#c4cbd3' },
+    cg: { name: 'Codegen', sub: 'runs at build time', c: '#5fd3e6', narrow: true },
+    out: { name: 'Native interface', sub: 'generated for you', c: '#9fb0c3' }
+  };
+
+  static LIB = {
+    tap: {
+      old: {
+        title: 'one tap · old architecture', file: 'Counter.tsx', lanes: ['js', 'bridge', 'ui'], screen: true, ui0: '1',
+        intro: 'Press Play. We will follow a single press of this counter button, one stop at a time. Use Step to move at your own pace.',
+        code: ['function Counter() {', '  const [count, setCount] = useState(1);', '  return (', '    <Pressable onPress={() => setCount(c => c + 1)}>', '      <Text>{count}</Text>', '    </Pressable>', '  );', '}'],
+        steps: [
+          { l: 'ui', ln: 3, a: 'Touch on view #12', c: 'Your finger touches the screen. The UI thread owns the screen, so it gets the touch first: a press on the native view with id 12. It doesn’t know about onPress. It reports the raw touch to JavaScript, where React Native decides whether it counts as a press.' },
+          { l: 'bridge', a: 'Serialize to JSON', p: ['ui', 'bridge', '{"type":"topTouchEnd","target":12}'], q: ['touchEnd #12'], c: 'The bridge only carries text. So the touch is serialized: turned into a JSON string. It joins a queue of other messages waiting to cross.' },
+          { l: 'js', a: 'Parse JSON', p: ['bridge', 'js', '{"type":"topTouchEnd","target":12}'], q: [], c: 'The bridge sends its queue over in a batch, a group of messages sent together. The JS thread parses the string back into an object.' },
+          { l: 'js', ln: 3, a: 'onPress → setCount(2)', c: 'React Native’s touch system, which runs in JS, sees a finished press on your Pressable and calls onPress. onPress calls setCount, asking React to change the state from 1 to 2.' },
+          { l: 'js', ln: 4, a: 'Render: "1" → "2"', c: 'React runs Counter again and compares the result with the last one. Only one thing changed: the Text now says 2.' },
+          { l: 'bridge', a: 'Serialize update', p: ['js', 'bridge', '["updateView",14,{"text":"2"}]'], q: ['updateView #14'], c: 'That change is serialized into another JSON message and queued on the bridge.' },
+          { l: 'ui', a: 'Parse → update view #14', p: ['bridge', 'ui', '["updateView",14,{"text":"2"}]'], q: [], c: 'Native parses the message. It passes through a third thread first, the Shadow thread, which works out layout (chapter 2). Then the UI thread updates the real text view.' },
+          { l: 'ui', a: 'Frame shows "2"', ui: '2', c: 'On the next frame the screen shows 2. One tap cost two trips across the bridge and four rounds of JSON writing and reading.' }
+        ]
+      },
+      new: {
+        title: 'one tap · new architecture', file: 'Counter.tsx', lanes: ['js', 'jsi', 'ui'], screen: true, ui0: '1',
+        intro: 'Same button, same code, New Architecture. Press Play and count the stops.',
+        code: ['function Counter() {', '  const [count, setCount] = useState(1);', '  return (', '    <Pressable onPress={() => setCount(c => c + 1)}>', '      <Text>{count}</Text>', '    </Pressable>', '  );', '}'],
+        steps: [
+          { l: 'ui', ln: 3, a: 'Touch on view #12', c: 'Your finger touches the screen. The UI thread gets the touch on view 12 and needs JavaScript to decide what happens.' },
+          { l: 'jsi', a: 'C++ event, no JSON', p: ['ui', 'js', 'touchEnd → JS thread', 'ref'], c: 'There is no bridge here. The touch becomes a C++ event that is scheduled onto the JS thread, and JS reads it through JSI as a normal object. It still waits its turn on the JS thread, but nothing is turned into text or batched with other messages.' },
+          { l: 'js', ln: 3, a: 'onPress → setCount(2)', c: 'React Native’s touch system turns the touch into a press and calls onPress, which calls setCount. This part is exactly the same as before: your code did not change.' },
+          { l: 'js', ln: 4, a: 'Render → C++ tree', c: 'React runs Counter again. Fabric, the new renderer, writes the result into a tree that lives in C++ memory, which the UI side can read as well.' },
+          { l: 'jsi', a: 'Hand over the tree', p: ['js', 'ui', 'commit(tree)', 'ref'], c: 'React commits the new tree, and Fabric schedules the mount on the UI thread. It hands over a reference to the tree in C++, not a JSON copy of it.' },
+          { l: 'ui', a: 'Frame shows "2"', ui: '2', c: 'The UI thread applies the change and the next frame shows 2. Same result, and no JSON anywhere on the way.' }
+        ]
+      }
+    },
+    map: {
+      old: {
+        title: 'the old map', file: 'App.tsx', lanes: ['js', 'bridge', 'shadow', 'ui'],
+        intro: 'Press Play for a tour of who does what when your app starts and draws its first screen.',
+        code: ["AppRegistry.registerComponent('App', () => App);", '', 'function App() {', '  const [items, setItems] = useState([]);', '  useEffect(() => { api.load().then(setItems); }, []);', '  return <FlatList data={items} renderItem={Row} />;', '}'],
+        steps: [
+          { l: 'ui', a: 'Start app, start JS thread', c: 'The UI thread is the app’s main thread. It starts first and sets up React Native, which starts the JS thread and hands it your JS bundle: all of your code, packed into one file.' },
+          { l: 'js', ln: 0, a: 'Run your code', c: 'The JS thread loads and runs that bundle. Every component, hook and handler you write runs here, one thing at a time.' },
+          { l: 'js', ln: 5, a: 'Render App', c: 'React renders App and works out which views should exist.' },
+          { l: 'bridge', a: 'Batch of view commands', p: ['js', 'bridge', '[["createView",2,"RCTView"],…]'], q: ['createView #2', 'createView #3', 'setChildren #1'], c: 'React’s output can’t cross as objects. It becomes a batch of JSON commands: create this view, put it inside that one.' },
+          { l: 'shadow', a: 'Yoga: compute layout', p: ['bridge', 'shadow', '[["createView",2,…]]'], q: [], c: 'The Shadow thread reads the batch and runs Yoga, a layout engine. Yoga turns your flexbox styles into exact positions and sizes.' },
+          { l: 'ui', a: 'Create real views', p: ['shadow', 'ui', 'x, y, width, height'], c: 'The UI thread creates the real platform views at those positions and draws them.' },
+          { l: 'bridge', a: 'Events go back as JSON', p: ['ui', 'bridge', '{"type":"scroll","y":120}'], q: ['scroll y=120'], c: 'When the user scrolls or taps, events travel back over the same bridge. Everything between JS and native is asynchronous: sent now, handled later.' }
+        ]
+      },
+      new: {
+        title: 'the new map', file: 'App.tsx', lanes: ['js', 'jsi', 'shadow', 'ui'],
+        intro: 'Same app, New Architecture. The three threads are still here. Watch what connects them.',
+        code: ["AppRegistry.registerComponent('App', () => App);", '', 'function App() {', '  const [items, setItems] = useState([]);', '  useEffect(() => { api.load().then(setItems); }, []);', '  return <FlatList data={items} renderItem={Row} />;', '}'],
+        steps: [
+          { l: 'ui', a: 'Start app, start JS thread', c: 'The UI thread starts first, and the JS thread loads your bundle, just like before.' },
+          { l: 'js', ln: 0, a: 'Run your code', c: 'The JS thread runs your code. Still one thing at a time: that never changed.' },
+          { l: 'js', ln: 5, a: 'Render App', c: 'React renders App.' },
+          { l: 'jsi', a: 'Tree built in C++', p: ['js', 'shadow', 'shadow tree (C++)', 'ref'], c: 'Instead of JSON commands, React’s output becomes a shadow tree in C++. Through JSI, every thread can reach it.' },
+          { l: 'shadow', a: 'Yoga: compute layout', c: 'Layout still uses Yoga, now in C++, as part of committing the tree. It runs off the UI thread, and can run synchronously when an urgent update or a measurement needs the answer right away.' },
+          { l: 'ui', a: 'Create real views', p: ['shadow', 'ui', 'tree ref', 'ref'], c: 'The UI thread reads the finished tree and creates the real views.' },
+          { l: 'jsi', a: 'Events without JSON', p: ['ui', 'js', 'onScroll(y: 120)', 'ref'], c: 'Events come back as C++ events scheduled onto the JS thread, with no JSON. And when JS needs an answer from native right now, a synchronous call can return it on the same line.' }
+        ]
+      }
+    },
+    jsi: {
+      old: {
+        title: 'calling a native module · bridge', file: 'Battery.tsx', lanes: ['js', 'bridge', 'native'],
+        intro: 'You want the battery level. Press Play and count how many times data changes form on the way.',
+        code: ['// Old: ask through the bridge', 'const level = await NativeModules.Battery.getLevel();', 'setBattery(level);'],
+        steps: [
+          { l: 'js', ln: 1, a: 'getLevel() → Promise', c: 'You call the module. Nothing native happens yet. The call hands you a Promise: a placeholder for a value that will arrive later.' },
+          { l: 'bridge', a: 'Serialize the call', p: ['js', 'bridge', '{"moduleID":23,"methodID":4,"args":[],"callID":7}'], q: ['call #7'], c: 'The call is written into JSON: a number for the module, a number for the method, the arguments, and an id so the reply can find its Promise. Then it is queued.' },
+          { l: 'native', a: 'Parse, look up module #23', p: ['bridge', 'native', '{"moduleID":23,…}'], q: [], c: 'Native parses the JSON, finds module 23 and method 4 in a table it built at startup, and calls the method.' },
+          { l: 'native', a: 'Read battery: 0.82', c: 'The actual work is tiny: read one number.' },
+          { l: 'bridge', a: 'Serialize the reply', p: ['native', 'bridge', '{"callID":7,"result":0.82}'], q: ['reply #7'], c: 'The answer makes the same trip back, as JSON.' },
+          { l: 'js', ln: 2, a: 'Promise resolves → setBattery', p: ['bridge', 'js', '{"callID":7,"result":0.82}'], q: [], c: 'On a later turn of the JS thread the Promise resolves and your next line runs. Four rounds of writing and reading JSON, for one number.' }
+        ]
+      },
+      new: {
+        title: 'calling a native module · JSI', file: 'Battery.tsx', lanes: ['js', 'jsi', 'native'],
+        intro: 'Same question, New Architecture. JS already holds the module. Press Play.',
+        code: ['// New: call the host object directly', 'const level = Battery.getLevel();', 'setBattery(level);'],
+        steps: [
+          { l: 'js', ln: 0, a: 'Holds Battery (host object)', c: 'When the module was first used, JS received a host object: it looks like a normal JS object, but its methods are C++ functions. JS keeps a reference to it, like keeping a phone number instead of mailing a letter each time.' },
+          { l: 'jsi', ln: 1, a: 'Direct C++ call', p: ['js', 'native', 'Battery.getLevel()', 'ref'], c: 'Calling getLevel runs the C++ function directly through JSI, right here on the JS thread. No JSON, no queue, no lookup table: JS already holds the function.' },
+          { l: 'native', a: 'Read battery: 0.82', c: 'Native reads the value and returns it as a plain number.' },
+          { l: 'js', ln: 2, a: 'level = 0.82, same line', p: ['native', 'js', '0.82', 'ref'], c: 'The number comes straight back, so the very next line can use it. Slow work can still be async; now you get to choose.' }
+        ]
+      }
+    },
+    codegen: {
+      old: {
+        title: 'types across the bridge · old', file: 'Battery (JS + Obj-C)', lanes: ['js', 'bridge', 'native'],
+        intro: 'In the old architecture, JS and native are written separately and nothing checks that they agree. Press Play to see when a mistake is found.',
+        code: ['// JS side: nothing describes the native API', 'const level = await NativeModules.Battery.getLevel(true);', '', '// Objective-C side, written by hand', 'RCT_EXPORT_METHOD(getLevel:(RCTPromiseResolveBlock)resolve', '                  rejecter:(RCTPromiseRejectBlock)reject)'],
+        steps: [
+          { l: 'js', ln: 1, a: 'getLevel(true)', c: 'Here JS passes an argument the native method doesn’t take. TypeScript can’t warn you: NativeModules.Battery is typed as “anything”.' },
+          { l: 'bridge', a: 'Carry it anyway', p: ['js', 'bridge', '{"method":"getLevel","args":[true]}'], q: ['getLevel(true)'], c: 'The bridge doesn’t know about types either. It just carries the JSON.' },
+          { l: 'native', ln: [4, 5], a: 'Argument mismatch!', p: ['bridge', 'native', '{"args":[true]}'], q: [], err: true, c: 'Only now, while the app is running on a user’s phone, does native notice the mismatch. The result is a red error screen in development or a crash in production.' }
+        ]
+      },
+      new: {
+        title: 'codegen · spec → native', file: 'NativeBattery.ts', lanes: ['spec', 'cg', 'out'],
+        intro: 'Codegen runs when you build the app. Press Play to watch a TypeScript spec become native code.',
+        code: ["import type { TurboModule } from 'react-native';", "import { TurboModuleRegistry } from 'react-native';", '', 'export interface Spec extends TurboModule {', '  getLevel(): number;', '  setLowPowerMode(enabled: boolean): void;', '  getModel(): Promise<string>;', '}', '', "export default TurboModuleRegistry.getEnforcing<Spec>('Battery');"],
+        steps: [
+          { l: 'spec', ln: [3, 7], a: 'interface Spec', c: 'You write a spec: a TypeScript interface that lists every method and its types. This is the single source of truth for both sides.' },
+          { l: 'cg', ln: 4, a: 'number → double', p: ['spec', 'cg', 'getLevel(): number'], c: 'Codegen reads each method. Every JS type maps to one native type. A number becomes a double, the native word for a decimal number.' },
+          { l: 'out', a: 'double getLevel(rt)', p: ['cg', 'out', 'double getLevel(…)'], c: 'It writes the matching C++ method. You never edit this file by hand.' },
+          { l: 'cg', ln: 5, a: 'boolean → bool', p: ['spec', 'cg', 'setLowPowerMode(boolean)'], c: 'A boolean becomes a bool. A void return means native sends nothing back.' },
+          { l: 'out', a: 'void setLowPowerMode(rt, bool)', p: ['cg', 'out', 'void setLowPowerMode(…)'], c: 'Another method is added to the generated interface.' },
+          { l: 'cg', ln: 6, a: 'Promise<string> → Promise', p: ['spec', 'cg', 'getModel(): Promise<string>'], c: 'A Promise becomes an async method that native resolves later with a string.' },
+          { l: 'out', ln: 9, a: 'class NativeBatterySpecJSI', p: ['cg', 'out', 'NativeBatterySpecJSI'], c: 'The result is an abstract class: a list of methods your Swift, Kotlin or C++ must provide. If they don’t match, the compiler flags it at build time, before any user sees it.' }
+        ]
+      }
+    },
+    fabric: {
+      old: {
+        title: 'rendering · old renderer', file: 'Profile.tsx', lanes: ['js', 'bridge', 'shadow', 'ui'], phases: ['Render', 'Commit', 'Mount'], trees: true, treeNames: ['Element tree · JS', 'Shadow tree · Shadow thread', 'Host views · UI'],
+        intro: 'Before we meet Fabric, here is how the old renderer turned a component into views. Press Play or Step.',
+        code: ['function Profile({ user }) {', '  return (', '    <View style={styles.card}>', '      <Image source={user.avatar} />', '      <Text>{user.name}</Text>', '    </View>', '  );', '}'],
+        steps: [
+          { l: 'js', ph: 0, ln: [2, 5], a: 'Run Profile()', tr: { e: [[0, '<View card>', 1], [1, '<Image>', 1], [1, '<Text> "Ada"', 1]] }, c: 'Render: React runs your component and gets an element tree: plain JS objects describing what you want on screen.' },
+          { l: 'bridge', ph: 0, a: 'JSON view commands', p: ['js', 'bridge', '[["createView",21,"RCTView"],…]'], q: ['createView #21', 'createView #22', 'createView #23'], c: 'The element tree can’t cross. It becomes JSON commands, queued on the bridge.' },
+          { l: 'shadow', ph: 1, a: 'Rebuild tree, run Yoga', p: ['bridge', 'shadow', '[["createView",…]]'], q: [], tr: { s: [[0, 'View 0,0 320×88', 1], [1, 'Image 16,16 56×56', 1], [1, 'Text 88,32 200×24', 1]] }, c: 'Commit: the Shadow thread builds its own copy of the tree and runs layout. JS can’t see this copy. If JS wants a size, it must ask over the bridge and wait.' },
+          { l: 'ui', ph: 2, a: 'Create views', p: ['shadow', 'ui', '3 views + frames'], tr: { h: [[0, 'View #21', 1], [1, 'Image #22', 1], [1, 'Text #23', 1]] }, c: 'Mount: the UI thread creates the real views. Three separate copies of your UI now exist, in three places, kept in sync by messages.' }
+        ]
+      },
+      new: {
+        title: 'rendering · fabric', file: 'Profile.tsx', lanes: ['js', 'core', 'ui'], phases: ['Render', 'Commit', 'Mount'], trees: true, treeNames: ['Element tree · JS', 'Shadow tree · C++', 'Host views · UI'],
+        intro: 'Fabric renders in three phases: render, commit, mount. Press Step to go through them one at a time.',
+        code: ['function Profile({ user }) {', '  return (', '    <View style={styles.card}>', '      <Image source={user.avatar} />', '      <Text>{user.name}</Text>', '    </View>', '  );', '}'],
+        steps: [
+          { l: 'js', ph: 0, ln: [2, 5], a: 'Run Profile()', tr: { e: [[0, '<View card>', 1], [1, '<Image>', 1], [1, '<Text> "Ada"', 1]] }, c: 'Render: React runs your component and gets an element tree, plain JS objects describing what you want.' },
+          { l: 'core', ph: 0, a: 'Create shadow nodes', p: ['js', 'core', 'createNode × 3', 'ref'], tr: { s: [[0, 'ViewShadowNode', 1], [1, 'ImageShadowNode', 1], [1, 'ParagraphShadowNode', 1]] }, c: 'Fabric turns each element into a shadow node in C++ right away, through JSI. Together they form the shadow tree, a C++ copy of your UI.' },
+          { l: 'core', ph: 1, a: 'Yoga: layout', tr: { s: [[0, 'View 0,0 320×88', 1], [1, 'Image 16,16 56×56', 1], [1, 'Text 88,32 200×24', 1]] }, c: 'Commit: Yoga computes each node’s position and size.' },
+          { l: 'core', ph: 1, a: 'Seal tree → "next"', tr: { s: [[0, 'View 0,0 320×88'], [1, 'Image 16,16 56×56'], [1, 'Text 88,32 200×24']] }, c: 'The tree is then sealed: it can never change, only be replaced. That makes it safe for any thread to read at the same time. It becomes the next tree to show.' },
+          { l: 'core', ph: 2, a: 'Diff → 3 mutations', c: 'Mount: Fabric compares the new tree with what’s on screen and lists the differences, called mutations: create, update, delete.' },
+          { l: 'ui', ph: 2, a: 'Apply to host views', p: ['core', 'ui', '3 mutations', 'ref'], tr: { h: [[0, 'View (host)', 1], [1, 'Image (host)', 1], [1, 'Text (host)', 1]] }, c: 'The UI thread applies those mutations to host views, the real iOS or Android views. The next frame shows the result.' }
+        ]
+      }
+    }
+  };
+
+  sc() {
+    const lib = Component.LIB[this.props.scenario] || Component.LIB.tap;
+    return this.props.mode === 'new' ? lib.new : lib.old;
+  }
+  componentDidMount() {
+    try {
+      const q = new URLSearchParams(location.search);
+      if (q.get('demo')) { const n = this.sc().steps.length; this.setState({ step: Math.floor((n - 1) / 2) + 1, p: 1 }); }
+    } catch (e) {}
+  }
+  componentDidUpdate(pp) { if (pp.mode !== this.props.mode || pp.scenario !== this.props.scenario) this.reset(); }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); }
+  reset = () => { cancelAnimationFrame(this.raf); this.setState({ step: -1, p: 0, playing: false, once: false }); };
+  run = () => { this.last = null; cancelAnimationFrame(this.raf); this.raf = requestAnimationFrame(this.tick); };
+  tick = (ts) => {
+    const s = this.sc();
+    let { step, p, playing, once, speed } = this.state;
+    if (!playing) return;
+    const dt = this.last == null ? 16 : Math.min(80, ts - this.last);
+    this.last = ts;
+    const dur = ((s.steps[step] && s.steps[step].d) || 2.4) * 1000;
+    p += dt * speed / dur;
+    if (p >= 1) {
+      if (once || step >= s.steps.length - 1) { this.setState({ p: 1, playing: false, once: false }); return; }
+      step += 1; p = 0;
+    }
+    this.setState({ step, p });
+    this.raf = requestAnimationFrame(this.tick);
+  };
+  play = () => {
+    const n = this.sc().steps.length;
+    const { step, p, playing } = this.state;
+    if (playing) { this.setState({ playing: false }); return; }
+    const restart = (step >= n - 1 && p >= 1) || step < 0;
+    this.setState({ playing: true, once: false, step: restart ? 0 : (p >= 1 ? step + 1 : step), p: restart || p >= 1 ? 0 : p }, this.run);
+  };
+  stepFwd = () => {
+    const n = this.sc().steps.length;
+    const { step, p } = this.state;
+    if (step >= n - 1 && p >= 1) return;
+    const next = step < 0 ? 0 : (p >= 1 ? step + 1 : step);
+    this.setState({ step: next, p: next !== step ? 0 : p, playing: true, once: true }, this.run);
+  };
+  jump(i) { this.setState({ step: i, p: 0, playing: true, once: true }, this.run); }
+
+  tok(line) {
+    const out = [];
+    const re = /(\/\/.*$)|('[^']*'|"[^"]*")|(<\/?[A-Za-z][\w.]*|\/?>)|\b(function|const|let|return|await|async|import|export|from|type|interface|extends|default|for|class|public|virtual|void|bool|double|true|false|new)\b|(\b\d[\d_.]*\b)/g;
+    let i = 0, m;
+    while ((m = re.exec(line))) {
+      if (m.index > i) out.push({ t: line.slice(i, m.index), c: '#c4cbd3' });
+      out.push({ t: m[0], c: m[1] ? '#6b7480' : m[2] ? '#b5c98f' : m[3] ? '#eef1f4' : m[4] ? '#8fa6c9' : '#c4cbd3' });
+      i = m.index + m[0].length;
+    }
+    if (i < line.length) out.push({ t: line.slice(i), c: '#c4cbd3' });
+    if (!out.length) out.push({ t: ' ', c: '#c4cbd3' });
+    return out;
+  }
+
+  renderVals() {
+    const s = this.sc(), LN = Component.LN;
+    const { step, p, playing, speed } = this.state;
+    const isNew = this.props.mode === 'new';
+    const acc = isNew ? '#5fd3e6' : '#f2b35b';
+    const compact = !!this.props.compact, reduced = !!this.props.reduced;
+    const n = s.steps.length, cur = step >= 0 ? s.steps[step] : null;
+    const complete = step >= n - 1 && p >= 1;
+    const err = cur && cur.err && (p > 0.5 || reduced);
+    const chip = err ? { label: 'runtime error', fg: '#f0694f', bg: '#f0694f1f' }
+      : playing ? { label: 'running', fg: acc, bg: acc + '1f' }
+      : step < 0 ? { label: 'idle', fg: '#a1aab5', bg: '#1b2129' }
+      : complete ? { label: 'complete', fg: '#eef1f4', bg: '#2a323c' }
+      : { label: 'paused', fg: '#c4cbd3', bg: '#1b2129' };
+
+    const fr = s.lanes.map(id => (LN[id].narrow ? 0.78 : 1));
+    const tot = fr.reduce((a, b) => a + b, 0);
+    const centers = []; let run = 0;
+    fr.forEach(f => { centers.push((run + f / 2) / tot * 100); run += f; });
+    const clamp = x => (x < 0 ? 0 : x > 1 ? 1 : x);
+    const ease = x => { x = clamp(x); return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; };
+    const done = s.steps.slice(0, step + 1);
+    const last = (key) => { for (let i = done.length - 1; i >= 0; i--) if (done[i][key] !== undefined) return done[i][key]; return undefined; };
+    const queue = last('q') || [];
+    const screen = last('ui') || s.ui0 || '';
+
+    const lanes = s.lanes.map((id) => {
+      const L = LN[id];
+      const active = !!cur && cur.l === id;
+      const c = active && err ? '#f0694f' : L.c;
+      const hist = done.filter(x => x.l === id && x.a).slice(compact ? -1 : -2);
+      const acts = hist.map((x) => {
+        const live = active && x === cur;
+        return { text: x.a, fg: live ? '#eef1f4' : '#8a94a0', bg: live ? c + '22' : 'transparent', bd: live ? c + '77' : '#262e38' };
+      });
+      return {
+        name: L.name, sub: L.sub, color: L.c, showSub: !compact,
+        border: active ? c : '#262e38', bg: active ? c + '12' : '#151a20', nameColor: active ? c : '#e7eaee',
+        acts, isJsi: L.k === 'jsi', queue: L.k === 'bridge' ? queue.slice(0, compact ? 2 : 4) : [],
+        hasScreen: !!s.screen && id === 'ui', screen
+      };
+    });
+
+    let pk = { show: false, x: 0, label: '', maxW: compact ? 110 : 220 };
+    let rf = { show: false, l: 0, w: 0, hx: 0, mx: 0, label: '' };
+    if (cur && cur.p) {
+      const [from, to, label, kind0] = cur.p;
+      const kind = kind0 || 'json';
+      const cf = centers[s.lanes.indexOf(from)], ct = centers[s.lanes.indexOf(to)];
+      if (kind === 'json') {
+        const e = reduced ? 1 : ease((p - 0.06) / 0.7);
+        pk = { show: true, x: cf + (ct - cf) * e, label, maxW: compact ? 110 : 220 };
+      } else {
+        const g = reduced ? 1 : ease(p / 0.28);
+        const hx = cf + (ct - cf) * g;
+        rf = { show: true, l: Math.min(cf, hx), w: Math.abs(hx - cf), hx, mx: (cf + ct) / 2, label };
+      }
+    }
+
+    const phases = (s.phases || []).map((t, i) => {
+      const on = cur && cur.ph === i, past = cur && cur.ph > i;
+      return { t, n: '0' + (i + 1), bd: on ? acc : '#333d49', bg: on ? acc + '1f' : 'transparent', fg: on ? acc : past ? '#c4cbd3' : '#8a94a0' };
+    });
+
+    const trees = s.trees ? ['e', 's', 'h'].map((k, i) => {
+      let nodes = null;
+      for (let j = done.length - 1; j >= 0; j--) if (done[j].tr && done[j].tr[k]) { nodes = done[j].tr[k]; break; }
+      const upd = !!(cur && cur.tr && cur.tr[k]);
+      return {
+        title: s.treeNames[i], bd: upd ? acc : '#262e38', tag: upd ? 'updated' : '', tagC: acc,
+        empty: !nodes,
+        nodes: (nodes || []).map(nd => ({ pad: nd[0] * 14, label: (nd[0] ? '└ ' : '') + nd[1], fg: upd && nd[2] ? acc : '#c4cbd3' }))
+      };
+    }) : [];
+
+    const key = this.props.scenario + this.props.mode;
+    if (this._tk !== key) { this._tk = key; this._toks = s.code.map(l => this.tok(l)); }
+    const lnSet = cur && cur.ln !== undefined ? (Array.isArray(cur.ln) ? cur.ln : [cur.ln, cur.ln]) : null;
+    const lines = s.code.map((l, i) => {
+      const on = lnSet && i >= lnSet[0] && i <= lnSet[1];
+      return { n: i + 1, toks: this._toks[i], bg: on ? acc + '1c' : 'transparent', numC: on ? acc : '#4f5864', mark: on && i === lnSet[0] ? '▸' : '', markC: acc };
+    });
+
+    const codeOpen = this.state.codeOpen == null ? !compact : this.state.codeOpen;
+    return {
+      title: s.title, file: s.file, chip, acc, accBg: acc + '14',
+      segs: s.steps.map((x, i) => ({ bg: i < step || (i === step && p >= 1) ? acc : i === step ? acc + '88' : '#2a323c', go: () => this.jump(i), tip: 'Step ' + (i + 1) })),
+      hasPhases: !!s.phases, phases,
+      gridCols: fr.map(f => f + 'fr').join(' '), laneH: compact ? 240 : 270,
+      lanes, pk, rf, wireC: isNew ? '#5fd3e655' : '#f2b35b55',
+      hasTrees: !!s.trees, trees,
+      lines, codeOpen, codeBtn: codeOpen ? 'Hide code' : 'Show code',
+      toggleCode: () => this.setState({ codeOpen: !codeOpen }),
+      play: this.play, stepFwd: this.stepFwd, reset: this.reset,
+      playLabel: playing ? 'Pause' : complete ? 'Replay' : step < 0 ? 'Play' : 'Resume',
+      speeds: [0.5, 1, 2].map(v => ({ t: v + '×', bg: v === speed ? '#2a323c' : 'transparent', fg: v === speed ? '#eef1f4' : '#a1aab5', go: () => this.setState({ speed: v }) })),
+      stepLabel: step < 0 ? n + ' steps' : 'step ' + (step + 1) + ' / ' + n,
+      caption: cur ? cur.c : s.intro
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#0a0c0f;color:#e7eaee;-webkit-font-smoothing:antialiased}
+a{color:#e7eaee;text-decoration-color:#4a5562}
+a:hover{color:#ffffff}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#0a0c0f;font-family:'IBM Plex Sans',system-ui,sans-serif;padding:28px 24px 64px" data-screen-label="Screens board">
+  <div style="display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font:500 12px/1 'IBM Plex Mono';letter-spacing:.1em;color:#a1aab5">ACROSS THE BRIDGE · SCREENS</span>
+        <span style="font:600 28px/1.1 'IBM Plex Sans';color:#eef1f4">{{ heading }}</span>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;font:500 12px/1 'IBM Plex Mono';color:#a1aab5"><input type="checkbox" checked="{{ demo }}" onChange="{{ toggleDemo }}" style="accent-color:#a1aab5">mid-simulation state</label>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <sc-for list="{{ picks }}" as="p" hint-placeholder-count="9">
+        <button onClick="{{ p.go }}" style="height:34px;padding:0 12px;border-radius:7px;border:1px solid {{ p.bd }};background:{{ p.bg }};color:{{ p.fg }};font:500 13px/1 'IBM Plex Sans';cursor:pointer">{{ p.t }}</button>
+      </sc-for>
+    </div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+      <sc-for list="{{ frames }}" as="f" hint-placeholder-count="4">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;justify-content:space-between;gap:12px;font:500 12px/1 'IBM Plex Mono';color:#a1aab5"><span style="color:{{ f.c }}">{{ f.label }}</span><a href="{{ f.src }}" target="_blank">open ↗</a></div>
+          <div style="width:{{ f.bw }}px;height:{{ f.bh }}px;overflow:hidden;border-radius:10px;border:1px solid #262e38;background:#0f1216">
+            <iframe src="{{ f.src }}" loading="lazy" title="{{ f.label }}" style="width:{{ f.w }}px;height:{{ f.h }}px;border:0;transform:scale({{ f.s }});transform-origin:0 0"></iframe>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { pick: 0, demo: true };
+  static PICKS = ['01 One tap', '02 Old map', '03 Where it hurt', '04 JSI', '05 Turbo + Codegen', '06 Fabric', '07 Wrap-up', 'Playground', 'Component sheet'];
+  renderVals() {
+    const { pick, demo } = this.state, P = Component.PICKS;
+    let frames;
+    const d = demo ? '&demo=1' : '';
+    if (pick === 8) frames = [{ label: 'Desktop', c: '#eef1f4', src: 'Component Sheet.dc.html', w: 1440, h: 2400, s: 0.6 }, { label: 'Mobile', c: '#eef1f4', src: 'Component Sheet.dc.html', w: 390, h: 2400, s: 0.6 }];
+    else {
+      const base = pick === 7 ? (m) => 'Playground.dc.html?mode=' + m + (demo ? '&at=0.45' : '') : (m) => 'Across the Bridge.dc.html?ch=' + (pick + 1) + '&mode=' + m + d;
+      const pg = pick === 7;
+      frames = [
+        { label: 'Desktop 1440 · Old', c: '#f2b35b', src: base('old'), w: 1440, h: 900, s: 0.5 },
+        { label: 'Desktop 1440 · New', c: '#5fd3e6', src: base('new') + (pg ? '&compare=0' : ''), w: 1440, h: 900, s: 0.5 },
+        { label: 'Mobile 390 · Old', c: '#f2b35b', src: base('old'), w: 390, h: 844, s: 0.6 },
+        { label: 'Mobile 390 · New', c: '#5fd3e6', src: base('new') + (pg ? '&tab=inspect' : ''), w: 390, h: 844, s: 0.6 }
+      ];
+      if (pg) frames.push({ label: 'Desktop 1440 · Compare', c: '#eef1f4', src: 'Playground.dc.html?mode=old&compare=1&preset=scroll&rate=90' + (demo ? '&at=0.6' : ''), w: 1440, h: 900, s: 0.5 });
+    }
+    return {
+      heading: P[pick] + (pick < 8 ? ' · desktop and mobile, both toggle positions' : ''),
+      demo, toggleDemo: () => this.setState({ demo: !demo }),
+      picks: P.map((t, i) => ({ t, bd: i === pick ? '#eef1f4' : '#333d49', bg: i === pick ? '#eef1f4' : 'transparent', fg: i === pick ? '#0f1216' : '#e7eaee', go: () => this.setState({ pick: i }) })),
+      frames: frames.map(f => ({ ...f, bw: Math.round(f.w * f.s), bh: Math.round(f.h * f.s) }))
+    };
+  }
+}
+</script>
+</body>
+</html>
