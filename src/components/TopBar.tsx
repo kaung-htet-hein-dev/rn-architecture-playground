@@ -22,7 +22,7 @@ export function TopBar({ onGo }: Props) {
         >
           <BrandMark />
           <span className="text-[15px] leading-none font-semibold tracking-[-.01em]">
-            Across the Bridge
+            React Native Internal
           </span>
         </a>
         <div className="ml-auto flex flex-none items-center gap-1 sm:gap-2">

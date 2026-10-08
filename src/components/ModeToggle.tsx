@@ -54,9 +54,30 @@ export function ModeToggle({
 
 export function BrandMark() {
   return (
-    <span className="flex gap-[3px]" aria-hidden="true">
-      <span className="h-4 w-1.5 rounded-[2px] bg-old" />
-      <span className="h-4 w-1.5 rounded-[2px] bg-new" />
+    <span
+      className="flex size-5 items-center justify-center"
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 32 32" className="size-full" fill="none">
+        <g stroke="#61DAFB" strokeWidth="1.7">
+          <ellipse cx="16" cy="16" rx="14" ry="5.5" />
+          <ellipse
+            cx="16"
+            cy="16"
+            rx="14"
+            ry="5.5"
+            transform="rotate(60 16 16)"
+          />
+          <ellipse
+            cx="16"
+            cy="16"
+            rx="14"
+            ry="5.5"
+            transform="rotate(120 16 16)"
+          />
+        </g>
+        <circle cx="16" cy="16" r="2.2" fill="#61DAFB" />
+      </svg>
     </span>
   );
 }

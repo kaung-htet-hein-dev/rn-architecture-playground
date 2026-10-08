@@ -1,4 +1,4 @@
-# Across the Bridge: requirements and design handoff
+# React Native Internal: requirements and design handoff
 
 ## 1. Overview
 
@@ -18,7 +18,7 @@ This is an interactive website that teaches React Native's old architecture and 
 ### Top bar (course)
 
 - Sticky, 58px minimum height, background `#0f1216ee` with a 10px backdrop blur, bottom border `#262e38`. Content is max 1240px wide with 20px side padding, and wraps.
-- **Brand:** two 6×16 bars (amber and cyan) plus "Across the Bridge" in Plex Sans 600 15px. Clicking it scrolls to the top.
+- **Brand:** two 6×16 bars (amber and cyan) plus "React Native Internal" in Plex Sans 600 15px. Clicking it scrolls to the top.
 - **Chapter progress:** 7 clickable segments, 4px tall with radius 2. Past segments `#6b7480`, current one = mode accent, future `#2a323c`. Below the segments, a label in mono 11px reading "03 / 07 · Where it hurt" (hidden under 760px). The active chapter is the last section whose top is less than 180px from the top of the viewport.
 - **Old / New segmented toggle:** 30px buttons. Active Old has background `#f2b35b` and text `#1a1408`. Active New has background `#5fd3e6` and text `#071a1e`. Inactive buttons have text `#a1aab5`.
 - **Motion:** reduced-motion behavior is always enabled; there is no motion toggle.
@@ -47,15 +47,15 @@ This is an interactive website that teaches React Native's old architecture and 
 
 - Each step lasts 2.4 s at 1×. Progress p goes from 0 to 1 and then advances to the next step.
 - **Play** from idle or complete starts at step 0.
-- **Step** plays exactly one step, then pauses.
+- **Step** immediately advances to the next step and pauses; it does not wait for the step duration.
 - **Jump** (clicking a segment) plays that one step.
 - **Status:** `idle` (step = −1), `running`, `paused`, `complete` (last step and p = 1), and `error` (a step flagged `err` once past p = 0.5).
 
 ## 4. Chapters
 
-All copy, scenario steps, packet labels and code lines are in `design/SimPanel.dc.html` (`static LIB`) and `design/Across the Bridge.dc.html`. Port them verbatim.
+All copy, scenario steps, packet labels and code lines are in `design/SimPanel.dc.html` (`static LIB`) and `design/React Native Internal.dc.html`. Port them verbatim.
 
-1. **One tap, slowed down (hero):** hero title "Across the Bridge" (clamp 44–88px, weight 600, −3.5% tracking), a lede, and a thread color legend. SimPanel `tap`. Old: 8 steps through JSON and the bridge. New: 6 steps where the touch becomes a C++ event scheduled onto the JS thread, with no JSON.
+1. **One tap, slowed down (hero):** hero title "React Native Internal" (clamp 44–88px, weight 600, −3.5% tracking), a lede, and a thread color legend. SimPanel `tap`. Old: 8 steps through JSON and the bridge. New: 6 steps where the touch becomes a C++ event scheduled onto the JS thread, with no JSON.
 2. **The old map:** SimPanel `map`, 4 lanes (JS, Bridge or JSI, Shadow, UI).
 3. **Where it hurt:** ScrollRace (section 5.1).
 4. **JSI:** SimPanel `jsi`. Old: a getLevel round trip with module and method IDs and four rounds of JSON. New: a host object called synchronously.
@@ -270,14 +270,14 @@ Alpha suffixes are used throughout (e.g. `#5fd3e61f` for the chip background, `1
 
 ## 10. Files
 
-| File                               | Contents                                                               |
-| ---------------------------------- | ---------------------------------------------------------------------- |
-| `design/Across the Bridge.dc.html` | Course page (all chapter copy, startup plan, quiz, glossary, timeline) |
-| `design/SimPanel.dc.html`          | Reusable lanes + code panel, all chapter scenarios                     |
-| `design/ScrollRace.dc.html`        | Chapter 3 simulation                                                   |
-| `design/Playground.dc.html`        | Playground layout and preset generators                                |
-| `design/Component Sheet.dc.html`   | Tokens and component states                                            |
-| `design/Screens.dc.html`           | Review board only (desktop/mobile × old/new iframes)                   |
-| `design/support.js`                | Runtime needed to open the prototypes in a browser                     |
+| File                                   | Contents                                                               |
+| -------------------------------------- | ---------------------------------------------------------------------- |
+| `design/React Native Internal.dc.html` | Course page (all chapter copy, startup plan, quiz, glossary, timeline) |
+| `design/SimPanel.dc.html`              | Reusable lanes + code panel, all chapter scenarios                     |
+| `design/ScrollRace.dc.html`            | Chapter 3 simulation                                                   |
+| `design/Playground.dc.html`            | Playground layout and preset generators                                |
+| `design/Component Sheet.dc.html`       | Tokens and component states                                            |
+| `design/Screens.dc.html`               | Review board only (desktop/mobile × old/new iframes)                   |
+| `design/support.js`                    | Runtime needed to open the prototypes in a browser                     |
 
-To view the prototypes, run `npx serve design` and open `Across the Bridge.dc.html`. Add `?mode=new`, `?ch=3` or `?demo=1` to see other states.
+To view the prototypes, run `npx serve design` and open `React Native Internal.dc.html`. Add `?mode=new`, `?ch=3` or `?demo=1` to see other states.

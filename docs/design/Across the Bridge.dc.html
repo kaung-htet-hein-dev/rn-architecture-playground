@@ -1,507 +1,2641 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-html,body{margin:0;background:#0f1216;color:#e7eaee;-webkit-font-smoothing:antialiased}
-a{color:#e7eaee;text-decoration-color:#4a5562;text-underline-offset:3px}
-a:hover{color:#ffffff;text-decoration-color:currentColor}
-::selection{background:#5fd3e633}
-</style>
-</helmet>
-<div style="min-height:100vh;background:#0f1216;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#e7eaee">
-  <header style="position:sticky;top:0;z-index:30;background:#0f1216ee;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #262e38">
-    <div style="max-width:1240px;margin:0 auto;padding:0 20px;min-height:58px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
-      <a href="#ch1" onClick="{{ goTop }}" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#eef1f4;flex:none">
-        <span style="display:flex;gap:3px"><span style="width:6px;height:16px;border-radius:2px;background:#f2b35b"></span><span style="width:6px;height:16px;border-radius:2px;background:#5fd3e6"></span></span>
-        <span style="font:600 15px/1 'IBM Plex Sans';letter-spacing:-.01em">Across the Bridge</span>
-      </a>
-      <div style="flex:1 1 200px;display:flex;flex-direction:column;gap:6px;min-width:0">
-        <div style="display:flex;gap:4px">
-          <sc-for list="{{ chapters }}" as="c" hint-placeholder-count="7">
-            <button onClick="{{ c.go }}" title="{{ c.title }}" style="flex:1;height:14px;padding:4px 0;border:0;background:transparent;cursor:pointer;display:flex;align-items:center"><span style="display:block;width:100%;height:4px;border-radius:2px;background:{{ c.bg }};transition:background .2s"></span></button>
-          </sc-for>
-        </div>
-        <sc-if value="{{ showChTitle }}" hint-placeholder-val="{{ true }}"><span style="font:500 11px/1 'IBM Plex Mono';color:#a1aab5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ chLabel }}</span></sc-if>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;flex:none">
-        <div role="group" aria-label="Architecture" style="display:flex;border:1px solid #333d49;border-radius:7px;padding:2px;gap:2px">
-          <button onClick="{{ setOld }}" style="height:30px;padding:0 12px;border-radius:5px;border:0;cursor:pointer;font:600 12.5px/1 'IBM Plex Sans';background:{{ tgOld.bg }};color:{{ tgOld.fg }}">Old</button>
-          <button onClick="{{ setNew }}" style="height:30px;padding:0 12px;border-radius:5px;border:0;cursor:pointer;font:600 12.5px/1 'IBM Plex Sans';background:{{ tgNew.bg }};color:{{ tgNew.fg }}">New</button>
-        </div>
-        <button onClick="{{ toggleMotion }}" title="Reduce motion" style="height:34px;padding:0 10px;border-radius:7px;border:1px solid #333d49;background:transparent;color:#c4cbd3;font:500 12px/1 'IBM Plex Mono';cursor:pointer">{{ motionLabel }}</button>
-        <a href="{{ pgHref }}" style="height:34px;display:flex;align-items:center;padding:0 14px;border-radius:7px;background:#e7eaee;color:#0f1216;font:600 13px/1 'IBM Plex Sans';text-decoration:none">Playground</a>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <section id="ch1" data-screen-label="01 One tap, slowed down" style="padding:72px 20px 96px;border-bottom:1px solid #1e252d">
-      <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:44px">
-        <div style="display:flex;flex-direction:column;gap:20px;max-width:860px">
-          <span style="font:500 12px/1 'IBM Plex Mono';letter-spacing:.1em;color:#a1aab5">A COURSE FOR REACT NATIVE DEVELOPERS</span>
-          <h1 style="margin:0;font:600 clamp(44px,7.4vw,88px)/0.98 'IBM Plex Sans';letter-spacing:-.035em;color:#eef1f4">Across the Bridge</h1>
-          <p style="margin:0;font:400 clamp(17px,1.6vw,20px)/1.55 'IBM Plex Sans';color:#c4cbd3;text-wrap:pretty;max-width:680px">You write React Native every day. Let’s slow it down and look at what happens underneath: first in the old architecture, then in the New Architecture that replaced it. Seven short chapters, then a playground where you can poke at everything.</p>
-          <div style="display:flex;gap:18px;flex-wrap:wrap;font:400 13px/1.4 'IBM Plex Mono';color:#a1aab5">
-            <span style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:2px;background:#f2b35b"></span>Old architecture</span>
-            <span style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:2px;background:#5fd3e6"></span>New Architecture</span>
-            <span style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:2px;background:#b39dff"></span>JS thread</span>
-            <span style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:2px;background:#79d49c"></span>Shadow thread</span>
-            <span style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:2px;background:#f291c4"></span>UI thread</span>
-          </div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <span style="font:500 12px/1 'IBM Plex Mono';letter-spacing:.1em;color:#a1aab5">CHAPTER 01</span>
-          <h2 style="margin:0;font:600 clamp(30px,4.2vw,48px)/1.08 'IBM Plex Sans';letter-spacing:-.02em;color:#eef1f4">One tap, slowed down</h2>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px 44px">
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHY</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">You press buttons all day. If we slow one press down, you’ll see every place where an app can lose time. That becomes our map for the rest of the course.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHAT</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">A tap starts on the native side, the iOS or Android code the phone runs for its own UI. It travels to your JavaScript, and your answer travels back. Each side works on its own <strong style="color:#eef1f4;font-weight:600">thread</strong>: a single line of work that does one thing at a time, in order.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">HOW</span>
-            <sc-if value="{{ isOld }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">The <span style="color:#f291c4">UI thread</span> draws the screen and receives touches. The <span style="color:#b39dff">JS thread</span> runs your React code. In the old architecture they talk through the <span style="color:#f2b35b">bridge</span>, which only carries text. So every message is <strong style="color:#eef1f4;font-weight:600">serialized</strong>, turned into a JSON string, and parsed back on the other side.</p></sc-if>
-            <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">The <span style="color:#f291c4">UI thread</span> draws the screen and receives touches. The <span style="color:#b39dff">JS thread</span> runs your React code. In the New Architecture there is no bridge: JS and C++ call each other through <span style="color:#5fd3e6">JSI</span>, and data stays as real values, so nothing is turned into text. Work still waits its turn on the right thread.</p></sc-if>
-          </div>
-        </div>
-        <dc-import name="SimPanel" scenario="tap" mode="{{ mode }}" reduced="{{ reduced }}" compact="{{ mobile }}" hint-size="100%,600px"></dc-import>
-        <p style="margin:0;font:400 14px/1.5 'IBM Plex Sans';color:#a1aab5">Flip <strong style="color:#eef1f4;font-weight:600">Old / New</strong> in the top bar to replay this exact tap in the other architecture.</p>
-      </div>
-    </section>
-
-    <section id="ch2" data-screen-label="02 The old map" style="padding:96px 20px;border-bottom:1px solid #1e252d">
-      <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:44px">
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <span style="font:500 12px/1 'IBM Plex Mono';letter-spacing:.1em;color:#a1aab5">CHAPTER 02</span>
-          <h2 style="margin:0;font:600 clamp(30px,4.2vw,48px)/1.08 'IBM Plex Sans';letter-spacing:-.02em;color:#eef1f4">The old map</h2>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px 44px">
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHY</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">When something feels slow, the first question to ask is: which thread is busy? You can only answer that if you know which threads exist and what each one does.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHAT</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">Three threads. The <span style="color:#b39dff">JS thread</span> runs React. The <span style="color:#79d49c">Shadow thread</span> works out <strong style="color:#eef1f4;font-weight:600">layout</strong>, meaning where each box goes and how big it is, using a library called Yoga. The <span style="color:#f291c4">UI thread</span> creates the real views and handles touches.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">HOW</span>
-            <sc-if value="{{ isOld }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">The bridge connects JS to the native threads, and everything on it is <strong style="color:#eef1f4;font-weight:600">asynchronous</strong>: you send a message and carry on, and the answer arrives later. Messages are queued and sent in <strong style="color:#eef1f4;font-weight:600">batches</strong>, groups sent together to save work. Neither side can reach over and read the other’s data.</p></sc-if>
-            <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">You’re looking at the New Architecture version of the map. The same three threads exist. What changed is the connection: the bridge is replaced by JSI, and the shadow tree moves into C++ where every thread can read it. Switch back to Old to see the original.</p></sc-if>
-          </div>
-        </div>
-        <dc-import name="SimPanel" scenario="map" mode="{{ mode }}" reduced="{{ reduced }}" compact="{{ mobile }}" hint-size="100%,600px"></dc-import>
-      </div>
-    </section>
-
-    <section id="ch3" data-screen-label="03 Where it hurt" style="padding:96px 20px;border-bottom:1px solid #1e252d">
-      <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:44px">
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <span style="font:500 12px/1 'IBM Plex Mono';letter-spacing:.1em;color:#a1aab5">CHAPTER 03</span>
-          <h2 style="margin:0;font:600 clamp(30px,4.2vw,48px)/1.08 'IBM Plex Sans';letter-spacing:-.02em;color:#eef1f4">Where it hurt</h2>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px 44px">
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHY</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">Smooth scrolling means a new picture every 16.6 ms, which is 60 pictures per second. Each picture is a <strong style="color:#eef1f4;font-weight:600">frame</strong>. When the app misses that window, the user sees a stutter: a <strong style="color:#eef1f4;font-weight:600">dropped frame</strong>.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHAT</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">Both phones scroll the same list. The scrolling itself is native, but every scroll event asks JS to render more rows. When JS falls behind, you get blank rows. Drag the load slider to make each event’s JS work heavier.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">HOW</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">Both phones merge scroll events that pile up while JS is busy. The difference is the cost: on the old phone every event pays for JSON twice, the scroll event coming in and the row updates going out. The further JS falls behind, the more rows it has to send, so each bridge batch gets bigger and slower. The new phone skips the JSON. Heavy JS is still heavy, though: push the slider to the end.</p></div>
-        </div>
-        <dc-import name="ScrollRace" mode="{{ mode }}" reduced="{{ reduced }}" hint-size="100%,720px"></dc-import>
-      </div>
-    </section>
-
-    <section id="ch4" data-screen-label="04 JSI" style="padding:96px 20px;border-bottom:1px solid #1e252d">
-      <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:44px">
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <span style="font:500 12px/1 'IBM Plex Mono';letter-spacing:.1em;color:#a1aab5">CHAPTER 04</span>
-          <h2 style="margin:0;font:600 clamp(30px,4.2vw,48px)/1.08 'IBM Plex Sans';letter-spacing:-.02em;color:#eef1f4">JSI: holding a reference instead of sending a message</h2>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px 44px">
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHY</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">You call <strong style="color:#eef1f4;font-weight:600">native modules</strong> all the time: code written in Swift, Kotlin or Java that JS can use, like reading the battery level. On the bridge, even a tiny question becomes a round trip of messages.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHAT</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty"><span style="color:#5fd3e6">JSI</span>, the JavaScript Interface, lets JS hold a reference to an object that lives in <strong style="color:#eef1f4;font-weight:600">C++</strong>, a fast, lower-level language that runs on both iOS and Android. That object is a <strong style="color:#eef1f4;font-weight:600">host object</strong>: to JS it looks normal, but its methods are C++ functions.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">HOW</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">Instead of writing a letter and waiting for a reply, JS just calls the function. No JSON, no queue, no lookup table. If the method is synchronous, the value comes back on the same line. Toggle Old / New to compare the two trips.</p></div>
-        </div>
-        <dc-import name="SimPanel" scenario="jsi" mode="{{ mode }}" reduced="{{ reduced }}" compact="{{ mobile }}" hint-size="100%,560px"></dc-import>
-      </div>
-    </section>
-
-    <section id="ch5" data-screen-label="05 Turbo Modules and Codegen" style="padding:96px 20px;border-bottom:1px solid #1e252d">
-      <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:44px">
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <span style="font:500 12px/1 'IBM Plex Mono';letter-spacing:.1em;color:#a1aab5">CHAPTER 05</span>
-          <h2 style="margin:0;font:600 clamp(30px,4.2vw,48px)/1.08 'IBM Plex Sans';letter-spacing:-.02em;color:#eef1f4">Turbo Modules and Codegen</h2>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px 44px">
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHY</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">Users judge your app in its first second. In the old architecture, most native modules in your app are created at launch by default, even the ones the first screen never touches.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHAT</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">A <span style="color:#5fd3e6">Turbo Module</span> is a native module built on JSI that loads <strong style="color:#eef1f4;font-weight:600">lazily</strong>: the first time JS asks for it, not before. <span style="color:#5fd3e6">Codegen</span> is a build-time tool that reads a TypeScript description of the module and writes the matching native code.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">HOW</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">First, play both startups and compare when the first screen becomes usable. Then step through Codegen turning a spec into a typed C++ interface, so a mismatch between JS and native fails the build instead of crashing on a user’s phone.</p></div>
-        </div>
-        <div style="display:flex;flex-direction:column;border:1px solid #262e38;border-radius:12px;background:#12161b;overflow:hidden">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid #262e38;flex-wrap:wrap">
-            <div style="display:flex;align-items:center;gap:10px">
-              <span style="display:inline-flex;align-items:center;gap:6px;font:500 11px/1 'IBM Plex Mono';letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:4px;color:{{ s5.chip.fg }};background:{{ s5.chip.bg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ s5.chip.fg }}"></span>{{ s5.chip.label }}</span>
-              <span style="font:500 12px/1.2 'IBM Plex Mono';color:#a1aab5">app startup · 10 native modules</span>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <style>
+          html,
+          body {
+            margin: 0;
+            background: #0f1216;
+            color: #e7eaee;
+            -webkit-font-smoothing: antialiased;
+          }
+          a {
+            color: #e7eaee;
+            text-decoration-color: #4a5562;
+            text-underline-offset: 3px;
+          }
+          a:hover {
+            color: #ffffff;
+            text-decoration-color: currentColor;
+          }
+          ::selection {
+            background: #5fd3e633;
+          }
+        </style>
+      </helmet>
+      <div
+        style="
+          min-height: 100vh;
+          background: #0f1216;
+          font-family: &quot;IBM Plex Sans&quot;, system-ui, sans-serif;
+          color: #e7eaee;
+        "
+      >
+        <header
+          style="
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            background: #0f1216ee;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid #262e38;
+          "
+        >
+          <div
+            style="
+              max-width: 1240px;
+              margin: 0 auto;
+              padding: 0 20px;
+              min-height: 58px;
+              display: flex;
+              align-items: center;
+              gap: 18px;
+              flex-wrap: wrap;
+            "
+          >
+            <a
+              href="#ch1"
+              onClick="{{ goTop }}"
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                text-decoration: none;
+                color: #eef1f4;
+                flex: none;
+              "
+            >
+              <span style="display: flex; gap: 3px"
+                ><span
+                  style="
+                    width: 6px;
+                    height: 16px;
+                    border-radius: 2px;
+                    background: #f2b35b;
+                  "
+                ></span
+                ><span
+                  style="
+                    width: 6px;
+                    height: 16px;
+                    border-radius: 2px;
+                    background: #5fd3e6;
+                  "
+                ></span
+              ></span>
+              <span
+                style="
+                  font: 600 15px/1 &quot;IBM Plex Sans&quot;;
+                  letter-spacing: -0.01em;
+                "
+                >React Native Internal</span
+              >
+            </a>
+            <div
+              style="
+                flex: 1 1 200px;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                min-width: 0;
+              "
+            >
+              <div style="display: flex; gap: 4px">
+                <sc-for list="{{ chapters }}" as="c" hint-placeholder-count="7">
+                  <button
+                    onClick="{{ c.go }}"
+                    title="{{ c.title }}"
+                    style="
+                      flex: 1;
+                      height: 14px;
+                      padding: 4px 0;
+                      border: 0;
+                      background: transparent;
+                      cursor: pointer;
+                      display: flex;
+                      align-items: center;
+                    "
+                  >
+                    <span
+                      style="display:block;width:100%;height:4px;border-radius:2px;background:{{ c.bg }};transition:background .2s"
+                    ></span>
+                  </button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ showChTitle }}" hint-placeholder-val="{{ true }}"
+                ><span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #a1aab5;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                  "
+                  >{{ chLabel }}</span
+                ></sc-if
+              >
             </div>
-            <span style="font:400 12px/1 'IBM Plex Mono';color:#8a94a0">t = {{ s5.tLabel }} ms</span>
-          </div>
-          <div style="padding:22px 16px 18px;display:flex;flex-direction:column;gap:22px">
-            <div style="position:relative;height:14px;margin:0 2px">
-              <sc-for list="{{ s5.ticks }}" as="tk" hint-placeholder-count="5"><span style="position:absolute;left:{{ tk.l }}%;transform:translateX(-50%);font:400 11px/1 'IBM Plex Mono';color:#8a94a0">{{ tk.t }}</span></sc-for>
+            <div
+              style="display: flex; align-items: center; gap: 8px; flex: none"
+            >
+              <div
+                role="group"
+                aria-label="Architecture"
+                style="
+                  display: flex;
+                  border: 1px solid #333d49;
+                  border-radius: 7px;
+                  padding: 2px;
+                  gap: 2px;
+                "
+              >
+                <button
+                  onClick="{{ setOld }}"
+                  style="height:30px;padding:0 12px;border-radius:5px;border:0;cursor:pointer;font:600 12.5px/1 'IBM Plex Sans';background:{{ tgOld.bg }};color:{{ tgOld.fg }}"
+                >
+                  Old
+                </button>
+                <button
+                  onClick="{{ setNew }}"
+                  style="height:30px;padding:0 12px;border-radius:5px;border:0;cursor:pointer;font:600 12.5px/1 'IBM Plex Sans';background:{{ tgNew.bg }};color:{{ tgNew.fg }}"
+                >
+                  New
+                </button>
+              </div>
+              <button
+                onClick="{{ toggleMotion }}"
+                title="Reduce motion"
+                style="
+                  height: 34px;
+                  padding: 0 10px;
+                  border-radius: 7px;
+                  border: 1px solid #333d49;
+                  background: transparent;
+                  color: #c4cbd3;
+                  font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                  cursor: pointer;
+                "
+              >
+                {{ motionLabel }}
+              </button>
+              <a
+                href="{{ pgHref }}"
+                style="
+                  height: 34px;
+                  display: flex;
+                  align-items: center;
+                  padding: 0 14px;
+                  border-radius: 7px;
+                  background: #e7eaee;
+                  color: #0f1216;
+                  font: 600 13px/1 &quot;IBM Plex Sans&quot;;
+                  text-decoration: none;
+                "
+                >Playground</a
+              >
             </div>
-            <sc-for list="{{ s5.rows }}" as="r" hint-placeholder-count="2">
-              <div style="display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:10px;border:1px solid {{ r.bd }};background:#151a20">
-                <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">
-                  <span style="display:flex;align-items:center;gap:8px;font:600 14px/1.2 'IBM Plex Sans';color:{{ r.c }}"><span style="width:8px;height:8px;border-radius:2px;background:{{ r.c }}"></span>{{ r.name }}</span>
-                  <span style="font:500 13px/1 'IBM Plex Mono';color:{{ r.resC }}">{{ r.res }}</span>
+          </div>
+        </header>
+
+        <main>
+          <section
+            id="ch1"
+            data-screen-label="01 One tap, slowed down"
+            style="padding: 72px 20px 96px; border-bottom: 1px solid #1e252d"
+          >
+            <div
+              style="
+                max-width: 1240px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 44px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 20px;
+                  max-width: 860px;
+                "
+              >
+                <span
+                  style="
+                    font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                    letter-spacing: 0.1em;
+                    color: #a1aab5;
+                  "
+                  >A COURSE FOR REACT NATIVE DEVELOPERS</span
+                >
+                <h1
+                  style="
+                    margin: 0;
+                    font: 600 clamp(44px, 7.4vw, 88px)/0.98
+                      &quot;IBM Plex Sans&quot;;
+                    letter-spacing: -0.035em;
+                    color: #eef1f4;
+                  "
+                >
+                  React Native Internal
+                </h1>
+                <p
+                  style="
+                    margin: 0;
+                    font: 400 clamp(17px, 1.6vw, 20px)/1.55
+                      &quot;IBM Plex Sans&quot;;
+                    color: #c4cbd3;
+                    text-wrap: pretty;
+                    max-width: 680px;
+                  "
+                >
+                  You write React Native every day. Let’s slow it down and look
+                  at what happens underneath: first in the old architecture,
+                  then in the New Architecture that replaced it. Seven short
+                  chapters, then a playground where you can poke at everything.
+                </p>
+                <div
+                  style="
+                    display: flex;
+                    gap: 18px;
+                    flex-wrap: wrap;
+                    font: 400 13px/1.4 &quot;IBM Plex Mono&quot;;
+                    color: #a1aab5;
+                  "
+                >
+                  <span style="display: flex; align-items: center; gap: 8px"
+                    ><span
+                      style="
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 2px;
+                        background: #f2b35b;
+                      "
+                    ></span
+                    >Old architecture</span
+                  >
+                  <span style="display: flex; align-items: center; gap: 8px"
+                    ><span
+                      style="
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 2px;
+                        background: #5fd3e6;
+                      "
+                    ></span
+                    >New Architecture</span
+                  >
+                  <span style="display: flex; align-items: center; gap: 8px"
+                    ><span
+                      style="
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 2px;
+                        background: #b39dff;
+                      "
+                    ></span
+                    >JS thread</span
+                  >
+                  <span style="display: flex; align-items: center; gap: 8px"
+                    ><span
+                      style="
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 2px;
+                        background: #79d49c;
+                      "
+                    ></span
+                    >Shadow thread</span
+                  >
+                  <span style="display: flex; align-items: center; gap: 8px"
+                    ><span
+                      style="
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 2px;
+                        background: #f291c4;
+                      "
+                    ></span
+                    >UI thread</span
+                  >
                 </div>
-                <div style="position:relative;height:30px;background:#0f1216;border-radius:5px">
-                  <sc-for list="{{ r.segs }}" as="g" hint-placeholder-count="6">
-                    <div title="{{ g.name }}" style="position:absolute;top:4px;bottom:4px;left:{{ g.l }}%;width:{{ g.w }}%;border-radius:3px;background:#1e252d;overflow:hidden;box-shadow:inset 0 0 0 1px {{ g.bd }}">
-                      <div style="height:100%;width:{{ g.f }}%;background:{{ g.c }}"></div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 14px">
+                <span
+                  style="
+                    font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                    letter-spacing: 0.1em;
+                    color: #a1aab5;
+                  "
+                  >CHAPTER 01</span
+                >
+                <h2
+                  style="
+                    margin: 0;
+                    font: 600 clamp(30px, 4.2vw, 48px)/1.08
+                      &quot;IBM Plex Sans&quot;;
+                    letter-spacing: -0.02em;
+                    color: #eef1f4;
+                  "
+                >
+                  One tap, slowed down
+                </h2>
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(min(100%, 280px), 1fr)
+                  );
+                  gap: 24px 44px;
+                "
+              >
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHY</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    You press buttons all day. If we slow one press down, you’ll
+                    see every place where an app can lose time. That becomes our
+                    map for the rest of the course.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHAT</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    A tap starts on the native side, the iOS or Android code the
+                    phone runs for its own UI. It travels to your JavaScript,
+                    and your answer travels back. Each side works on its own
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >thread</strong
+                    >: a single line of work that does one thing at a time, in
+                    order.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >HOW</span
+                  >
+                  <sc-if value="{{ isOld }}" hint-placeholder-val="{{ true }}"
+                    ><p
+                      style="
+                        margin: 0;
+                        font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                        color: #d5dae0;
+                        text-wrap: pretty;
+                      "
+                    >
+                      The <span style="color: #f291c4">UI thread</span> draws
+                      the screen and receives touches. The
+                      <span style="color: #b39dff">JS thread</span> runs your
+                      React code. In the old architecture they talk through the
+                      <span style="color: #f2b35b">bridge</span>, which only
+                      carries text. So every message is
+                      <strong style="color: #eef1f4; font-weight: 600"
+                        >serialized</strong
+                      >, turned into a JSON string, and parsed back on the other
+                      side.
+                    </p></sc-if
+                  >
+                  <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}"
+                    ><p
+                      style="
+                        margin: 0;
+                        font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                        color: #d5dae0;
+                        text-wrap: pretty;
+                      "
+                    >
+                      The <span style="color: #f291c4">UI thread</span> draws
+                      the screen and receives touches. The
+                      <span style="color: #b39dff">JS thread</span> runs your
+                      React code. In the New Architecture there is no bridge: JS
+                      and C++ call each other through
+                      <span style="color: #5fd3e6">JSI</span>, and data stays as
+                      real values, so nothing is turned into text. Work still
+                      waits its turn on the right thread.
+                    </p></sc-if
+                  >
+                </div>
+              </div>
+              <dc-import
+                name="SimPanel"
+                scenario="tap"
+                mode="{{ mode }}"
+                reduced="{{ reduced }}"
+                compact="{{ mobile }}"
+                hint-size="100%,600px"
+              ></dc-import>
+              <p
+                style="
+                  margin: 0;
+                  font: 400 14px/1.5 &quot;IBM Plex Sans&quot;;
+                  color: #a1aab5;
+                "
+              >
+                Flip
+                <strong style="color: #eef1f4; font-weight: 600"
+                  >Old / New</strong
+                >
+                in the top bar to replay this exact tap in the other
+                architecture.
+              </p>
+            </div>
+          </section>
+
+          <section
+            id="ch2"
+            data-screen-label="02 The old map"
+            style="padding: 96px 20px; border-bottom: 1px solid #1e252d"
+          >
+            <div
+              style="
+                max-width: 1240px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 44px;
+              "
+            >
+              <div style="display: flex; flex-direction: column; gap: 14px">
+                <span
+                  style="
+                    font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                    letter-spacing: 0.1em;
+                    color: #a1aab5;
+                  "
+                  >CHAPTER 02</span
+                >
+                <h2
+                  style="
+                    margin: 0;
+                    font: 600 clamp(30px, 4.2vw, 48px)/1.08
+                      &quot;IBM Plex Sans&quot;;
+                    letter-spacing: -0.02em;
+                    color: #eef1f4;
+                  "
+                >
+                  The old map
+                </h2>
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(min(100%, 280px), 1fr)
+                  );
+                  gap: 24px 44px;
+                "
+              >
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHY</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    When something feels slow, the first question to ask is:
+                    which thread is busy? You can only answer that if you know
+                    which threads exist and what each one does.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHAT</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    Three threads. The
+                    <span style="color: #b39dff">JS thread</span> runs React.
+                    The <span style="color: #79d49c">Shadow thread</span> works
+                    out
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >layout</strong
+                    >, meaning where each box goes and how big it is, using a
+                    library called Yoga. The
+                    <span style="color: #f291c4">UI thread</span> creates the
+                    real views and handles touches.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >HOW</span
+                  >
+                  <sc-if value="{{ isOld }}" hint-placeholder-val="{{ true }}"
+                    ><p
+                      style="
+                        margin: 0;
+                        font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                        color: #d5dae0;
+                        text-wrap: pretty;
+                      "
+                    >
+                      The bridge connects JS to the native threads, and
+                      everything on it is
+                      <strong style="color: #eef1f4; font-weight: 600"
+                        >asynchronous</strong
+                      >: you send a message and carry on, and the answer arrives
+                      later. Messages are queued and sent in
+                      <strong style="color: #eef1f4; font-weight: 600"
+                        >batches</strong
+                      >, groups sent together to save work. Neither side can
+                      reach over and read the other’s data.
+                    </p></sc-if
+                  >
+                  <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}"
+                    ><p
+                      style="
+                        margin: 0;
+                        font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                        color: #d5dae0;
+                        text-wrap: pretty;
+                      "
+                    >
+                      You’re looking at the New Architecture version of the map.
+                      The same three threads exist. What changed is the
+                      connection: the bridge is replaced by JSI, and the shadow
+                      tree moves into C++ where every thread can read it. Switch
+                      back to Old to see the original.
+                    </p></sc-if
+                  >
+                </div>
+              </div>
+              <dc-import
+                name="SimPanel"
+                scenario="map"
+                mode="{{ mode }}"
+                reduced="{{ reduced }}"
+                compact="{{ mobile }}"
+                hint-size="100%,600px"
+              ></dc-import>
+            </div>
+          </section>
+
+          <section
+            id="ch3"
+            data-screen-label="03 Where it hurt"
+            style="padding: 96px 20px; border-bottom: 1px solid #1e252d"
+          >
+            <div
+              style="
+                max-width: 1240px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 44px;
+              "
+            >
+              <div style="display: flex; flex-direction: column; gap: 14px">
+                <span
+                  style="
+                    font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                    letter-spacing: 0.1em;
+                    color: #a1aab5;
+                  "
+                  >CHAPTER 03</span
+                >
+                <h2
+                  style="
+                    margin: 0;
+                    font: 600 clamp(30px, 4.2vw, 48px)/1.08
+                      &quot;IBM Plex Sans&quot;;
+                    letter-spacing: -0.02em;
+                    color: #eef1f4;
+                  "
+                >
+                  Where it hurt
+                </h2>
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(min(100%, 280px), 1fr)
+                  );
+                  gap: 24px 44px;
+                "
+              >
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHY</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    Smooth scrolling means a new picture every 16.6 ms, which is
+                    60 pictures per second. Each picture is a
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >frame</strong
+                    >. When the app misses that window, the user sees a stutter:
+                    a
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >dropped frame</strong
+                    >.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHAT</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    Both phones scroll the same list. The scrolling itself is
+                    native, but every scroll event asks JS to render more rows.
+                    When JS falls behind, you get blank rows. Drag the load
+                    slider to make each event’s JS work heavier.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >HOW</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    Both phones merge scroll events that pile up while JS is
+                    busy. The difference is the cost: on the old phone every
+                    event pays for JSON twice, the scroll event coming in and
+                    the row updates going out. The further JS falls behind, the
+                    more rows it has to send, so each bridge batch gets bigger
+                    and slower. The new phone skips the JSON. Heavy JS is still
+                    heavy, though: push the slider to the end.
+                  </p>
+                </div>
+              </div>
+              <dc-import
+                name="ScrollRace"
+                mode="{{ mode }}"
+                reduced="{{ reduced }}"
+                hint-size="100%,720px"
+              ></dc-import>
+            </div>
+          </section>
+
+          <section
+            id="ch4"
+            data-screen-label="04 JSI"
+            style="padding: 96px 20px; border-bottom: 1px solid #1e252d"
+          >
+            <div
+              style="
+                max-width: 1240px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 44px;
+              "
+            >
+              <div style="display: flex; flex-direction: column; gap: 14px">
+                <span
+                  style="
+                    font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                    letter-spacing: 0.1em;
+                    color: #a1aab5;
+                  "
+                  >CHAPTER 04</span
+                >
+                <h2
+                  style="
+                    margin: 0;
+                    font: 600 clamp(30px, 4.2vw, 48px)/1.08
+                      &quot;IBM Plex Sans&quot;;
+                    letter-spacing: -0.02em;
+                    color: #eef1f4;
+                  "
+                >
+                  JSI: holding a reference instead of sending a message
+                </h2>
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(min(100%, 280px), 1fr)
+                  );
+                  gap: 24px 44px;
+                "
+              >
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHY</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    You call
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >native modules</strong
+                    >
+                    all the time: code written in Swift, Kotlin or Java that JS
+                    can use, like reading the battery level. On the bridge, even
+                    a tiny question becomes a round trip of messages.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHAT</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    <span style="color: #5fd3e6">JSI</span>, the JavaScript
+                    Interface, lets JS hold a reference to an object that lives
+                    in
+                    <strong style="color: #eef1f4; font-weight: 600">C++</strong
+                    >, a fast, lower-level language that runs on both iOS and
+                    Android. That object is a
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >host object</strong
+                    >: to JS it looks normal, but its methods are C++ functions.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >HOW</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    Instead of writing a letter and waiting for a reply, JS just
+                    calls the function. No JSON, no queue, no lookup table. If
+                    the method is synchronous, the value comes back on the same
+                    line. Toggle Old / New to compare the two trips.
+                  </p>
+                </div>
+              </div>
+              <dc-import
+                name="SimPanel"
+                scenario="jsi"
+                mode="{{ mode }}"
+                reduced="{{ reduced }}"
+                compact="{{ mobile }}"
+                hint-size="100%,560px"
+              ></dc-import>
+            </div>
+          </section>
+
+          <section
+            id="ch5"
+            data-screen-label="05 Turbo Modules and Codegen"
+            style="padding: 96px 20px; border-bottom: 1px solid #1e252d"
+          >
+            <div
+              style="
+                max-width: 1240px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 44px;
+              "
+            >
+              <div style="display: flex; flex-direction: column; gap: 14px">
+                <span
+                  style="
+                    font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                    letter-spacing: 0.1em;
+                    color: #a1aab5;
+                  "
+                  >CHAPTER 05</span
+                >
+                <h2
+                  style="
+                    margin: 0;
+                    font: 600 clamp(30px, 4.2vw, 48px)/1.08
+                      &quot;IBM Plex Sans&quot;;
+                    letter-spacing: -0.02em;
+                    color: #eef1f4;
+                  "
+                >
+                  Turbo Modules and Codegen
+                </h2>
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(min(100%, 280px), 1fr)
+                  );
+                  gap: 24px 44px;
+                "
+              >
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHY</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    Users judge your app in its first second. In the old
+                    architecture, most native modules in your app are created at
+                    launch by default, even the ones the first screen never
+                    touches.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHAT</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    A <span style="color: #5fd3e6">Turbo Module</span> is a
+                    native module built on JSI that loads
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >lazily</strong
+                    >: the first time JS asks for it, not before.
+                    <span style="color: #5fd3e6">Codegen</span> is a build-time
+                    tool that reads a TypeScript description of the module and
+                    writes the matching native code.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >HOW</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    First, play both startups and compare when the first screen
+                    becomes usable. Then step through Codegen turning a spec
+                    into a typed C++ interface, so a mismatch between JS and
+                    native fails the build instead of crashing on a user’s
+                    phone.
+                  </p>
+                </div>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  border: 1px solid #262e38;
+                  border-radius: 12px;
+                  background: #12161b;
+                  overflow: hidden;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    padding: 10px 14px;
+                    border-bottom: 1px solid #262e38;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <div style="display: flex; align-items: center; gap: 10px">
+                    <span
+                      style="display:inline-flex;align-items:center;gap:6px;font:500 11px/1 'IBM Plex Mono';letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:4px;color:{{ s5.chip.fg }};background:{{ s5.chip.bg }}"
+                      ><span
+                        style="width:6px;height:6px;border-radius:50%;background:{{ s5.chip.fg }}"
+                      ></span
+                      >{{ s5.chip.label }}</span
+                    >
+                    <span
+                      style="
+                        font: 500 12px/1.2 &quot;IBM Plex Mono&quot;;
+                        color: #a1aab5;
+                      "
+                      >app startup · 10 native modules</span
+                    >
+                  </div>
+                  <span
+                    style="
+                      font: 400 12px/1 &quot;IBM Plex Mono&quot;;
+                      color: #8a94a0;
+                    "
+                    >t = {{ s5.tLabel }} ms</span
+                  >
+                </div>
+                <div
+                  style="
+                    padding: 22px 16px 18px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 22px;
+                  "
+                >
+                  <div style="position: relative; height: 14px; margin: 0 2px">
+                    <sc-for
+                      list="{{ s5.ticks }}"
+                      as="tk"
+                      hint-placeholder-count="5"
+                      ><span
+                        style="position:absolute;left:{{ tk.l }}%;transform:translateX(-50%);font:400 11px/1 'IBM Plex Mono';color:#8a94a0"
+                        >{{ tk.t }}</span
+                      ></sc-for
+                    >
+                  </div>
+                  <sc-for
+                    list="{{ s5.rows }}"
+                    as="r"
+                    hint-placeholder-count="2"
+                  >
+                    <div
+                      style="display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:10px;border:1px solid {{ r.bd }};background:#151a20"
+                    >
+                      <div
+                        style="
+                          display: flex;
+                          justify-content: space-between;
+                          gap: 12px;
+                          flex-wrap: wrap;
+                          align-items: baseline;
+                        "
+                      >
+                        <span
+                          style="display:flex;align-items:center;gap:8px;font:600 14px/1.2 'IBM Plex Sans';color:{{ r.c }}"
+                          ><span
+                            style="width:8px;height:8px;border-radius:2px;background:{{ r.c }}"
+                          ></span
+                          >{{ r.name }}</span
+                        >
+                        <span
+                          style="font:500 13px/1 'IBM Plex Mono';color:{{ r.resC }}"
+                          >{{ r.res }}</span
+                        >
+                      </div>
+                      <div
+                        style="
+                          position: relative;
+                          height: 30px;
+                          background: #0f1216;
+                          border-radius: 5px;
+                        "
+                      >
+                        <sc-for
+                          list="{{ r.segs }}"
+                          as="g"
+                          hint-placeholder-count="6"
+                        >
+                          <div
+                            title="{{ g.name }}"
+                            style="position:absolute;top:4px;bottom:4px;left:{{ g.l }}%;width:{{ g.w }}%;border-radius:3px;background:#1e252d;overflow:hidden;box-shadow:inset 0 0 0 1px {{ g.bd }}"
+                          >
+                            <div
+                              style="height:100%;width:{{ g.f }}%;background:{{ g.c }}"
+                            ></div>
+                          </div>
+                        </sc-for>
+                        <sc-if
+                          value="{{ r.showMark }}"
+                          hint-placeholder-val="{{ false }}"
+                        >
+                          <div
+                            style="position:absolute;top:-6px;bottom:-6px;left:{{ r.mx }}%;width:2px;background:#eef1f4"
+                          ></div>
+                        </sc-if>
+                        <div
+                          style="position:absolute;top:-4px;bottom:-4px;left:{{ s5.cx }}%;width:1px;background:#a1aab5;opacity:.7"
+                        ></div>
+                      </div>
+                      <div
+                        style="
+                          display: flex;
+                          gap: 14px;
+                          flex-wrap: wrap;
+                          font: 400 12px/1.4 &quot;IBM Plex Mono&quot;;
+                          color: #a1aab5;
+                        "
+                      >
+                        <sc-for
+                          list="{{ r.legend }}"
+                          as="lg"
+                          hint-placeholder-count="2"
+                          ><span
+                            style="display: flex; align-items: center; gap: 6px"
+                            ><span
+                              style="width:8px;height:8px;border-radius:2px;background:{{ lg.c }}"
+                            ></span
+                            >{{ lg.t }}</span
+                          ></sc-for
+                        >
+                      </div>
+                      <sc-if
+                        value="{{ r.hasLazy }}"
+                        hint-placeholder-val="{{ false }}"
+                      >
+                        <div
+                          style="
+                            display: flex;
+                            flex-direction: column;
+                            gap: 8px;
+                            padding-top: 4px;
+                          "
+                        >
+                          <span
+                            style="
+                              font: 400 13px/1.4 &quot;IBM Plex Sans&quot;;
+                              color: #a1aab5;
+                            "
+                            >Not loaded yet. Tap one to use it from JS:</span
+                          >
+                          <div style="display: flex; gap: 6px; flex-wrap: wrap">
+                            <sc-for
+                              list="{{ r.lazy }}"
+                              as="m"
+                              hint-placeholder-count="8"
+                            >
+                              <button
+                                onClick="{{ m.go }}"
+                                style="height:30px;padding:0 10px;border-radius:6px;border:1px solid {{ m.bd }};background:{{ m.bg }};color:{{ m.fg }};font:500 12px/1 'IBM Plex Mono';cursor:pointer"
+                              >
+                                {{ m.t }}
+                              </button>
+                            </sc-for>
+                          </div>
+                        </div>
+                      </sc-if>
                     </div>
                   </sc-for>
-                  <sc-if value="{{ r.showMark }}" hint-placeholder-val="{{ false }}">
-                    <div style="position:absolute;top:-6px;bottom:-6px;left:{{ r.mx }}%;width:2px;background:#eef1f4"></div>
-                  </sc-if>
-                  <div style="position:absolute;top:-4px;bottom:-4px;left:{{ s5.cx }}%;width:1px;background:#a1aab5;opacity:.7"></div>
                 </div>
-                <div style="display:flex;gap:14px;flex-wrap:wrap;font:400 12px/1.4 'IBM Plex Mono';color:#a1aab5">
-                  <sc-for list="{{ r.legend }}" as="lg" hint-placeholder-count="2"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:2px;background:{{ lg.c }}"></span>{{ lg.t }}</span></sc-for>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 10px 14px;
+                    border-top: 1px solid #262e38;
+                  "
+                >
+                  <button
+                    onClick="{{ s5.play }}"
+                    style="height:34px;min-width:84px;padding:0 14px;border-radius:6px;border:1px solid {{ acc }};background:{{ accBg }};color:{{ acc }};font:600 13px/1 'IBM Plex Sans';cursor:pointer"
+                  >
+                    {{ s5.playLabel }}
+                  </button>
+                  <button
+                    onClick="{{ s5.step }}"
+                    style="
+                      height: 34px;
+                      padding: 0 12px;
+                      border-radius: 6px;
+                      border: 1px solid #333d49;
+                      background: #1b2129;
+                      color: #e7eaee;
+                      font: 500 13px/1 &quot;IBM Plex Sans&quot;;
+                      cursor: pointer;
+                    "
+                    style-hover="background:#222a33"
+                  >
+                    Step
+                  </button>
+                  <div
+                    style="
+                      display: flex;
+                      border: 1px solid #333d49;
+                      border-radius: 6px;
+                      overflow: hidden;
+                    "
+                  >
+                    <sc-for
+                      list="{{ s5.speeds }}"
+                      as="sp"
+                      hint-placeholder-count="3"
+                      ><button
+                        onClick="{{ sp.go }}"
+                        style="height:32px;padding:0 10px;border:0;background:{{ sp.bg }};color:{{ sp.fg }};font:500 12px/1 'IBM Plex Mono';cursor:pointer"
+                      >
+                        {{ sp.t }}
+                      </button></sc-for
+                    >
+                  </div>
+                  <button
+                    onClick="{{ s5.reset }}"
+                    style="
+                      height: 34px;
+                      padding: 0 12px;
+                      border-radius: 6px;
+                      border: 1px solid #333d49;
+                      background: #1b2129;
+                      color: #e7eaee;
+                      font: 500 13px/1 &quot;IBM Plex Sans&quot;;
+                      cursor: pointer;
+                    "
+                    style-hover="background:#222a33"
+                  >
+                    Reset
+                  </button>
                 </div>
-                <sc-if value="{{ r.hasLazy }}" hint-placeholder-val="{{ false }}">
-                  <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px">
-                    <span style="font:400 13px/1.4 'IBM Plex Sans';color:#a1aab5">Not loaded yet. Tap one to use it from JS:</span>
-                    <div style="display:flex;gap:6px;flex-wrap:wrap">
-                      <sc-for list="{{ r.lazy }}" as="m" hint-placeholder-count="8">
-                        <button onClick="{{ m.go }}" style="height:30px;padding:0 10px;border-radius:6px;border:1px solid {{ m.bd }};background:{{ m.bg }};color:{{ m.fg }};font:500 12px/1 'IBM Plex Mono';cursor:pointer">{{ m.t }}</button>
-                      </sc-for>
+                <div
+                  style="
+                    display: flex;
+                    gap: 12px;
+                    padding: 12px 14px 16px;
+                    border-top: 1px solid #1e252d;
+                    min-height: 76px;
+                    box-sizing: border-box;
+                    background: #0f1317;
+                  "
+                >
+                  <span
+                    style="flex:none;width:3px;border-radius:2px;background:{{ acc }}"
+                  ></span>
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 15px/1.6 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                      max-width: 860px;
+                    "
+                  >
+                    {{ s5.caption }}
+                  </p>
+                </div>
+              </div>
+              <dc-import
+                name="SimPanel"
+                scenario="codegen"
+                mode="{{ mode }}"
+                reduced="{{ reduced }}"
+                compact="{{ mobile }}"
+                hint-size="100%,560px"
+              ></dc-import>
+            </div>
+          </section>
+
+          <section
+            id="ch6"
+            data-screen-label="06 Fabric"
+            style="padding: 96px 20px; border-bottom: 1px solid #1e252d"
+          >
+            <div
+              style="
+                max-width: 1240px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 44px;
+              "
+            >
+              <div style="display: flex; flex-direction: column; gap: 14px">
+                <span
+                  style="
+                    font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                    letter-spacing: 0.1em;
+                    color: #a1aab5;
+                  "
+                  >CHAPTER 06</span
+                >
+                <h2
+                  style="
+                    margin: 0;
+                    font: 600 clamp(30px, 4.2vw, 48px)/1.08
+                      &quot;IBM Plex Sans&quot;;
+                    letter-spacing: -0.02em;
+                    color: #eef1f4;
+                  "
+                >
+                  Fabric: render, commit, mount
+                </h2>
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(min(100%, 280px), 1fr)
+                  );
+                  gap: 24px 44px;
+                "
+              >
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHY</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    Every setState you call ends up as real views on screen. The
+                    part that turns React’s output into those views is the
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >renderer</strong
+                    >. <span style="color: #5fd3e6">Fabric</span> is the New
+                    Architecture’s renderer.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >WHAT</span
+                  >
+                  <p
+                    style="
+                      margin: 0;
+                      font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                      color: #d5dae0;
+                      text-wrap: pretty;
+                    "
+                  >
+                    It works in three phases.
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >Render</strong
+                    >: React runs your components and Fabric builds a
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >shadow tree</strong
+                    >, a C++ copy of your UI.
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >Commit</strong
+                    >: layout is calculated and the tree is sealed.
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >Mount</strong
+                    >: the changes are applied to
+                    <strong style="color: #eef1f4; font-weight: 600"
+                      >host views</strong
+                    >, the real platform views.
+                  </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      letter-spacing: 0.12em;
+                      color: #8a94a0;
+                    "
+                    >HOW</span
+                  >
+                  <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}"
+                    ><p
+                      style="
+                        margin: 0;
+                        font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                        color: #d5dae0;
+                        text-wrap: pretty;
+                      "
+                    >
+                      Because the shadow tree lives in C++ and is shared through
+                      JSI, any thread can read it. That is what lets you measure
+                      layout synchronously, and lets React render urgent updates
+                      first. Step through the three phases and watch the three
+                      trees fill in.
+                    </p></sc-if
+                  >
+                  <sc-if value="{{ isOld }}" hint-placeholder-val="{{ true }}"
+                    ><p
+                      style="
+                        margin: 0;
+                        font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                        color: #d5dae0;
+                        text-wrap: pretty;
+                      "
+                    >
+                      You’re seeing the old renderer first, so you have
+                      something to compare against. The same three phases
+                      happened, but spread over three threads and stitched
+                      together with JSON. Step through it, then flip to New to
+                      watch Fabric do the same work.
+                    </p></sc-if
+                  >
+                </div>
+              </div>
+              <dc-import
+                name="SimPanel"
+                scenario="fabric"
+                mode="{{ mode }}"
+                reduced="{{ reduced }}"
+                compact="{{ mobile }}"
+                hint-size="100%,720px"
+              ></dc-import>
+            </div>
+          </section>
+
+          <section
+            id="ch7"
+            data-screen-label="07 Wrap-up"
+            style="padding: 96px 20px 120px"
+          >
+            <div
+              style="
+                max-width: 1240px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 72px;
+              "
+            >
+              <div style="display: flex; flex-direction: column; gap: 14px">
+                <span
+                  style="
+                    font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                    letter-spacing: 0.1em;
+                    color: #a1aab5;
+                  "
+                  >CHAPTER 07</span
+                >
+                <h2
+                  style="
+                    margin: 0;
+                    font: 600 clamp(30px, 4.2vw, 48px)/1.08
+                      &quot;IBM Plex Sans&quot;;
+                    letter-spacing: -0.02em;
+                    color: #eef1f4;
+                  "
+                >
+                  Wrap-up
+                </h2>
+                <p
+                  style="
+                    margin: 0;
+                    font: 400 17px/1.65 &quot;IBM Plex Sans&quot;;
+                    color: #d5dae0;
+                    max-width: 680px;
+                    text-wrap: pretty;
+                  "
+                >
+                  Let’s put the pieces back together: the new map, how we got
+                  here, what changes in your app when you migrate, and a quick
+                  check that it all stuck.
+                </p>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 20px">
+                <h3
+                  style="
+                    margin: 0;
+                    font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                    color: #eef1f4;
+                  "
+                >
+                  {{ mapTitle }}
+                </h3>
+                <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}">
+                  <div
+                    style="
+                      display: grid;
+                      grid-template-columns: repeat(
+                        auto-fit,
+                        minmax(min(100%, 200px), 1fr)
+                      );
+                      gap: 12px;
+                      align-items: stretch;
+                    "
+                  >
+                    <div
+                      style="
+                        border: 1px solid #b39dff66;
+                        border-radius: 10px;
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                        background: #151a20;
+                      "
+                    >
+                      <span
+                        style="
+                          font: 600 14px/1 &quot;IBM Plex Sans&quot;;
+                          color: #b39dff;
+                        "
+                        >JS thread</span
+                      ><span
+                        style="
+                          font: 400 14px/1.5 &quot;IBM Plex Sans&quot;;
+                          color: #c4cbd3;
+                        "
+                        >React and your code. Holds host objects for modules it
+                        has used.</span
+                      >
                     </div>
+                    <div
+                      style="
+                        border: 1px solid #5fd3e6;
+                        border-radius: 10px;
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                        background: #11262b;
+                      "
+                    >
+                      <span
+                        style="
+                          font: 600 14px/1 &quot;IBM Plex Sans&quot;;
+                          color: #5fd3e6;
+                        "
+                        >JSI</span
+                      ><span
+                        style="
+                          font: 400 14px/1.5 &quot;IBM Plex Sans&quot;;
+                          color: #c4cbd3;
+                        "
+                        >Direct calls between JS and C++. Sync or async, no
+                        JSON.</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        border: 1px solid #5fd3e666;
+                        border-radius: 10px;
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                        background: #151a20;
+                      "
+                    >
+                      <span
+                        style="
+                          font: 600 14px/1 &quot;IBM Plex Sans&quot;;
+                          color: #5fd3e6;
+                        "
+                        >C++ core</span
+                      ><span
+                        style="
+                          font: 400 13px/1.5 &quot;IBM Plex Mono&quot;;
+                          color: #c4cbd3;
+                        "
+                        >Fabric renderer<br />Shared shadow tree<br />Turbo
+                        Modules (lazy)</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        border: 1px solid #79d49c66;
+                        border-radius: 10px;
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                        background: #151a20;
+                      "
+                    >
+                      <span
+                        style="
+                          font: 600 14px/1 &quot;IBM Plex Sans&quot;;
+                          color: #79d49c;
+                        "
+                        >Background thread</span
+                      ><span
+                        style="
+                          font: 400 14px/1.5 &quot;IBM Plex Sans&quot;;
+                          color: #c4cbd3;
+                        "
+                        >Yoga layout in C++ during commit, off the UI thread.
+                        Can run synchronously for urgent work.</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        border: 1px solid #f291c466;
+                        border-radius: 10px;
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                        background: #151a20;
+                      "
+                    >
+                      <span
+                        style="
+                          font: 600 14px/1 &quot;IBM Plex Sans&quot;;
+                          color: #f291c4;
+                        "
+                        >UI thread</span
+                      ><span
+                        style="
+                          font: 400 14px/1.5 &quot;IBM Plex Sans&quot;;
+                          color: #c4cbd3;
+                        "
+                        >Applies mutations to host views, handles touches.</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      font: 400 13px/1.5 &quot;IBM Plex Mono&quot;;
+                      color: #a1aab5;
+                      border: 1px dashed #333d49;
+                      border-radius: 8px;
+                      padding: 12px 14px;
+                    "
+                  >
+                    Build time · Codegen reads your TypeScript specs and
+                    generates the C++ interfaces both sides must match.
+                  </div>
+                </sc-if>
+                <sc-if value="{{ isOld }}" hint-placeholder-val="{{ true }}">
+                  <div
+                    style="
+                      display: grid;
+                      grid-template-columns: repeat(
+                        auto-fit,
+                        minmax(min(100%, 200px), 1fr)
+                      );
+                      gap: 12px;
+                      align-items: stretch;
+                    "
+                  >
+                    <div
+                      style="
+                        border: 1px solid #b39dff66;
+                        border-radius: 10px;
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                        background: #151a20;
+                      "
+                    >
+                      <span
+                        style="
+                          font: 600 14px/1 &quot;IBM Plex Sans&quot;;
+                          color: #b39dff;
+                        "
+                        >JS thread</span
+                      ><span
+                        style="
+                          font: 400 14px/1.5 &quot;IBM Plex Sans&quot;;
+                          color: #c4cbd3;
+                        "
+                        >React and your code. Reaches native only by sending
+                        JSON messages.</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        border: 1px solid #f2b35b;
+                        border-radius: 10px;
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                        background: #2a2216;
+                      "
+                    >
+                      <span
+                        style="
+                          font: 600 14px/1 &quot;IBM Plex Sans&quot;;
+                          color: #f2b35b;
+                        "
+                        >Bridge</span
+                      ><span
+                        style="
+                          font: 400 14px/1.5 &quot;IBM Plex Sans&quot;;
+                          color: #c4cbd3;
+                        "
+                        >Async, batched JSON messages. The only way
+                        across.</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        border: 1px solid #79d49c66;
+                        border-radius: 10px;
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                        background: #151a20;
+                      "
+                    >
+                      <span
+                        style="
+                          font: 600 14px/1 &quot;IBM Plex Sans&quot;;
+                          color: #79d49c;
+                        "
+                        >Shadow thread</span
+                      ><span
+                        style="
+                          font: 400 14px/1.5 &quot;IBM Plex Sans&quot;;
+                          color: #c4cbd3;
+                        "
+                        >Its own copy of the tree. Yoga layout.</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        border: 1px solid #f291c466;
+                        border-radius: 10px;
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                        background: #151a20;
+                      "
+                    >
+                      <span
+                        style="
+                          font: 600 14px/1 &quot;IBM Plex Sans&quot;;
+                          color: #f291c4;
+                        "
+                        >UI thread</span
+                      ><span
+                        style="
+                          font: 400 14px/1.5 &quot;IBM Plex Sans&quot;;
+                          color: #c4cbd3;
+                        "
+                        >Creates views, handles touches.</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        border: 1px solid #9fb0c366;
+                        border-radius: 10px;
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                        background: #151a20;
+                      "
+                    >
+                      <span
+                        style="
+                          font: 600 14px/1 &quot;IBM Plex Sans&quot;;
+                          color: #9fb0c3;
+                        "
+                        >Native modules</span
+                      ><span
+                        style="
+                          font: 400 14px/1.5 &quot;IBM Plex Sans&quot;;
+                          color: #c4cbd3;
+                        "
+                        >Mostly created at launch. Types never checked.</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      font: 400 13px/1.5 &quot;IBM Plex Mono&quot;;
+                      color: #a1aab5;
+                      border: 1px dashed #333d49;
+                      border-radius: 8px;
+                      padding: 12px 14px;
+                    "
+                  >
+                    Switch to New in the top bar to see what replaced each part.
                   </div>
                 </sc-if>
               </div>
-            </sc-for>
-          </div>
-          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid #262e38">
-            <button onClick="{{ s5.play }}" style="height:34px;min-width:84px;padding:0 14px;border-radius:6px;border:1px solid {{ acc }};background:{{ accBg }};color:{{ acc }};font:600 13px/1 'IBM Plex Sans';cursor:pointer">{{ s5.playLabel }}</button>
-            <button onClick="{{ s5.step }}" style="height:34px;padding:0 12px;border-radius:6px;border:1px solid #333d49;background:#1b2129;color:#e7eaee;font:500 13px/1 'IBM Plex Sans';cursor:pointer" style-hover="background:#222a33">Step</button>
-            <div style="display:flex;border:1px solid #333d49;border-radius:6px;overflow:hidden">
-              <sc-for list="{{ s5.speeds }}" as="sp" hint-placeholder-count="3"><button onClick="{{ sp.go }}" style="height:32px;padding:0 10px;border:0;background:{{ sp.bg }};color:{{ sp.fg }};font:500 12px/1 'IBM Plex Mono';cursor:pointer">{{ sp.t }}</button></sc-for>
-            </div>
-            <button onClick="{{ s5.reset }}" style="height:34px;padding:0 12px;border-radius:6px;border:1px solid #333d49;background:#1b2129;color:#e7eaee;font:500 13px/1 'IBM Plex Sans';cursor:pointer" style-hover="background:#222a33">Reset</button>
-          </div>
-          <div style="display:flex;gap:12px;padding:12px 14px 16px;border-top:1px solid #1e252d;min-height:76px;box-sizing:border-box;background:#0f1317">
-            <span style="flex:none;width:3px;border-radius:2px;background:{{ acc }}"></span>
-            <p style="margin:0;font:400 15px/1.6 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty;max-width:860px">{{ s5.caption }}</p>
-          </div>
-        </div>
-        <dc-import name="SimPanel" scenario="codegen" mode="{{ mode }}" reduced="{{ reduced }}" compact="{{ mobile }}" hint-size="100%,560px"></dc-import>
-      </div>
-    </section>
 
-    <section id="ch6" data-screen-label="06 Fabric" style="padding:96px 20px;border-bottom:1px solid #1e252d">
-      <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:44px">
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <span style="font:500 12px/1 'IBM Plex Mono';letter-spacing:.1em;color:#a1aab5">CHAPTER 06</span>
-          <h2 style="margin:0;font:600 clamp(30px,4.2vw,48px)/1.08 'IBM Plex Sans';letter-spacing:-.02em;color:#eef1f4">Fabric: render, commit, mount</h2>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px 44px">
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHY</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">Every setState you call ends up as real views on screen. The part that turns React’s output into those views is the <strong style="color:#eef1f4;font-weight:600">renderer</strong>. <span style="color:#5fd3e6">Fabric</span> is the New Architecture’s renderer.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">WHAT</span><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">It works in three phases. <strong style="color:#eef1f4;font-weight:600">Render</strong>: React runs your components and Fabric builds a <strong style="color:#eef1f4;font-weight:600">shadow tree</strong>, a C++ copy of your UI. <strong style="color:#eef1f4;font-weight:600">Commit</strong>: layout is calculated and the tree is sealed. <strong style="color:#eef1f4;font-weight:600">Mount</strong>: the changes are applied to <strong style="color:#eef1f4;font-weight:600">host views</strong>, the real platform views.</p></div>
-          <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';letter-spacing:.12em;color:#8a94a0">HOW</span>
-            <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">Because the shadow tree lives in C++ and is shared through JSI, any thread can read it. That is what lets you measure layout synchronously, and lets React render urgent updates first. Step through the three phases and watch the three trees fill in.</p></sc-if>
-            <sc-if value="{{ isOld }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;text-wrap:pretty">You’re seeing the old renderer first, so you have something to compare against. The same three phases happened, but spread over three threads and stitched together with JSON. Step through it, then flip to New to watch Fabric do the same work.</p></sc-if>
-          </div>
-        </div>
-        <dc-import name="SimPanel" scenario="fabric" mode="{{ mode }}" reduced="{{ reduced }}" compact="{{ mobile }}" hint-size="100%,720px"></dc-import>
-      </div>
-    </section>
-
-    <section id="ch7" data-screen-label="07 Wrap-up" style="padding:96px 20px 120px">
-      <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:72px">
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <span style="font:500 12px/1 'IBM Plex Mono';letter-spacing:.1em;color:#a1aab5">CHAPTER 07</span>
-          <h2 style="margin:0;font:600 clamp(30px,4.2vw,48px)/1.08 'IBM Plex Sans';letter-spacing:-.02em;color:#eef1f4">Wrap-up</h2>
-          <p style="margin:0;font:400 17px/1.65 'IBM Plex Sans';color:#d5dae0;max-width:680px;text-wrap:pretty">Let’s put the pieces back together: the new map, how we got here, what changes in your app when you migrate, and a quick check that it all stuck.</p>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:20px">
-          <h3 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">{{ mapTitle }}</h3>
-          <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}">
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;align-items:stretch">
-              <div style="border:1px solid #b39dff66;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;background:#151a20"><span style="font:600 14px/1 'IBM Plex Sans';color:#b39dff">JS thread</span><span style="font:400 14px/1.5 'IBM Plex Sans';color:#c4cbd3">React and your code. Holds host objects for modules it has used.</span></div>
-              <div style="border:1px solid #5fd3e6;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;background:#11262b"><span style="font:600 14px/1 'IBM Plex Sans';color:#5fd3e6">JSI</span><span style="font:400 14px/1.5 'IBM Plex Sans';color:#c4cbd3">Direct calls between JS and C++. Sync or async, no JSON.</span></div>
-              <div style="border:1px solid #5fd3e666;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px;background:#151a20"><span style="font:600 14px/1 'IBM Plex Sans';color:#5fd3e6">C++ core</span><span style="font:400 13px/1.5 'IBM Plex Mono';color:#c4cbd3">Fabric renderer<br>Shared shadow tree<br>Turbo Modules (lazy)</span></div>
-              <div style="border:1px solid #79d49c66;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;background:#151a20"><span style="font:600 14px/1 'IBM Plex Sans';color:#79d49c">Background thread</span><span style="font:400 14px/1.5 'IBM Plex Sans';color:#c4cbd3">Yoga layout in C++ during commit, off the UI thread. Can run synchronously for urgent work.</span></div>
-              <div style="border:1px solid #f291c466;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;background:#151a20"><span style="font:600 14px/1 'IBM Plex Sans';color:#f291c4">UI thread</span><span style="font:400 14px/1.5 'IBM Plex Sans';color:#c4cbd3">Applies mutations to host views, handles touches.</span></div>
-            </div>
-            <div style="font:400 13px/1.5 'IBM Plex Mono';color:#a1aab5;border:1px dashed #333d49;border-radius:8px;padding:12px 14px">Build time · Codegen reads your TypeScript specs and generates the C++ interfaces both sides must match.</div>
-          </sc-if>
-          <sc-if value="{{ isOld }}" hint-placeholder-val="{{ true }}">
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;align-items:stretch">
-              <div style="border:1px solid #b39dff66;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;background:#151a20"><span style="font:600 14px/1 'IBM Plex Sans';color:#b39dff">JS thread</span><span style="font:400 14px/1.5 'IBM Plex Sans';color:#c4cbd3">React and your code. Reaches native only by sending JSON messages.</span></div>
-              <div style="border:1px solid #f2b35b;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;background:#2a2216"><span style="font:600 14px/1 'IBM Plex Sans';color:#f2b35b">Bridge</span><span style="font:400 14px/1.5 'IBM Plex Sans';color:#c4cbd3">Async, batched JSON messages. The only way across.</span></div>
-              <div style="border:1px solid #79d49c66;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;background:#151a20"><span style="font:600 14px/1 'IBM Plex Sans';color:#79d49c">Shadow thread</span><span style="font:400 14px/1.5 'IBM Plex Sans';color:#c4cbd3">Its own copy of the tree. Yoga layout.</span></div>
-              <div style="border:1px solid #f291c466;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;background:#151a20"><span style="font:600 14px/1 'IBM Plex Sans';color:#f291c4">UI thread</span><span style="font:400 14px/1.5 'IBM Plex Sans';color:#c4cbd3">Creates views, handles touches.</span></div>
-              <div style="border:1px solid #9fb0c366;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;background:#151a20"><span style="font:600 14px/1 'IBM Plex Sans';color:#9fb0c3">Native modules</span><span style="font:400 14px/1.5 'IBM Plex Sans';color:#c4cbd3">Mostly created at launch. Types never checked.</span></div>
-            </div>
-            <div style="font:400 13px/1.5 'IBM Plex Mono';color:#a1aab5;border:1px dashed #333d49;border-radius:8px;padding:12px 14px">Switch to New in the top bar to see what replaced each part.</div>
-          </sc-if>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:20px">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
-            <h3 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">How we got here</h3>
-            <div style="display:flex;gap:12px;align-items:center"><span style="font:400 12px/1.4 'IBM Plex Mono';color:#a1aab5">Dates are editable. Check them against the release notes.</span><button onClick="{{ resetDates }}" style="height:28px;padding:0 10px;border-radius:6px;border:1px solid #333d49;background:transparent;color:#c4cbd3;font:500 12px/1 'IBM Plex Sans';cursor:pointer">Reset dates</button></div>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:20px 16px">
-            <sc-for list="{{ timeline }}" as="tl" hint-placeholder-count="5">
-              <div style="display:flex;flex-direction:column;gap:10px;padding-top:16px;border-top:2px solid {{ tl.c }}">
-                <input value="{{ tl.date }}" onChange="{{ tl.set }}" aria-label="Date" style="width:100%;box-sizing:border-box;background:transparent;border:1px dashed #3a4450;border-radius:5px;padding:6px 8px;color:#eef1f4;font:500 13px/1 'IBM Plex Mono';outline:none">
-                <span style="font:600 20px/1 'IBM Plex Mono';color:{{ tl.c }}">{{ tl.v }}</span>
-                <span style="font:400 14px/1.5 'IBM Plex Sans';color:#c4cbd3;text-wrap:pretty">{{ tl.t }}</span>
-              </div>
-            </sc-for>
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:20px">
-          <h3 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Migration notes</h3>
-          <ol style="margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px">
-            <li style="display:flex;gap:14px;padding:16px;border:1px solid #262e38;border-radius:10px;background:#151a20"><span style="font:500 13px/1.6 'IBM Plex Mono';color:#5fd3e6">01</span><span style="font:400 15px/1.6 'IBM Plex Sans';color:#d5dae0">Upgrade to a current React Native version. The New Architecture is on by default from 0.76.</span></li>
-            <li style="display:flex;gap:14px;padding:16px;border:1px solid #262e38;border-radius:10px;background:#151a20"><span style="font:500 13px/1.6 'IBM Plex Mono';color:#5fd3e6">02</span><span style="font:400 15px/1.6 'IBM Plex Sans';color:#d5dae0">Check your libraries first. The interop layer lets many old-style modules and components run unchanged while their authors catch up.</span></li>
-            <li style="display:flex;gap:14px;padding:16px;border:1px solid #262e38;border-radius:10px;background:#151a20"><span style="font:500 13px/1.6 'IBM Plex Mono';color:#5fd3e6">03</span><span style="font:400 15px/1.6 'IBM Plex Sans';color:#d5dae0">Move your own native modules to Turbo Modules: write a TypeScript spec, run Codegen, implement the generated interface.</span></li>
-            <li style="display:flex;gap:14px;padding:16px;border:1px solid #262e38;border-radius:10px;background:#151a20"><span style="font:500 13px/1.6 'IBM Plex Mono';color:#5fd3e6">04</span><span style="font:400 15px/1.6 'IBM Plex Sans';color:#d5dae0">Search for code built around the bridge: setNativeProps, findNodeHandle, direct UIManager calls. Test those screens closely.</span></li>
-            <li style="display:flex;gap:14px;padding:16px;border:1px solid #262e38;border-radius:10px;background:#151a20"><span style="font:500 13px/1.6 'IBM Plex Mono';color:#5fd3e6">05</span><span style="font:400 15px/1.6 'IBM Plex Sans';color:#d5dae0">Profile again after migrating. JSI removes serialization overhead, not slow JavaScript.</span></li>
-          </ol>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:20px">
-          <h3 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">In one sentence</h3>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px">
-            <div style="padding:18px;border:1px solid #262e38;border-radius:10px;display:flex;flex-direction:column;gap:12px"><span style="font:500 12px/1 'IBM Plex Mono';color:#8a94a0">01 · One tap</span><span style="font:400 16px/1.55 'IBM Plex Sans';color:#eef1f4">A tap is a round trip: native to JS, and back to native.</span></div>
-            <div style="padding:18px;border:1px solid #262e38;border-radius:10px;display:flex;flex-direction:column;gap:12px"><span style="font:500 12px/1 'IBM Plex Mono';color:#8a94a0">02 · The old map</span><span style="font:400 16px/1.55 'IBM Plex Sans';color:#eef1f4">Three threads that could only talk through an asynchronous JSON bridge.</span></div>
-            <div style="padding:18px;border:1px solid #262e38;border-radius:10px;display:flex;flex-direction:column;gap:12px"><span style="font:500 12px/1 'IBM Plex Mono';color:#8a94a0">03 · Where it hurt</span><span style="font:400 16px/1.55 'IBM Plex Sans';color:#eef1f4">Under load, JSON on the bridge pushes each event past the 16.6 ms frame, and frames drop.</span></div>
-            <div style="padding:18px;border:1px solid #262e38;border-radius:10px;display:flex;flex-direction:column;gap:12px"><span style="font:500 12px/1 'IBM Plex Mono';color:#8a94a0">04 · JSI</span><span style="font:400 16px/1.55 'IBM Plex Sans';color:#eef1f4">JS holds a reference to a C++ object and calls it directly.</span></div>
-            <div style="padding:18px;border:1px solid #262e38;border-radius:10px;display:flex;flex-direction:column;gap:12px"><span style="font:500 12px/1 'IBM Plex Mono';color:#8a94a0">05 · Turbo Modules</span><span style="font:400 16px/1.55 'IBM Plex Sans';color:#eef1f4">Modules load when first used, and Codegen keeps JS and native types in agreement.</span></div>
-            <div style="padding:18px;border:1px solid #262e38;border-radius:10px;display:flex;flex-direction:column;gap:12px"><span style="font:500 12px/1 'IBM Plex Mono';color:#8a94a0">06 · Fabric</span><span style="font:400 16px/1.55 'IBM Plex Sans';color:#eef1f4">Render, commit, mount, on one shadow tree in C++ that every thread can read.</span></div>
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:20px">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
-            <h3 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Quick check</h3>
-            <span style="font:500 13px/1 'IBM Plex Mono';color:#a1aab5">{{ score }}</span>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:12px">
-            <sc-for list="{{ quiz }}" as="q" hint-placeholder-count="5">
-              <div style="display:flex;flex-direction:column;gap:12px;padding:18px;border:1px solid #262e38;border-radius:10px;background:#151a20">
-                <div style="display:flex;gap:12px"><span style="font:500 13px/1.6 'IBM Plex Mono';color:#8a94a0">{{ q.n }}</span><span style="font:500 16px/1.5 'IBM Plex Sans';color:#eef1f4">{{ q.q }}</span></div>
-                <div style="display:flex;gap:8px;flex-wrap:wrap">
-                  <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="3">
-                    <button onClick="{{ o.pick }}" style="min-height:40px;padding:8px 14px;border-radius:7px;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }};font:400 14px/1.35 'IBM Plex Sans';cursor:pointer;text-align:left">{{ o.t }}</button>
+              <div style="display: flex; flex-direction: column; gap: 20px">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: baseline;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <h3
+                    style="
+                      margin: 0;
+                      font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                      color: #eef1f4;
+                    "
+                  >
+                    How we got here
+                  </h3>
+                  <div style="display: flex; gap: 12px; align-items: center">
+                    <span
+                      style="
+                        font: 400 12px/1.4 &quot;IBM Plex Mono&quot;;
+                        color: #a1aab5;
+                      "
+                      >Dates are editable. Check them against the release
+                      notes.</span
+                    ><button
+                      onClick="{{ resetDates }}"
+                      style="
+                        height: 28px;
+                        padding: 0 10px;
+                        border-radius: 6px;
+                        border: 1px solid #333d49;
+                        background: transparent;
+                        color: #c4cbd3;
+                        font: 500 12px/1 &quot;IBM Plex Sans&quot;;
+                        cursor: pointer;
+                      "
+                    >
+                      Reset dates
+                    </button>
+                  </div>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: repeat(
+                      auto-fit,
+                      minmax(min(100%, 180px), 1fr)
+                    );
+                    gap: 20px 16px;
+                  "
+                >
+                  <sc-for
+                    list="{{ timeline }}"
+                    as="tl"
+                    hint-placeholder-count="5"
+                  >
+                    <div
+                      style="display:flex;flex-direction:column;gap:10px;padding-top:16px;border-top:2px solid {{ tl.c }}"
+                    >
+                      <input
+                        value="{{ tl.date }}"
+                        onChange="{{ tl.set }}"
+                        aria-label="Date"
+                        style="
+                          width: 100%;
+                          box-sizing: border-box;
+                          background: transparent;
+                          border: 1px dashed #3a4450;
+                          border-radius: 5px;
+                          padding: 6px 8px;
+                          color: #eef1f4;
+                          font: 500 13px/1 &quot;IBM Plex Mono&quot;;
+                          outline: none;
+                        "
+                      />
+                      <span
+                        style="font:600 20px/1 'IBM Plex Mono';color:{{ tl.c }}"
+                        >{{ tl.v }}</span
+                      >
+                      <span
+                        style="
+                          font: 400 14px/1.5 &quot;IBM Plex Sans&quot;;
+                          color: #c4cbd3;
+                          text-wrap: pretty;
+                        "
+                        >{{ tl.t }}</span
+                      >
+                    </div>
                   </sc-for>
                 </div>
-                <sc-if value="{{ q.answered }}" hint-placeholder-val="{{ false }}"><p style="margin:0;font:400 14px/1.55 'IBM Plex Sans';color:{{ q.fbC }}">{{ q.fb }}</p></sc-if>
               </div>
-            </sc-for>
-          </div>
-        </div>
 
-        <div style="display:flex;flex-direction:column;gap:20px">
-          <h3 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Glossary</h3>
-          <dl style="margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:0 40px">
-            <sc-for list="{{ glossary }}" as="g" hint-placeholder-count="10">
-              <div style="display:flex;flex-direction:column;gap:4px;padding:14px 0;border-bottom:1px solid #1e252d">
-                <dt style="font:600 14px/1.3 'IBM Plex Mono';color:{{ g.c }}">{{ g.t }}</dt>
-                <dd style="margin:0;font:400 15px/1.55 'IBM Plex Sans';color:#c4cbd3;text-wrap:pretty">{{ g.d }}</dd>
+              <div style="display: flex; flex-direction: column; gap: 20px">
+                <h3
+                  style="
+                    margin: 0;
+                    font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                    color: #eef1f4;
+                  "
+                >
+                  Migration notes
+                </h3>
+                <ol
+                  style="
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    display: grid;
+                    grid-template-columns: repeat(
+                      auto-fit,
+                      minmax(min(100%, 340px), 1fr)
+                    );
+                    gap: 14px;
+                  "
+                >
+                  <li
+                    style="
+                      display: flex;
+                      gap: 14px;
+                      padding: 16px;
+                      border: 1px solid #262e38;
+                      border-radius: 10px;
+                      background: #151a20;
+                    "
+                  >
+                    <span
+                      style="
+                        font: 500 13px/1.6 &quot;IBM Plex Mono&quot;;
+                        color: #5fd3e6;
+                      "
+                      >01</span
+                    ><span
+                      style="
+                        font: 400 15px/1.6 &quot;IBM Plex Sans&quot;;
+                        color: #d5dae0;
+                      "
+                      >Upgrade to a current React Native version. The New
+                      Architecture is on by default from 0.76.</span
+                    >
+                  </li>
+                  <li
+                    style="
+                      display: flex;
+                      gap: 14px;
+                      padding: 16px;
+                      border: 1px solid #262e38;
+                      border-radius: 10px;
+                      background: #151a20;
+                    "
+                  >
+                    <span
+                      style="
+                        font: 500 13px/1.6 &quot;IBM Plex Mono&quot;;
+                        color: #5fd3e6;
+                      "
+                      >02</span
+                    ><span
+                      style="
+                        font: 400 15px/1.6 &quot;IBM Plex Sans&quot;;
+                        color: #d5dae0;
+                      "
+                      >Check your libraries first. The interop layer lets many
+                      old-style modules and components run unchanged while their
+                      authors catch up.</span
+                    >
+                  </li>
+                  <li
+                    style="
+                      display: flex;
+                      gap: 14px;
+                      padding: 16px;
+                      border: 1px solid #262e38;
+                      border-radius: 10px;
+                      background: #151a20;
+                    "
+                  >
+                    <span
+                      style="
+                        font: 500 13px/1.6 &quot;IBM Plex Mono&quot;;
+                        color: #5fd3e6;
+                      "
+                      >03</span
+                    ><span
+                      style="
+                        font: 400 15px/1.6 &quot;IBM Plex Sans&quot;;
+                        color: #d5dae0;
+                      "
+                      >Move your own native modules to Turbo Modules: write a
+                      TypeScript spec, run Codegen, implement the generated
+                      interface.</span
+                    >
+                  </li>
+                  <li
+                    style="
+                      display: flex;
+                      gap: 14px;
+                      padding: 16px;
+                      border: 1px solid #262e38;
+                      border-radius: 10px;
+                      background: #151a20;
+                    "
+                  >
+                    <span
+                      style="
+                        font: 500 13px/1.6 &quot;IBM Plex Mono&quot;;
+                        color: #5fd3e6;
+                      "
+                      >04</span
+                    ><span
+                      style="
+                        font: 400 15px/1.6 &quot;IBM Plex Sans&quot;;
+                        color: #d5dae0;
+                      "
+                      >Search for code built around the bridge: setNativeProps,
+                      findNodeHandle, direct UIManager calls. Test those screens
+                      closely.</span
+                    >
+                  </li>
+                  <li
+                    style="
+                      display: flex;
+                      gap: 14px;
+                      padding: 16px;
+                      border: 1px solid #262e38;
+                      border-radius: 10px;
+                      background: #151a20;
+                    "
+                  >
+                    <span
+                      style="
+                        font: 500 13px/1.6 &quot;IBM Plex Mono&quot;;
+                        color: #5fd3e6;
+                      "
+                      >05</span
+                    ><span
+                      style="
+                        font: 400 15px/1.6 &quot;IBM Plex Sans&quot;;
+                        color: #d5dae0;
+                      "
+                      >Profile again after migrating. JSI removes serialization
+                      overhead, not slow JavaScript.</span
+                    >
+                  </li>
+                </ol>
               </div>
-            </sc-for>
-          </dl>
-        </div>
 
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:28px;border:1px solid #333d49;border-radius:12px;background:#151a20">
-          <div style="display:flex;flex-direction:column;gap:6px"><span style="font:600 20px/1.3 'IBM Plex Sans';color:#eef1f4">Now try it yourself</span><span style="font:400 15px/1.5 'IBM Plex Sans';color:#c4cbd3">Seven scenarios, both architectures, every step inspectable.</span></div>
-          <a href="{{ pgHref }}" style="height:42px;display:flex;align-items:center;padding:0 18px;border-radius:8px;background:#e7eaee;color:#0f1216;font:600 14px/1 'IBM Plex Sans';text-decoration:none">Open the Playground</a>
-        </div>
+              <div style="display: flex; flex-direction: column; gap: 20px">
+                <h3
+                  style="
+                    margin: 0;
+                    font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                    color: #eef1f4;
+                  "
+                >
+                  In one sentence
+                </h3>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: repeat(
+                      auto-fit,
+                      minmax(min(100%, 260px), 1fr)
+                    );
+                    gap: 12px;
+                  "
+                >
+                  <div
+                    style="
+                      padding: 18px;
+                      border: 1px solid #262e38;
+                      border-radius: 10px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 12px;
+                    "
+                  >
+                    <span
+                      style="
+                        font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                        color: #8a94a0;
+                      "
+                      >01 · One tap</span
+                    ><span
+                      style="
+                        font: 400 16px/1.55 &quot;IBM Plex Sans&quot;;
+                        color: #eef1f4;
+                      "
+                      >A tap is a round trip: native to JS, and back to
+                      native.</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      padding: 18px;
+                      border: 1px solid #262e38;
+                      border-radius: 10px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 12px;
+                    "
+                  >
+                    <span
+                      style="
+                        font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                        color: #8a94a0;
+                      "
+                      >02 · The old map</span
+                    ><span
+                      style="
+                        font: 400 16px/1.55 &quot;IBM Plex Sans&quot;;
+                        color: #eef1f4;
+                      "
+                      >Three threads that could only talk through an
+                      asynchronous JSON bridge.</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      padding: 18px;
+                      border: 1px solid #262e38;
+                      border-radius: 10px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 12px;
+                    "
+                  >
+                    <span
+                      style="
+                        font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                        color: #8a94a0;
+                      "
+                      >03 · Where it hurt</span
+                    ><span
+                      style="
+                        font: 400 16px/1.55 &quot;IBM Plex Sans&quot;;
+                        color: #eef1f4;
+                      "
+                      >Under load, JSON on the bridge pushes each event past the
+                      16.6 ms frame, and frames drop.</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      padding: 18px;
+                      border: 1px solid #262e38;
+                      border-radius: 10px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 12px;
+                    "
+                  >
+                    <span
+                      style="
+                        font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                        color: #8a94a0;
+                      "
+                      >04 · JSI</span
+                    ><span
+                      style="
+                        font: 400 16px/1.55 &quot;IBM Plex Sans&quot;;
+                        color: #eef1f4;
+                      "
+                      >JS holds a reference to a C++ object and calls it
+                      directly.</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      padding: 18px;
+                      border: 1px solid #262e38;
+                      border-radius: 10px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 12px;
+                    "
+                  >
+                    <span
+                      style="
+                        font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                        color: #8a94a0;
+                      "
+                      >05 · Turbo Modules</span
+                    ><span
+                      style="
+                        font: 400 16px/1.55 &quot;IBM Plex Sans&quot;;
+                        color: #eef1f4;
+                      "
+                      >Modules load when first used, and Codegen keeps JS and
+                      native types in agreement.</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      padding: 18px;
+                      border: 1px solid #262e38;
+                      border-radius: 10px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 12px;
+                    "
+                  >
+                    <span
+                      style="
+                        font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                        color: #8a94a0;
+                      "
+                      >06 · Fabric</span
+                    ><span
+                      style="
+                        font: 400 16px/1.55 &quot;IBM Plex Sans&quot;;
+                        color: #eef1f4;
+                      "
+                      >Render, commit, mount, on one shadow tree in C++ that
+                      every thread can read.</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 20px">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: baseline;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <h3
+                    style="
+                      margin: 0;
+                      font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                      color: #eef1f4;
+                    "
+                  >
+                    Quick check
+                  </h3>
+                  <span
+                    style="
+                      font: 500 13px/1 &quot;IBM Plex Mono&quot;;
+                      color: #a1aab5;
+                    "
+                    >{{ score }}</span
+                  >
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <sc-for list="{{ quiz }}" as="q" hint-placeholder-count="5">
+                    <div
+                      style="
+                        display: flex;
+                        flex-direction: column;
+                        gap: 12px;
+                        padding: 18px;
+                        border: 1px solid #262e38;
+                        border-radius: 10px;
+                        background: #151a20;
+                      "
+                    >
+                      <div style="display: flex; gap: 12px">
+                        <span
+                          style="
+                            font: 500 13px/1.6 &quot;IBM Plex Mono&quot;;
+                            color: #8a94a0;
+                          "
+                          >{{ q.n }}</span
+                        ><span
+                          style="
+                            font: 500 16px/1.5 &quot;IBM Plex Sans&quot;;
+                            color: #eef1f4;
+                          "
+                          >{{ q.q }}</span
+                        >
+                      </div>
+                      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                        <sc-for
+                          list="{{ q.opts }}"
+                          as="o"
+                          hint-placeholder-count="3"
+                        >
+                          <button
+                            onClick="{{ o.pick }}"
+                            style="min-height:40px;padding:8px 14px;border-radius:7px;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }};font:400 14px/1.35 'IBM Plex Sans';cursor:pointer;text-align:left"
+                          >
+                            {{ o.t }}
+                          </button>
+                        </sc-for>
+                      </div>
+                      <sc-if
+                        value="{{ q.answered }}"
+                        hint-placeholder-val="{{ false }}"
+                        ><p
+                          style="margin:0;font:400 14px/1.55 'IBM Plex Sans';color:{{ q.fbC }}"
+                        >
+                          {{ q.fb }}
+                        </p></sc-if
+                      >
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 20px">
+                <h3
+                  style="
+                    margin: 0;
+                    font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                    color: #eef1f4;
+                  "
+                >
+                  Glossary
+                </h3>
+                <dl
+                  style="
+                    margin: 0;
+                    display: grid;
+                    grid-template-columns: repeat(
+                      auto-fit,
+                      minmax(min(100%, 340px), 1fr)
+                    );
+                    gap: 0 40px;
+                  "
+                >
+                  <sc-for
+                    list="{{ glossary }}"
+                    as="g"
+                    hint-placeholder-count="10"
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                        padding: 14px 0;
+                        border-bottom: 1px solid #1e252d;
+                      "
+                    >
+                      <dt
+                        style="font:600 14px/1.3 'IBM Plex Mono';color:{{ g.c }}"
+                      >
+                        {{ g.t }}
+                      </dt>
+                      <dd
+                        style="
+                          margin: 0;
+                          font: 400 15px/1.55 &quot;IBM Plex Sans&quot;;
+                          color: #c4cbd3;
+                          text-wrap: pretty;
+                        "
+                      >
+                        {{ g.d }}
+                      </dd>
+                    </div>
+                  </sc-for>
+                </dl>
+              </div>
+
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  gap: 20px;
+                  flex-wrap: wrap;
+                  padding: 28px;
+                  border: 1px solid #333d49;
+                  border-radius: 12px;
+                  background: #151a20;
+                "
+              >
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <span
+                    style="
+                      font: 600 20px/1.3 &quot;IBM Plex Sans&quot;;
+                      color: #eef1f4;
+                    "
+                    >Now try it yourself</span
+                  ><span
+                    style="
+                      font: 400 15px/1.5 &quot;IBM Plex Sans&quot;;
+                      color: #c4cbd3;
+                    "
+                    >Seven scenarios, both architectures, every step
+                    inspectable.</span
+                  >
+                </div>
+                <a
+                  href="{{ pgHref }}"
+                  style="
+                    height: 42px;
+                    display: flex;
+                    align-items: center;
+                    padding: 0 18px;
+                    border-radius: 8px;
+                    background: #e7eaee;
+                    color: #0f1216;
+                    font: 600 14px/1 &quot;IBM Plex Sans&quot;;
+                    text-decoration: none;
+                  "
+                  >Open the Playground</a
+                >
+              </div>
+            </div>
+          </section>
+        </main>
       </div>
-    </section>
-  </main>
-</div>
-</x-dc>
-<script type="text/x-dc" data-dc-script>
-class Component extends DCLogic {
-  static TITLES = ['One tap, slowed down', 'The old map', 'Where it hurt', 'JSI', 'Turbo Modules and Codegen', 'Fabric', 'Wrap-up'];
-  static DATES = ['Mar 2022', 'Apr 2024', 'Oct 2024', 'Jun 2025', 'Oct 2025'];
-  static MODS = [['Storage', 40, 1], ['Analytics', 35, 1], ['Camera', 120], ['Maps', 160], ['Bluetooth', 90], ['Payments', 110], ['Contacts', 60], ['Location', 70], ['Biometrics', 50], ['Haptics', 15]];
-  state = { mode: 'old', reduced: false, mobile: false, active: 0, quiz: {}, dates: Component.DATES.slice(),
-    s5: { t: 0, playing: false, speed: 1, lazy: {} } };
+    </x-dc>
+    <script type="text/x-dc" data-dc-script>
+      class Component extends DCLogic {
+        static TITLES = ['One tap, slowed down', 'The old map', 'Where it hurt', 'JSI', 'Turbo Modules and Codegen', 'Fabric', 'Wrap-up'];
+        static DATES = ['Mar 2022', 'Apr 2024', 'Oct 2024', 'Jun 2025', 'Oct 2025'];
+        static MODS = [['Storage', 40, 1], ['Analytics', 35, 1], ['Camera', 120], ['Maps', 160], ['Bluetooth', 90], ['Payments', 110], ['Contacts', 60], ['Location', 70], ['Biometrics', 50], ['Haptics', 15]];
+        state = { mode: 'old', reduced: false, mobile: false, active: 0, quiz: {}, dates: Component.DATES.slice(),
+          s5: { t: 0, playing: false, speed: 1, lazy: {} } };
 
-  componentDidMount() {
-    let mode = 'old', reduced = false, ch = 0, demo = false;
-    try {
-      const q = new URLSearchParams(location.search);
-      if (q.get('mode') === 'new') mode = 'new';
-      reduced = q.get('motion') === 'reduced' || (q.get('motion') !== 'full' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-      ch = Math.max(0, Math.min(6, (parseInt(q.get('ch'), 10) || 1) - 1));
-      demo = !!q.get('demo');
-      const d = JSON.parse(localStorage.getItem('atb-dates') || 'null');
-      if (Array.isArray(d) && d.length === 5) this.setState({ dates: d });
-    } catch (e) {}
-    this.setState({ mode, reduced, s5: demo ? { ...this.state.s5, t: 1000 } : this.state.s5 });
-    this.onResize(); this.onScroll();
-    window.addEventListener('resize', this.onResize);
-    window.addEventListener('scroll', this.onScroll, { passive: true });
-    if (ch > 0) setTimeout(() => this.go(ch, true), 300);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.onResize);
-    window.removeEventListener('scroll', this.onScroll);
-    cancelAnimationFrame(this.raf);
-  }
-  onResize = () => { const m = window.innerWidth < 760; if (m !== this.state.mobile) this.setState({ mobile: m }); };
-  onScroll = () => {
-    let a = 0;
-    for (let i = 0; i < 7; i++) { const el = document.getElementById('ch' + (i + 1)); if (el && el.getBoundingClientRect().top < 180) a = i; }
-    if (a !== this.state.active) this.setState({ active: a });
-  };
-  go(i, instant) {
-    const el = document.getElementById('ch' + (i + 1)); if (!el) return;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 58, behavior: instant || this.state.reduced ? 'auto' : 'smooth' });
-  }
+        componentDidMount() {
+          let mode = 'old', reduced = false, ch = 0, demo = false;
+          try {
+            const q = new URLSearchParams(location.search);
+            if (q.get('mode') === 'new') mode = 'new';
+            reduced = q.get('motion') === 'reduced' || (q.get('motion') !== 'full' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+            ch = Math.max(0, Math.min(6, (parseInt(q.get('ch'), 10) || 1) - 1));
+            demo = !!q.get('demo');
+            const d = JSON.parse(localStorage.getItem('atb-dates') || 'null');
+            if (Array.isArray(d) && d.length === 5) this.setState({ dates: d });
+          } catch (e) {}
+          this.setState({ mode, reduced, s5: demo ? { ...this.state.s5, t: 1000 } : this.state.s5 });
+          this.onResize(); this.onScroll();
+          window.addEventListener('resize', this.onResize);
+          window.addEventListener('scroll', this.onScroll, { passive: true });
+          if (ch > 0) setTimeout(() => this.go(ch, true), 300);
+        }
+        componentWillUnmount() {
+          window.removeEventListener('resize', this.onResize);
+          window.removeEventListener('scroll', this.onScroll);
+          cancelAnimationFrame(this.raf);
+        }
+        onResize = () => { const m = window.innerWidth < 760; if (m !== this.state.mobile) this.setState({ mobile: m }); };
+        onScroll = () => {
+          let a = 0;
+          for (let i = 0; i < 7; i++) { const el = document.getElementById('ch' + (i + 1)); if (el && el.getBoundingClientRect().top < 180) a = i; }
+          if (a !== this.state.active) this.setState({ active: a });
+        };
+        go(i, instant) {
+          const el = document.getElementById('ch' + (i + 1)); if (!el) return;
+          window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 58, behavior: instant || this.state.reduced ? 'auto' : 'smooth' });
+        }
 
-  // chapter 5 startup
-  plan() {
-    const M = Component.MODS, old = [], nw = [], lazy = [];
-    let t = 0;
-    M.forEach(([n, d]) => { old.push({ name: n + ' init', s: t, d, c: '#9fb0c3' }); t += d; });
-    old.push({ name: 'JS bundle', s: t, d: 180, c: '#b39dff' }); t += 180;
-    old.push({ name: 'First render', s: t, d: 40, c: '#f291c4' }); t += 40;
-    const oldEnd = t; t = 0;
-    nw.push({ name: 'JS bundle', s: 0, d: 180, c: '#b39dff' }); t = 180;
-    M.filter(m => m[2]).forEach(([n, d]) => { nw.push({ name: n + ' (first use)', s: t, d, c: '#5fd3e6' }); t += d; });
-    nw.push({ name: 'First render', s: t, d: 40, c: '#f291c4' }); t += 40;
-    M.filter(m => !m[2]).forEach(m => lazy.push(m));
-    return { old, nw, oldEnd, newEnd: t, lazy, bounds: [...new Set([...old, ...nw].map(x => x.s + x.d))].sort((a, b) => a - b) };
-  }
-  s5run = () => { this.last = null; cancelAnimationFrame(this.raf); this.raf = requestAnimationFrame(this.s5tick); };
-  s5tick = (ts) => {
-    const s = this.state.s5; if (!s.playing) return;
-    const dt = this.last == null ? 16 : Math.min(80, ts - this.last); this.last = ts;
-    const P = this.plan(), end = Math.max(P.oldEnd, 1000);
-    let t;
-    if (this.state.reduced) { this.racc = (this.racc || 0) + dt * s.speed; if (this.racc < 500) { this.raf = requestAnimationFrame(this.s5tick); return; } this.racc = 0; t = P.bounds.find(b => b > s.t + 0.01) || end; }
-    else t = s.t + dt * s.speed * 0.36;
-    if (t >= P.oldEnd) { this.setState({ s5: { ...s, t: P.oldEnd, playing: false } }); return; }
-    this.setState({ s5: { ...s, t } });
-    this.raf = requestAnimationFrame(this.s5tick);
-  };
-  s5set(patch, cb) { this.setState(st => ({ s5: { ...st.s5, ...patch } }), cb); }
+        // chapter 5 startup
+        plan() {
+          const M = Component.MODS, old = [], nw = [], lazy = [];
+          let t = 0;
+          M.forEach(([n, d]) => { old.push({ name: n + ' init', s: t, d, c: '#9fb0c3' }); t += d; });
+          old.push({ name: 'JS bundle', s: t, d: 180, c: '#b39dff' }); t += 180;
+          old.push({ name: 'First render', s: t, d: 40, c: '#f291c4' }); t += 40;
+          const oldEnd = t; t = 0;
+          nw.push({ name: 'JS bundle', s: 0, d: 180, c: '#b39dff' }); t = 180;
+          M.filter(m => m[2]).forEach(([n, d]) => { nw.push({ name: n + ' (first use)', s: t, d, c: '#5fd3e6' }); t += d; });
+          nw.push({ name: 'First render', s: t, d: 40, c: '#f291c4' }); t += 40;
+          M.filter(m => !m[2]).forEach(m => lazy.push(m));
+          return { old, nw, oldEnd, newEnd: t, lazy, bounds: [...new Set([...old, ...nw].map(x => x.s + x.d))].sort((a, b) => a - b) };
+        }
+        s5run = () => { this.last = null; cancelAnimationFrame(this.raf); this.raf = requestAnimationFrame(this.s5tick); };
+        s5tick = (ts) => {
+          const s = this.state.s5; if (!s.playing) return;
+          const dt = this.last == null ? 16 : Math.min(80, ts - this.last); this.last = ts;
+          const P = this.plan(), end = Math.max(P.oldEnd, 1000);
+          let t;
+          if (this.state.reduced) { this.racc = (this.racc || 0) + dt * s.speed; if (this.racc < 500) { this.raf = requestAnimationFrame(this.s5tick); return; } this.racc = 0; t = P.bounds.find(b => b > s.t + 0.01) || end; }
+          else t = s.t + dt * s.speed * 0.36;
+          if (t >= P.oldEnd) { this.setState({ s5: { ...s, t: P.oldEnd, playing: false } }); return; }
+          this.setState({ s5: { ...s, t } });
+          this.raf = requestAnimationFrame(this.s5tick);
+        };
+        s5set(patch, cb) { this.setState(st => ({ s5: { ...st.s5, ...patch } }), cb); }
 
-  renderVals() {
-    const st = this.state, isNew = st.mode === 'new';
-    const acc = isNew ? '#5fd3e6' : '#f2b35b';
-    const T = Component.TITLES;
-    const chapters = T.map((title, i) => ({ title: (i + 1) + '. ' + title, bg: i < st.active ? '#6b7480' : i === st.active ? acc : '#2a323c', go: (e) => { e && e.preventDefault && e.preventDefault(); this.go(i); } }));
+        renderVals() {
+          const st = this.state, isNew = st.mode === 'new';
+          const acc = isNew ? '#5fd3e6' : '#f2b35b';
+          const T = Component.TITLES;
+          const chapters = T.map((title, i) => ({ title: (i + 1) + '. ' + title, bg: i < st.active ? '#6b7480' : i === st.active ? acc : '#2a323c', go: (e) => { e && e.preventDefault && e.preventDefault(); this.go(i); } }));
 
-    // ch5
-    const P = this.plan(), s = st.s5, t = s.t, W = 1000;
-    const seg = (x) => ({ name: x.name, l: x.s / W * 100, w: Math.max(0.6, x.d / W * 100 - 0.25), f: Math.max(0, Math.min(1, (t - x.s) / x.d)) * 100, c: x.c, bd: '#262e38' });
-    const doneOld = t >= P.oldEnd, doneNew = t >= P.newEnd;
-    const rows = [
-      { name: 'Old · eager: every module at launch', c: '#f2b35b', bd: isNew ? '#262e38' : '#f2b35b88', segs: P.old.map(seg), mx: P.oldEnd / W * 100, showMark: doneOld,
-        res: doneOld ? 'interactive at ' + P.oldEnd + ' ms' : 'starting…', resC: doneOld ? '#f2b35b' : '#8a94a0',
-        legend: [{ c: '#9fb0c3', t: 'native module init' }, { c: '#b39dff', t: 'JS bundle' }, { c: '#f291c4', t: 'first render' }], hasLazy: false, lazy: [] },
-      { name: 'New · lazy Turbo Modules', c: '#5fd3e6', bd: isNew ? '#5fd3e688' : '#262e38', segs: P.nw.map(seg), mx: P.newEnd / W * 100, showMark: doneNew,
-        res: doneNew ? 'interactive at ' + P.newEnd + ' ms' : 'starting…', resC: doneNew ? '#5fd3e6' : '#8a94a0',
-        legend: [{ c: '#b39dff', t: 'JS bundle' }, { c: '#5fd3e6', t: 'module, on first use' }, { c: '#f291c4', t: 'first render' }],
-        hasLazy: doneNew, lazy: P.lazy.map(([n, d]) => {
-          const ls = s.lazy[n];
-          return { t: ls === 'ready' ? n + ' · ready' : ls === 'loading' ? n + ' · loading ' + d + ' ms' : n,
-            bd: ls ? '#5fd3e6' : '#333d49', bg: ls === 'ready' ? '#5fd3e61f' : 'transparent', fg: ls ? '#5fd3e6' : '#c4cbd3',
-            go: () => { if (ls) return; this.s5set({ lazy: { ...this.state.s5.lazy, [n]: 'loading' } }); setTimeout(() => this.s5set({ lazy: { ...this.state.s5.lazy, [n]: 'ready' } }), this.state.reduced ? 0 : d * 4); } };
-        }) }
-    ];
-    const s5chip = s.playing ? { label: 'running', fg: acc, bg: acc + '1f' } : t >= P.oldEnd ? { label: 'complete', fg: '#eef1f4', bg: '#2a323c' } : t === 0 ? { label: 'idle', fg: '#a1aab5', bg: '#1b2129' } : { label: 'paused', fg: '#c4cbd3', bg: '#1b2129' };
-    let cap5;
-    if (t === 0) cap5 = 'Press Play. Both apps link the same ten native modules. Watch when each one can show its first screen.';
-    else if (!doneNew) cap5 = 'The old app is creating native modules one after another. None of your JS has run yet. The new app is already loading its JS bundle.';
-    else if (!doneOld) cap5 = 'The new app is interactive at ' + P.newEnd + ' ms. It only created Storage and Analytics, because the first screen used them. The old app is still setting up modules like Maps and Camera that nobody asked for.';
-    else cap5 = 'Old: ' + P.oldEnd + ' ms. New: ' + P.newEnd + ' ms. The other eight Turbo Modules haven’t loaded at all. Tap one below: it loads the moment JS first uses it, and only once.';
-    const s5 = {
-      chip: s5chip, tLabel: Math.round(t), cx: Math.min(100, t / W * 100), rows, caption: cap5,
-      ticks: [0, 250, 500, 750, 1000].map(v => ({ l: v / 10, t: v + (v === 1000 ? ' ms' : '') })),
-      playLabel: s.playing ? 'Pause' : t >= P.oldEnd ? 'Replay' : t === 0 ? 'Play' : 'Resume',
-      play: () => { if (s.playing) return this.s5set({ playing: false }); this.s5set({ playing: true, t: t >= P.oldEnd ? 0 : t, lazy: t >= P.oldEnd ? {} : s.lazy }, this.s5run); },
-      step: () => { const nb = P.bounds.find(b => b > t + 0.01); if (nb != null) this.s5set({ t: nb, playing: false }); },
-      reset: () => { cancelAnimationFrame(this.raf); this.s5set({ t: 0, playing: false, lazy: {} }); },
-      speeds: [0.5, 1, 2].map(v => ({ t: v + '×', bg: v === s.speed ? '#2a323c' : 'transparent', fg: v === s.speed ? '#eef1f4' : '#a1aab5', go: () => this.s5set({ speed: v }) }))
-    };
+          // ch5
+          const P = this.plan(), s = st.s5, t = s.t, W = 1000;
+          const seg = (x) => ({ name: x.name, l: x.s / W * 100, w: Math.max(0.6, x.d / W * 100 - 0.25), f: Math.max(0, Math.min(1, (t - x.s) / x.d)) * 100, c: x.c, bd: '#262e38' });
+          const doneOld = t >= P.oldEnd, doneNew = t >= P.newEnd;
+          const rows = [
+            { name: 'Old · eager: every module at launch', c: '#f2b35b', bd: isNew ? '#262e38' : '#f2b35b88', segs: P.old.map(seg), mx: P.oldEnd / W * 100, showMark: doneOld,
+              res: doneOld ? 'interactive at ' + P.oldEnd + ' ms' : 'starting…', resC: doneOld ? '#f2b35b' : '#8a94a0',
+              legend: [{ c: '#9fb0c3', t: 'native module init' }, { c: '#b39dff', t: 'JS bundle' }, { c: '#f291c4', t: 'first render' }], hasLazy: false, lazy: [] },
+            { name: 'New · lazy Turbo Modules', c: '#5fd3e6', bd: isNew ? '#5fd3e688' : '#262e38', segs: P.nw.map(seg), mx: P.newEnd / W * 100, showMark: doneNew,
+              res: doneNew ? 'interactive at ' + P.newEnd + ' ms' : 'starting…', resC: doneNew ? '#5fd3e6' : '#8a94a0',
+              legend: [{ c: '#b39dff', t: 'JS bundle' }, { c: '#5fd3e6', t: 'module, on first use' }, { c: '#f291c4', t: 'first render' }],
+              hasLazy: doneNew, lazy: P.lazy.map(([n, d]) => {
+                const ls = s.lazy[n];
+                return { t: ls === 'ready' ? n + ' · ready' : ls === 'loading' ? n + ' · loading ' + d + ' ms' : n,
+                  bd: ls ? '#5fd3e6' : '#333d49', bg: ls === 'ready' ? '#5fd3e61f' : 'transparent', fg: ls ? '#5fd3e6' : '#c4cbd3',
+                  go: () => { if (ls) return; this.s5set({ lazy: { ...this.state.s5.lazy, [n]: 'loading' } }); setTimeout(() => this.s5set({ lazy: { ...this.state.s5.lazy, [n]: 'ready' } }), this.state.reduced ? 0 : d * 4); } };
+              }) }
+          ];
+          const s5chip = s.playing ? { label: 'running', fg: acc, bg: acc + '1f' } : t >= P.oldEnd ? { label: 'complete', fg: '#eef1f4', bg: '#2a323c' } : t === 0 ? { label: 'idle', fg: '#a1aab5', bg: '#1b2129' } : { label: 'paused', fg: '#c4cbd3', bg: '#1b2129' };
+          let cap5;
+          if (t === 0) cap5 = 'Press Play. Both apps link the same ten native modules. Watch when each one can show its first screen.';
+          else if (!doneNew) cap5 = 'The old app is creating native modules one after another. None of your JS has run yet. The new app is already loading its JS bundle.';
+          else if (!doneOld) cap5 = 'The new app is interactive at ' + P.newEnd + ' ms. It only created Storage and Analytics, because the first screen used them. The old app is still setting up modules like Maps and Camera that nobody asked for.';
+          else cap5 = 'Old: ' + P.oldEnd + ' ms. New: ' + P.newEnd + ' ms. The other eight Turbo Modules haven’t loaded at all. Tap one below: it loads the moment JS first uses it, and only once.';
+          const s5 = {
+            chip: s5chip, tLabel: Math.round(t), cx: Math.min(100, t / W * 100), rows, caption: cap5,
+            ticks: [0, 250, 500, 750, 1000].map(v => ({ l: v / 10, t: v + (v === 1000 ? ' ms' : '') })),
+            playLabel: s.playing ? 'Pause' : t >= P.oldEnd ? 'Replay' : t === 0 ? 'Play' : 'Resume',
+            play: () => { if (s.playing) return this.s5set({ playing: false }); this.s5set({ playing: true, t: t >= P.oldEnd ? 0 : t, lazy: t >= P.oldEnd ? {} : s.lazy }, this.s5run); },
+            step: () => { const nb = P.bounds.find(b => b > t + 0.01); if (nb != null) this.s5set({ t: nb, playing: false }); },
+            reset: () => { cancelAnimationFrame(this.raf); this.s5set({ t: 0, playing: false, lazy: {} }); },
+            speeds: [0.5, 1, 2].map(v => ({ t: v + '×', bg: v === s.speed ? '#2a323c' : 'transparent', fg: v === s.speed ? '#eef1f4' : '#a1aab5', go: () => this.s5set({ speed: v }) }))
+          };
 
-    // timeline
-    const TL = [['0.68', 'New Architecture available as an opt-in.'], ['0.74', 'Bridgeless mode becomes the default when the New Architecture is on.'], ['0.76', 'New Architecture on by default for new and upgraded apps.'], ['0.80', 'Legacy architecture frozen: no new features or fixes.'], ['0.82', 'New Architecture only. The old one can no longer be turned back on.']];
-    const timeline = TL.map(([v, tx], i) => ({ v, t: tx, date: st.dates[i], c: i < 2 ? '#f2b35b' : '#5fd3e6',
-      set: (e) => { const d = st.dates.slice(); d[i] = e.target.value; this.setState({ dates: d }); try { localStorage.setItem('atb-dates', JSON.stringify(d)); } catch (er) {} } }));
+          // timeline
+          const TL = [['0.68', 'New Architecture available as an opt-in.'], ['0.74', 'Bridgeless mode becomes the default when the New Architecture is on.'], ['0.76', 'New Architecture on by default for new and upgraded apps.'], ['0.80', 'Legacy architecture frozen: no new features or fixes.'], ['0.82', 'New Architecture only. The old one can no longer be turned back on.']];
+          const timeline = TL.map(([v, tx], i) => ({ v, t: tx, date: st.dates[i], c: i < 2 ? '#f2b35b' : '#5fd3e6',
+            set: (e) => { const d = st.dates.slice(); d[i] = e.target.value; this.setState({ dates: d }); try { localStorage.setItem('atb-dates', JSON.stringify(d)); } catch (er) {} } }));
 
-    // quiz
-    const Q = [
-      ['In the old architecture, how does JS call a native module?', ['A direct C++ function call', 'A JSON message over the bridge', 'It reads native memory'], 1, 'Every call was serialized to JSON, queued, and parsed on the native side.'],
-      ['Your JS runs a loop for 400 ms. Does the New Architecture keep taps responsive?', ['Yes, JSI makes the loop async', 'No, the JS thread is still busy', 'Only on Android'], 1, 'JSI removes the JSON and the queue, but the JS thread still does one thing at a time. Move heavy work off it.'],
-      ['When does a Turbo Module get created?', ['At app launch', 'The first time JS uses it', 'After the first frame'], 1, 'Turbo Modules load lazily, which is why startup gets faster.'],
-      ['What does Codegen read?', ['Your component tree', 'A TypeScript spec', 'The JS bundle at runtime'], 1, 'It reads the spec at build time and writes typed native interfaces.'],
-      ['Which Fabric phase applies changes to the real views?', ['Render', 'Commit', 'Mount'], 2, 'Mount turns the differences between trees into mutations on host views.']
-    ];
-    let right = 0, answered = 0;
-    const quiz = Q.map(([q, opts, ok, why], qi) => {
-      const a = st.quiz[qi]; const has = a !== undefined;
-      if (has) { answered++; if (a === ok) right++; }
-      return { n: '0' + (qi + 1), q, answered: has, fb: has ? (a === ok ? 'Right. ' : 'Not quite. ') + why : '', fbC: has && a === ok ? '#9fe0b4' : '#f5a08f',
-        opts: opts.map((o, oi) => {
-          const sel = a === oi, good = has && oi === ok;
-          return { t: o, bd: good ? '#79d49c' : sel ? '#f0694f' : '#333d49', bg: good ? '#79d49c14' : sel ? '#f0694f14' : 'transparent', fg: '#e7eaee',
-            pick: () => this.setState(s2 => ({ quiz: { ...s2.quiz, [qi]: oi } })) };
-        }) };
-    });
+          // quiz
+          const Q = [
+            ['In the old architecture, how does JS call a native module?', ['A direct C++ function call', 'A JSON message over the bridge', 'It reads native memory'], 1, 'Every call was serialized to JSON, queued, and parsed on the native side.'],
+            ['Your JS runs a loop for 400 ms. Does the New Architecture keep taps responsive?', ['Yes, JSI makes the loop async', 'No, the JS thread is still busy', 'Only on Android'], 1, 'JSI removes the JSON and the queue, but the JS thread still does one thing at a time. Move heavy work off it.'],
+            ['When does a Turbo Module get created?', ['At app launch', 'The first time JS uses it', 'After the first frame'], 1, 'Turbo Modules load lazily, which is why startup gets faster.'],
+            ['What does Codegen read?', ['Your component tree', 'A TypeScript spec', 'The JS bundle at runtime'], 1, 'It reads the spec at build time and writes typed native interfaces.'],
+            ['Which Fabric phase applies changes to the real views?', ['Render', 'Commit', 'Mount'], 2, 'Mount turns the differences between trees into mutations on host views.']
+          ];
+          let right = 0, answered = 0;
+          const quiz = Q.map(([q, opts, ok, why], qi) => {
+            const a = st.quiz[qi]; const has = a !== undefined;
+            if (has) { answered++; if (a === ok) right++; }
+            return { n: '0' + (qi + 1), q, answered: has, fb: has ? (a === ok ? 'Right. ' : 'Not quite. ') + why : '', fbC: has && a === ok ? '#9fe0b4' : '#f5a08f',
+              opts: opts.map((o, oi) => {
+                const sel = a === oi, good = has && oi === ok;
+                return { t: o, bd: good ? '#79d49c' : sel ? '#f0694f' : '#333d49', bg: good ? '#79d49c14' : sel ? '#f0694f14' : 'transparent', fg: '#e7eaee',
+                  pick: () => this.setState(s2 => ({ quiz: { ...s2.quiz, [qi]: oi } })) };
+              }) };
+          });
 
-    const G = [
-      ['Thread', 'A single line of work. It does one thing at a time, in order.', '#e7eaee'],
-      ['JS thread', 'Where your React code, hooks and handlers run.', '#b39dff'],
-      ['UI thread', 'The app’s main thread. Draws the screen and receives touches.', '#f291c4'],
-      ['Shadow thread', 'In the old architecture, the thread that ran layout on its own copy of the tree.', '#79d49c'],
-      ['Bridge', 'The old connection between JS and native. Carries batched, asynchronous JSON messages.', '#f2b35b'],
-      ['Serialize', 'Turn an object into text, like JSON, so it can be sent. Parsing turns it back.', '#f2b35b'],
-      ['Batch', 'A group of messages sent together.', '#f2b35b'],
-      ['Asynchronous', 'You send a request and carry on; the answer arrives later.', '#e7eaee'],
-      ['Frame', 'One picture on screen. At 60 per second, each gets 16.6 ms.', '#e7eaee'],
-      ['Dropped frame', 'A frame that wasn’t ready in time. The user sees a stutter.', '#f0694f'],
-      ['Native module', 'Platform code (Swift, Kotlin, Java, Objective-C) that JS can call.', '#9fb0c3'],
-      ['C++', 'A fast, lower-level language that runs on iOS and Android. The New Architecture’s shared core.', '#5fd3e6'],
-      ['JSI', 'JavaScript Interface. Lets JS hold references to C++ objects and call them directly.', '#5fd3e6'],
-      ['Host object', 'A C++ object JS can use like a normal object.', '#5fd3e6'],
-      ['Turbo Module', 'A native module built on JSI that loads the first time it’s used.', '#5fd3e6'],
-      ['Codegen', 'A build-time tool that turns a TypeScript spec into typed native code.', '#5fd3e6'],
-      ['Fabric', 'The New Architecture’s renderer.', '#5fd3e6'],
-      ['Yoga', 'The layout engine that turns flexbox styles into positions and sizes.', '#79d49c'],
-      ['Shadow tree', 'A C++ copy of your UI with layout information.', '#5fd3e6'],
-      ['Render · Commit · Mount', 'Fabric’s phases: build the tree, compute layout and seal it, apply changes to views.', '#5fd3e6'],
-      ['Host view', 'A real platform view, like UIView on iOS or View on Android.', '#f291c4'],
-      ['Interop layer', 'Lets old-style modules and components run in the New Architecture.', '#5fd3e6']
-    ].map(([t, d, c]) => ({ t, d, c }));
+          const G = [
+            ['Thread', 'A single line of work. It does one thing at a time, in order.', '#e7eaee'],
+            ['JS thread', 'Where your React code, hooks and handlers run.', '#b39dff'],
+            ['UI thread', 'The app’s main thread. Draws the screen and receives touches.', '#f291c4'],
+            ['Shadow thread', 'In the old architecture, the thread that ran layout on its own copy of the tree.', '#79d49c'],
+            ['Bridge', 'The old connection between JS and native. Carries batched, asynchronous JSON messages.', '#f2b35b'],
+            ['Serialize', 'Turn an object into text, like JSON, so it can be sent. Parsing turns it back.', '#f2b35b'],
+            ['Batch', 'A group of messages sent together.', '#f2b35b'],
+            ['Asynchronous', 'You send a request and carry on; the answer arrives later.', '#e7eaee'],
+            ['Frame', 'One picture on screen. At 60 per second, each gets 16.6 ms.', '#e7eaee'],
+            ['Dropped frame', 'A frame that wasn’t ready in time. The user sees a stutter.', '#f0694f'],
+            ['Native module', 'Platform code (Swift, Kotlin, Java, Objective-C) that JS can call.', '#9fb0c3'],
+            ['C++', 'A fast, lower-level language that runs on iOS and Android. The New Architecture’s shared core.', '#5fd3e6'],
+            ['JSI', 'JavaScript Interface. Lets JS hold references to C++ objects and call them directly.', '#5fd3e6'],
+            ['Host object', 'A C++ object JS can use like a normal object.', '#5fd3e6'],
+            ['Turbo Module', 'A native module built on JSI that loads the first time it’s used.', '#5fd3e6'],
+            ['Codegen', 'A build-time tool that turns a TypeScript spec into typed native code.', '#5fd3e6'],
+            ['Fabric', 'The New Architecture’s renderer.', '#5fd3e6'],
+            ['Yoga', 'The layout engine that turns flexbox styles into positions and sizes.', '#79d49c'],
+            ['Shadow tree', 'A C++ copy of your UI with layout information.', '#5fd3e6'],
+            ['Render · Commit · Mount', 'Fabric’s phases: build the tree, compute layout and seal it, apply changes to views.', '#5fd3e6'],
+            ['Host view', 'A real platform view, like UIView on iOS or View on Android.', '#f291c4'],
+            ['Interop layer', 'Lets old-style modules and components run in the New Architecture.', '#5fd3e6']
+          ].map(([t, d, c]) => ({ t, d, c }));
 
-    return {
-      mode: st.mode, isOld: !isNew, isNew, reduced: st.reduced, mobile: st.mobile, acc, accBg: acc + '14',
-      chapters, showChTitle: !st.mobile, chLabel: String(st.active + 1).padStart(2, '0') + ' / 07 · ' + T[st.active],
-      tgOld: { bg: isNew ? 'transparent' : '#f2b35b', fg: isNew ? '#a1aab5' : '#1a1408' },
-      tgNew: { bg: isNew ? '#5fd3e6' : 'transparent', fg: isNew ? '#071a1e' : '#a1aab5' },
-      setOld: () => this.setState({ mode: 'old' }), setNew: () => this.setState({ mode: 'new' }),
-      motionLabel: st.reduced ? 'Motion: reduced' : 'Motion: full',
-      toggleMotion: () => this.setState({ reduced: !st.reduced }),
-      pgHref: 'Playground.dc.html?mode=' + st.mode + (st.reduced ? '&motion=reduced' : ''),
-      goTop: (e) => { e.preventDefault(); this.go(0); },
-      s5, timeline, resetDates: () => { this.setState({ dates: Component.DATES.slice() }); try { localStorage.removeItem('atb-dates'); } catch (e) {} },
-      quiz, score: answered ? right + ' / ' + Q.length + ' correct' : Q.length + ' questions',
-      mapTitle: isNew ? 'The new map' : 'The old map, for comparison',
-      glossary: G
-    };
-  }
-}
-</script>
-</body>
+          return {
+            mode: st.mode, isOld: !isNew, isNew, reduced: st.reduced, mobile: st.mobile, acc, accBg: acc + '14',
+            chapters, showChTitle: !st.mobile, chLabel: String(st.active + 1).padStart(2, '0') + ' / 07 · ' + T[st.active],
+            tgOld: { bg: isNew ? 'transparent' : '#f2b35b', fg: isNew ? '#a1aab5' : '#1a1408' },
+            tgNew: { bg: isNew ? '#5fd3e6' : 'transparent', fg: isNew ? '#071a1e' : '#a1aab5' },
+            setOld: () => this.setState({ mode: 'old' }), setNew: () => this.setState({ mode: 'new' }),
+            motionLabel: st.reduced ? 'Motion: reduced' : 'Motion: full',
+            toggleMotion: () => this.setState({ reduced: !st.reduced }),
+            pgHref: 'Playground.dc.html?mode=' + st.mode + (st.reduced ? '&motion=reduced' : ''),
+            goTop: (e) => { e.preventDefault(); this.go(0); },
+            s5, timeline, resetDates: () => { this.setState({ dates: Component.DATES.slice() }); try { localStorage.removeItem('atb-dates'); } catch (e) {} },
+            quiz, score: answered ? right + ' / ' + Q.length + ' correct' : Q.length + ' questions',
+            mapTitle: isNew ? 'The new map' : 'The old map, for comparison',
+            glossary: G
+          };
+        }
+      }
+    </script>
+  </body>
 </html>

@@ -1,12 +1,12 @@
 # Development prompt
 
-You are a senior React and React Native engineer. Build **"Across the Bridge"**, an interactive website that teaches junior React Native developers how the old architecture (the bridge) and the New Architecture (JSI, Turbo Modules, Codegen, Fabric) work.
+You are a senior React and React Native engineer. Build **"React Native Internal"**, an interactive website that teaches junior React Native developers how the old architecture (the bridge) and the New Architecture (JSI, Turbo Modules, Codegen, Fabric) work.
 
 ## Inputs
 
 - `REQUIREMENTS.md`: full functional spec, simulation models, design tokens, and acceptance criteria. Treat it as the source of truth.
 - `design/*.dc.html`: high-fidelity HTML prototypes. Open them in a browser (serve the folder with `npx serve design` so `support.js` loads). They are **design references, not code to ship**. Each file has a template (markup between `<x-dc>` tags) and a `class Component` logic block in a `<script data-dc-script>` tag. All copy, scenario data, preset generators and simulation maths live in those logic blocks. Port them faithfully.
-  - `Across the Bridge.dc.html` is the course page: top bar, chapters 1–7, startup bars, quiz, timeline, glossary.
+  - `React Native Internal.dc.html` is the course page: top bar, chapters 1–7, startup bars, quiz, timeline, glossary.
   - `SimPanel.dc.html` is the reusable thread-lanes + code panel. Its `static LIB` holds every chapter scenario for both modes.
   - `ScrollRace.dc.html` is chapter 3's two-phone scroll simulation.
   - `Playground.dc.html` is the full-screen visualizer. `static PRESETS` and `gen()` hold the trace generators.

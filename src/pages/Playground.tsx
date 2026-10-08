@@ -229,7 +229,7 @@ export default function Playground() {
         >
           <BrandMark />
           <span className="text-sm leading-none font-semibold">
-            Across the Bridge
+            React Native Internal
           </span>
         </Link>
         <span aria-hidden="true" className="h-4 w-px bg-line-strong" />
@@ -312,25 +312,41 @@ export default function Playground() {
                 <span className="text-[13px] leading-none font-semibold text-text-muted">
                   Scenario
                 </span>
-                <select
-                  value={preset}
-                  onChange={(e) => {
-                    clock.reset(PLAYBACK_IDLE);
-                    setSel(null);
-                    setPreset(e.target.value as PresetId);
-                  }}
-                  className="h-10 rounded-[7px] border border-line-strong bg-surface px-2.5 text-[13.5px] leading-none font-medium text-text-bright outline-none focus-visible:border-text-dim"
-                >
-                  {PRESETS.map((p) => (
-                    <option
-                      key={p.id}
-                      value={p.id}
-                      className="bg-surface text-text-bright"
-                    >
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
+                <span className="relative block">
+                  <select
+                    value={preset}
+                    onChange={(e) => {
+                      clock.reset(PLAYBACK_IDLE);
+                      setSel(null);
+                      setPreset(e.target.value as PresetId);
+                    }}
+                    className="h-10 w-full appearance-none rounded-[7px] border border-line-strong bg-surface pl-2.5 pr-10 text-[13.5px] leading-none font-medium text-text-bright outline-none focus-visible:border-text-dim"
+                  >
+                    {PRESETS.map((p) => (
+                      <option
+                        key={p.id}
+                        value={p.id}
+                        className="bg-surface text-text-bright"
+                      >
+                        {p.name}
+                      </option>
+                    ))}
+                  </select>
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 16 16"
+                    className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-text-bright"
+                    fill="none"
+                  >
+                    <path
+                      d="m2.5 5.5 5.5 5 5.5-5"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.75"
+                    />
+                  </svg>
+                </span>
               </label>
               <p className="m-0 text-[15px] leading-[1.6] text-text-muted">
                 {pr.desc}

@@ -1,212 +1,1423 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-html,body{margin:0;background:#0f1216;color:#e7eaee;-webkit-font-smoothing:antialiased}
-a{color:#e7eaee;text-decoration-color:#4a5562;text-underline-offset:3px}
-a:hover{color:#ffffff}
-</style>
-</helmet>
-<div style="min-height:100vh;background:#0f1216;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#e7eaee;padding:56px 24px 96px" data-screen-label="Component sheet">
-  <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:64px">
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <span style="font:500 12px/1 'IBM Plex Mono';letter-spacing:.1em;color:#a1aab5">ACROSS THE BRIDGE · COMPONENT SHEET</span>
-      <h1 style="margin:0;font:600 clamp(36px,5vw,56px)/1.02 'IBM Plex Sans';letter-spacing:-.03em;color:#eef1f4">Tokens and components</h1>
-      <p style="margin:0;font:400 17px/1.6 'IBM Plex Sans';color:#c4cbd3;max-width:680px">Every value used by the course and the playground. Thread colors are fixed everywhere; architecture colors only mark Old (warm) and New (cool).</p>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:18px">
-      <h2 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Color · surfaces and text</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px">
-        <sc-for list="{{ neutrals }}" as="c" hint-placeholder-count="9">
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <div style="height:64px;border-radius:8px;background:{{ c.v }};border:1px solid #333d49"></div>
-            <span style="font:600 12.5px/1.2 'IBM Plex Mono';color:#eef1f4">{{ c.n }}</span>
-            <span style="font:400 12px/1.3 'IBM Plex Mono';color:#a1aab5">{{ c.v }} · {{ c.u }}</span>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <style>
+          html,
+          body {
+            margin: 0;
+            background: #0f1216;
+            color: #e7eaee;
+            -webkit-font-smoothing: antialiased;
+          }
+          a {
+            color: #e7eaee;
+            text-decoration-color: #4a5562;
+            text-underline-offset: 3px;
+          }
+          a:hover {
+            color: #ffffff;
+          }
+        </style>
+      </helmet>
+      <div
+        style="
+          min-height: 100vh;
+          background: #0f1216;
+          font-family: &quot;IBM Plex Sans&quot;, system-ui, sans-serif;
+          color: #e7eaee;
+          padding: 56px 24px 96px;
+        "
+        data-screen-label="Component sheet"
+      >
+        <div
+          style="
+            max-width: 1240px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 64px;
+          "
+        >
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <span
+              style="
+                font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                letter-spacing: 0.1em;
+                color: #a1aab5;
+              "
+              >React Native Internal · COMPONENT SHEET</span
+            >
+            <h1
+              style="
+                margin: 0;
+                font: 600 clamp(36px, 5vw, 56px)/1.02 &quot;IBM Plex Sans&quot;;
+                letter-spacing: -0.03em;
+                color: #eef1f4;
+              "
+            >
+              Tokens and components
+            </h1>
+            <p
+              style="
+                margin: 0;
+                font: 400 17px/1.6 &quot;IBM Plex Sans&quot;;
+                color: #c4cbd3;
+                max-width: 680px;
+              "
+            >
+              Every value used by the course and the playground. Thread colors
+              are fixed everywhere; architecture colors only mark Old (warm) and
+              New (cool).
+            </p>
           </div>
-        </sc-for>
-      </div>
-    </div>
 
-    <div style="display:flex;flex-direction:column;gap:18px">
-      <h2 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Color · architecture, threads, state</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px">
-        <sc-for list="{{ accents }}" as="c" hint-placeholder-count="9">
-          <div style="display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid #262e38;border-radius:10px;background:#151a20">
-            <div style="display:flex;gap:6px"><div style="flex:2;height:44px;border-radius:6px;background:{{ c.v }}"></div><div style="flex:1;height:44px;border-radius:6px;background:{{ c.tint }};border:1px solid {{ c.v }}"></div></div>
-            <span style="font:600 13px/1.2 'IBM Plex Sans';color:{{ c.v }}">{{ c.n }}</span>
-            <span style="font:400 12px/1.4 'IBM Plex Mono';color:#a1aab5">{{ c.v }} · tint {{ c.tint }}</span>
-            <span style="font:400 12.5px/1.45 'IBM Plex Sans';color:#c4cbd3">{{ c.u }}</span>
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2
+              style="
+                margin: 0;
+                font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                color: #eef1f4;
+              "
+            >
+              Color · surfaces and text
+            </h2>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 12px;
+              "
+            >
+              <sc-for list="{{ neutrals }}" as="c" hint-placeholder-count="9">
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <div
+                    style="height:64px;border-radius:8px;background:{{ c.v }};border:1px solid #333d49"
+                  ></div>
+                  <span
+                    style="
+                      font: 600 12.5px/1.2 &quot;IBM Plex Mono&quot;;
+                      color: #eef1f4;
+                    "
+                    >{{ c.n }}</span
+                  >
+                  <span
+                    style="
+                      font: 400 12px/1.3 &quot;IBM Plex Mono&quot;;
+                      color: #a1aab5;
+                    "
+                    >{{ c.v }} · {{ c.u }}</span
+                  >
+                </div>
+              </sc-for>
+            </div>
           </div>
-        </sc-for>
-      </div>
-    </div>
 
-    <div style="display:flex;flex-direction:column;gap:18px">
-      <h2 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Type</h2>
-      <div style="display:flex;flex-direction:column;border-top:1px solid #262e38">
-        <sc-for list="{{ type }}" as="t" hint-placeholder-count="9">
-          <div style="display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:16px;align-items:baseline;padding:16px 0;border-bottom:1px solid #1e252d">
-            <span style="font:400 12px/1.5 'IBM Plex Mono';color:#a1aab5">{{ t.n }}<br>{{ t.spec }}</span>
-            <span style="font:{{ t.font }};letter-spacing:{{ t.ls }};color:#eef1f4;text-wrap:pretty">{{ t.sample }}</span>
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2
+              style="
+                margin: 0;
+                font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                color: #eef1f4;
+              "
+            >
+              Color · architecture, threads, state
+            </h2>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 12px;
+              "
+            >
+              <sc-for list="{{ accents }}" as="c" hint-placeholder-count="9">
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    padding: 12px;
+                    border: 1px solid #262e38;
+                    border-radius: 10px;
+                    background: #151a20;
+                  "
+                >
+                  <div style="display: flex; gap: 6px">
+                    <div
+                      style="flex:2;height:44px;border-radius:6px;background:{{ c.v }}"
+                    ></div>
+                    <div
+                      style="flex:1;height:44px;border-radius:6px;background:{{ c.tint }};border:1px solid {{ c.v }}"
+                    ></div>
+                  </div>
+                  <span
+                    style="font:600 13px/1.2 'IBM Plex Sans';color:{{ c.v }}"
+                    >{{ c.n }}</span
+                  >
+                  <span
+                    style="
+                      font: 400 12px/1.4 &quot;IBM Plex Mono&quot;;
+                      color: #a1aab5;
+                    "
+                    >{{ c.v }} · tint {{ c.tint }}</span
+                  >
+                  <span
+                    style="
+                      font: 400 12.5px/1.45 &quot;IBM Plex Sans&quot;;
+                      color: #c4cbd3;
+                    "
+                    >{{ c.u }}</span
+                  >
+                </div>
+              </sc-for>
+            </div>
           </div>
-        </sc-for>
-      </div>
-    </div>
 
-    <div style="display:flex;flex-direction:column;gap:18px">
-      <h2 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Simulation states</h2>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="6">
-          <div style="display:flex;flex-direction:column;gap:8px;padding:14px;border:1px solid #262e38;border-radius:10px;min-width:170px;flex:1">
-            <span style="align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font:500 11px/1 'IBM Plex Mono';letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:4px;color:{{ c.fg }};background:{{ c.bg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ c.fg }}"></span>{{ c.l }}</span>
-            <span style="font:400 13px/1.45 'IBM Plex Sans';color:#c4cbd3">{{ c.u }}</span>
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2
+              style="
+                margin: 0;
+                font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                color: #eef1f4;
+              "
+            >
+              Type
+            </h2>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                border-top: 1px solid #262e38;
+              "
+            >
+              <sc-for list="{{ type }}" as="t" hint-placeholder-count="9">
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+                    gap: 16px;
+                    align-items: baseline;
+                    padding: 16px 0;
+                    border-bottom: 1px solid #1e252d;
+                  "
+                >
+                  <span
+                    style="
+                      font: 400 12px/1.5 &quot;IBM Plex Mono&quot;;
+                      color: #a1aab5;
+                    "
+                    >{{ t.n }}<br />{{ t.spec }}</span
+                  >
+                  <span
+                    style="font:{{ t.font }};letter-spacing:{{ t.ls }};color:#eef1f4;text-wrap:pretty"
+                    >{{ t.sample }}</span
+                  >
+                </div>
+              </sc-for>
+            </div>
           </div>
-        </sc-for>
-      </div>
-    </div>
 
-    <div style="display:flex;flex-direction:column;gap:18px">
-      <h2 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Controls</h2>
-      <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
-        <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">PLAY · OLD / NEW</span>
-          <div style="display:flex;gap:8px">
-            <button style="height:34px;min-width:84px;padding:0 14px;border-radius:6px;border:1px solid #f2b35b;background:#f2b35b14;color:#f2b35b;font:600 13px/1 'IBM Plex Sans'">Play</button>
-            <button style="height:34px;min-width:84px;padding:0 14px;border-radius:6px;border:1px solid #5fd3e6;background:#5fd3e614;color:#5fd3e6;font:600 13px/1 'IBM Plex Sans'">Pause</button>
-            <button style="height:34px;min-width:84px;padding:0 14px;border-radius:6px;border:1px solid #5fd3e6;background:#5fd3e614;color:#5fd3e6;font:600 13px/1 'IBM Plex Sans'">Replay</button>
-          </div></div>
-        <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">SECONDARY</span>
-          <div style="display:flex;gap:8px">
-            <button style="height:34px;padding:0 12px;border-radius:6px;border:1px solid #333d49;background:#1b2129;color:#e7eaee;font:500 13px/1 'IBM Plex Sans'">‹ Back</button>
-            <button style="height:34px;padding:0 12px;border-radius:6px;border:1px solid #333d49;background:#1b2129;color:#e7eaee;font:500 13px/1 'IBM Plex Sans'">Step ›</button>
-            <button style="height:34px;padding:0 12px;border-radius:6px;border:1px solid #333d49;background:#1b2129;color:#e7eaee;font:500 13px/1 'IBM Plex Sans'">Reset</button>
-          </div></div>
-        <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">SPEED</span>
-          <div style="display:flex;border:1px solid #333d49;border-radius:6px;overflow:hidden">
-            <button style="height:32px;padding:0 10px;border:0;background:transparent;color:#a1aab5;font:500 12px/1 'IBM Plex Mono'">0.5×</button>
-            <button style="height:32px;padding:0 10px;border:0;background:#2a323c;color:#eef1f4;font:500 12px/1 'IBM Plex Mono'">1×</button>
-            <button style="height:32px;padding:0 10px;border:0;background:transparent;color:#a1aab5;font:500 12px/1 'IBM Plex Mono'">2×</button>
-          </div></div>
-        <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">ARCHITECTURE TOGGLE</span>
-          <div style="display:flex;gap:10px">
-            <div style="display:flex;border:1px solid #333d49;border-radius:7px;padding:2px;gap:2px"><span style="height:30px;display:flex;align-items:center;padding:0 12px;border-radius:5px;background:#f2b35b;color:#1a1408;font:600 12.5px/1 'IBM Plex Sans'">Old</span><span style="height:30px;display:flex;align-items:center;padding:0 12px;color:#a1aab5;font:600 12.5px/1 'IBM Plex Sans'">New</span></div>
-            <div style="display:flex;border:1px solid #333d49;border-radius:7px;padding:2px;gap:2px"><span style="height:30px;display:flex;align-items:center;padding:0 12px;color:#a1aab5;font:600 12.5px/1 'IBM Plex Sans'">Old</span><span style="height:30px;display:flex;align-items:center;padding:0 12px;border-radius:5px;background:#5fd3e6;color:#071a1e;font:600 12.5px/1 'IBM Plex Sans'">New</span></div>
-          </div></div>
-        <div style="display:flex;flex-direction:column;gap:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">STEP PROGRESS</span>
-          <div style="display:flex;gap:4px;padding-top:12px"><span style="width:16px;height:6px;border-radius:3px;background:#f2b35b"></span><span style="width:16px;height:6px;border-radius:3px;background:#f2b35b"></span><span style="width:16px;height:6px;border-radius:3px;background:#f2b35b88"></span><span style="width:16px;height:6px;border-radius:3px;background:#2a323c"></span><span style="width:16px;height:6px;border-radius:3px;background:#2a323c"></span></div></div>
-      </div>
-    </div>
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2
+              style="
+                margin: 0;
+                font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                color: #eef1f4;
+              "
+            >
+              Simulation states
+            </h2>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap">
+              <sc-for list="{{ chips }}" as="c" hint-placeholder-count="6">
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    padding: 14px;
+                    border: 1px solid #262e38;
+                    border-radius: 10px;
+                    min-width: 170px;
+                    flex: 1;
+                  "
+                >
+                  <span
+                    style="align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font:500 11px/1 'IBM Plex Mono';letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:4px;color:{{ c.fg }};background:{{ c.bg }}"
+                    ><span
+                      style="width:6px;height:6px;border-radius:50%;background:{{ c.fg }}"
+                    ></span
+                    >{{ c.l }}</span
+                  >
+                  <span
+                    style="
+                      font: 400 13px/1.45 &quot;IBM Plex Sans&quot;;
+                      color: #c4cbd3;
+                    "
+                    >{{ c.u }}</span
+                  >
+                </div>
+              </sc-for>
+            </div>
+          </div>
 
-    <div style="display:flex;flex-direction:column;gap:18px">
-      <h2 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Messages</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px">
-        <div style="display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid #262e38;border-radius:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">BRIDGE PACKET · JSON</span>
-          <span style="align-self:flex-start;font:500 11px/1 'IBM Plex Mono';color:#1a1408;background:#f2b35b;border-radius:5px;padding:6px 8px;box-shadow:0 0 0 3px #f2b35b26">{"type":"press","target":12}</span>
-          <span style="font:400 13px/1.45 'IBM Plex Sans';color:#c4cbd3">Moves across the dashed wire. Width-limited, ellipsis at 220px.</span></div>
-        <div style="display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid #262e38;border-radius:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">QUEUED IN BRIDGE LANE</span>
-          <div style="display:flex;flex-direction:column;gap:6px;max-width:160px"><span style="font:500 10.5px/1 'IBM Plex Mono';color:#f2b35b;background:#f2b35b14;border:1px solid #f2b35b44;border-radius:4px;padding:5px 6px">createView #2</span><span style="font:500 10.5px/1 'IBM Plex Mono';color:#f2b35b;background:#f2b35b14;border:1px solid #f2b35b44;border-radius:4px;padding:5px 6px">setChildren #1</span></div></div>
-        <div style="display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid #262e38;border-radius:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">JSI DIRECT CALL</span>
-          <div style="position:relative;height:26px"><span style="position:absolute;left:0;top:0;font:500 11px/1 'IBM Plex Mono';color:#5fd3e6">Battery.getLevel()</span><span style="position:absolute;left:0;right:12px;top:19px;height:2px;background:#5fd3e6;box-shadow:0 0 8px #5fd3e699"></span><span style="position:absolute;right:6px;top:14px;width:12px;height:12px;border-radius:50%;background:#5fd3e6"></span></div>
-          <span style="font:400 13px/1.45 'IBM Plex Sans';color:#c4cbd3">A line that draws from caller to callee. No packet, no queue.</span></div>
-        <div style="display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid #262e38;border-radius:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">QUEUE DEPTH · OK / OVERLOADED</span>
-          <div style="display:flex;gap:3px;flex-wrap:wrap;max-width:170px"><span style="width:8px;height:8px;border-radius:2px;background:#f2b35b"></span><span style="width:8px;height:8px;border-radius:2px;background:#f2b35b"></span><span style="width:8px;height:8px;border-radius:2px;background:#f2b35b"></span><span style="width:8px;height:8px;border-radius:2px;background:#f2b35b"></span><span style="width:8px;height:8px;border-radius:2px;background:#f2b35b"></span><span style="width:8px;height:8px;border-radius:2px;background:#f2b35b"></span><span style="width:8px;height:8px;border-radius:2px;background:#f2b35b"></span><span style="width:8px;height:8px;border-radius:2px;background:#f2b35b"></span><span style="width:8px;height:8px;border-radius:2px;background:#f0694f"></span><span style="width:8px;height:8px;border-radius:2px;background:#f0694f"></span><span style="width:8px;height:8px;border-radius:2px;background:#f0694f"></span></div>
-          <span style="font:400 13px/1.45 'IBM Plex Sans';color:#c4cbd3">Squares turn red past 8 messages.</span></div>
-      </div>
-    </div>
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2
+              style="
+                margin: 0;
+                font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                color: #eef1f4;
+              "
+            >
+              Controls
+            </h2>
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 28px;
+                align-items: flex-start;
+              "
+            >
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >PLAY · OLD / NEW</span
+                >
+                <div style="display: flex; gap: 8px">
+                  <button
+                    style="
+                      height: 34px;
+                      min-width: 84px;
+                      padding: 0 14px;
+                      border-radius: 6px;
+                      border: 1px solid #f2b35b;
+                      background: #f2b35b14;
+                      color: #f2b35b;
+                      font: 600 13px/1 &quot;IBM Plex Sans&quot;;
+                    "
+                  >
+                    Play
+                  </button>
+                  <button
+                    style="
+                      height: 34px;
+                      min-width: 84px;
+                      padding: 0 14px;
+                      border-radius: 6px;
+                      border: 1px solid #5fd3e6;
+                      background: #5fd3e614;
+                      color: #5fd3e6;
+                      font: 600 13px/1 &quot;IBM Plex Sans&quot;;
+                    "
+                  >
+                    Pause
+                  </button>
+                  <button
+                    style="
+                      height: 34px;
+                      min-width: 84px;
+                      padding: 0 14px;
+                      border-radius: 6px;
+                      border: 1px solid #5fd3e6;
+                      background: #5fd3e614;
+                      color: #5fd3e6;
+                      font: 600 13px/1 &quot;IBM Plex Sans&quot;;
+                    "
+                  >
+                    Replay
+                  </button>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >SECONDARY</span
+                >
+                <div style="display: flex; gap: 8px">
+                  <button
+                    style="
+                      height: 34px;
+                      padding: 0 12px;
+                      border-radius: 6px;
+                      border: 1px solid #333d49;
+                      background: #1b2129;
+                      color: #e7eaee;
+                      font: 500 13px/1 &quot;IBM Plex Sans&quot;;
+                    "
+                  >
+                    ‹ Back
+                  </button>
+                  <button
+                    style="
+                      height: 34px;
+                      padding: 0 12px;
+                      border-radius: 6px;
+                      border: 1px solid #333d49;
+                      background: #1b2129;
+                      color: #e7eaee;
+                      font: 500 13px/1 &quot;IBM Plex Sans&quot;;
+                    "
+                  >
+                    Step ›
+                  </button>
+                  <button
+                    style="
+                      height: 34px;
+                      padding: 0 12px;
+                      border-radius: 6px;
+                      border: 1px solid #333d49;
+                      background: #1b2129;
+                      color: #e7eaee;
+                      font: 500 13px/1 &quot;IBM Plex Sans&quot;;
+                    "
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >SPEED</span
+                >
+                <div
+                  style="
+                    display: flex;
+                    border: 1px solid #333d49;
+                    border-radius: 6px;
+                    overflow: hidden;
+                  "
+                >
+                  <button
+                    style="
+                      height: 32px;
+                      padding: 0 10px;
+                      border: 0;
+                      background: transparent;
+                      color: #a1aab5;
+                      font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                    "
+                  >
+                    0.5×
+                  </button>
+                  <button
+                    style="
+                      height: 32px;
+                      padding: 0 10px;
+                      border: 0;
+                      background: #2a323c;
+                      color: #eef1f4;
+                      font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                    "
+                  >
+                    1×
+                  </button>
+                  <button
+                    style="
+                      height: 32px;
+                      padding: 0 10px;
+                      border: 0;
+                      background: transparent;
+                      color: #a1aab5;
+                      font: 500 12px/1 &quot;IBM Plex Mono&quot;;
+                    "
+                  >
+                    2×
+                  </button>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >ARCHITECTURE TOGGLE</span
+                >
+                <div style="display: flex; gap: 10px">
+                  <div
+                    style="
+                      display: flex;
+                      border: 1px solid #333d49;
+                      border-radius: 7px;
+                      padding: 2px;
+                      gap: 2px;
+                    "
+                  >
+                    <span
+                      style="
+                        height: 30px;
+                        display: flex;
+                        align-items: center;
+                        padding: 0 12px;
+                        border-radius: 5px;
+                        background: #f2b35b;
+                        color: #1a1408;
+                        font: 600 12.5px/1 &quot;IBM Plex Sans&quot;;
+                      "
+                      >Old</span
+                    ><span
+                      style="
+                        height: 30px;
+                        display: flex;
+                        align-items: center;
+                        padding: 0 12px;
+                        color: #a1aab5;
+                        font: 600 12.5px/1 &quot;IBM Plex Sans&quot;;
+                      "
+                      >New</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      border: 1px solid #333d49;
+                      border-radius: 7px;
+                      padding: 2px;
+                      gap: 2px;
+                    "
+                  >
+                    <span
+                      style="
+                        height: 30px;
+                        display: flex;
+                        align-items: center;
+                        padding: 0 12px;
+                        color: #a1aab5;
+                        font: 600 12.5px/1 &quot;IBM Plex Sans&quot;;
+                      "
+                      >Old</span
+                    ><span
+                      style="
+                        height: 30px;
+                        display: flex;
+                        align-items: center;
+                        padding: 0 12px;
+                        border-radius: 5px;
+                        background: #5fd3e6;
+                        color: #071a1e;
+                        font: 600 12.5px/1 &quot;IBM Plex Sans&quot;;
+                      "
+                      >New</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >STEP PROGRESS</span
+                >
+                <div style="display: flex; gap: 4px; padding-top: 12px">
+                  <span
+                    style="
+                      width: 16px;
+                      height: 6px;
+                      border-radius: 3px;
+                      background: #f2b35b;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 16px;
+                      height: 6px;
+                      border-radius: 3px;
+                      background: #f2b35b;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 16px;
+                      height: 6px;
+                      border-radius: 3px;
+                      background: #f2b35b88;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 16px;
+                      height: 6px;
+                      border-radius: 3px;
+                      background: #2a323c;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 16px;
+                      height: 6px;
+                      border-radius: 3px;
+                      background: #2a323c;
+                    "
+                  ></span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-    <div style="display:flex;flex-direction:column;gap:18px">
-      <h2 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Lanes, frames, code</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px">
-        <div style="display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid #262e38;border-radius:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">LANE · IDLE / ACTIVE</span>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <div style="border:1px solid #262e38;border-radius:8px;background:#151a20;padding:10px;display:flex;flex-direction:column;gap:6px;min-height:110px"><span style="display:flex;align-items:center;gap:6px;font:600 12.5px/1.2 'IBM Plex Sans';color:#e7eaee"><span style="width:8px;height:8px;border-radius:2px;background:#b39dff"></span>JS thread</span><span style="font:400 11px/1.3 'IBM Plex Mono';color:#8a94a0">runs your React code</span><span style="flex:1"></span><span style="font:500 11.5px/1.4 'IBM Plex Mono';padding:6px 7px;border-radius:5px;color:#8a94a0;border:1px solid #262e38">onPress()</span></div>
-            <div style="border:1px solid #f291c4;border-radius:8px;background:#f291c412;padding:10px;display:flex;flex-direction:column;gap:6px;min-height:110px"><span style="display:flex;align-items:center;gap:6px;font:600 12.5px/1.2 'IBM Plex Sans';color:#f291c4"><span style="width:8px;height:8px;border-radius:2px;background:#f291c4"></span>UI thread</span><span style="font:400 11px/1.3 'IBM Plex Mono';color:#8a94a0">draws, gets touches</span><span style="flex:1"></span><span style="font:500 11.5px/1.4 'IBM Plex Mono';padding:6px 7px;border-radius:5px;color:#eef1f4;background:#f291c422;border:1px solid #f291c477">Touch on view #12</span></div>
-          </div></div>
-        <div style="display:flex;flex-direction:column;gap:14px;padding:16px;border:1px solid #262e38;border-radius:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">16.6 MS FRAME BUDGET · OK / TIGHT / DROPPED</span>
-          <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:5px;background:#262e38;border-radius:3px;overflow:hidden"><div style="height:100%;width:30%;background:#f291c4"></div></div><span style="font:500 11px/1 'IBM Plex Mono';color:#f291c4;width:84px">5.0 / 16.6</span></div>
-          <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:5px;background:#262e38;border-radius:3px;overflow:hidden"><div style="height:100%;width:88%;background:#f291c4"></div></div><span style="font:500 11px/1 'IBM Plex Mono';color:#f291c4;width:84px">14.6 / 16.6</span></div>
-          <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:5px;background:#262e38;border-radius:3px;overflow:hidden"><div style="height:100%;width:100%;background:#f0694f"></div></div><span style="font:500 11px/1 'IBM Plex Mono';color:#f0694f;width:84px">dropped</span></div>
-          <div style="display:flex;height:10px;gap:1px"><span style="flex:1;background:#3a4a3f"></span><span style="flex:1;background:#3a4a3f"></span><span style="flex:1;background:#f0694f"></span><span style="flex:1;background:#f0694f"></span><span style="flex:1;background:#3a4a3f"></span><span style="flex:1;background:#3a4a3f"></span><span style="flex:1;background:#3a4a3f"></span><span style="flex:1;background:#f0694f"></span></div></div>
-        <div style="display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid #262e38;border-radius:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">CODE · ACTIVE LINE + EDITABLE PARAMETER</span>
-          <div style="background:#0f1317;border-radius:6px;padding:8px 0;font:400 13px/1.75 'IBM Plex Mono'">
-            <div style="display:flex;white-space:pre"><span style="width:30px;text-align:right;color:#4f5864;padding-right:6px">3</span><span style="width:16px"></span><span style="color:#c4cbd3">  const onPress = () =&gt; {</span></div>
-            <div style="display:flex;white-space:pre;background:#5fd3e61c"><span style="width:30px;text-align:right;color:#5fd3e6;padding-right:6px">4</span><span style="width:16px;color:#5fd3e6;text-align:center">▸</span><span style="color:#c4cbd3">    Haptics.impact(<span style="color:#b5c98f">'medium'</span>);</span></div>
-            <div style="display:flex;white-space:pre"><span style="width:30px;text-align:right;color:#4f5864;padding-right:6px">5</span><span style="width:16px"></span><span style="color:#c4cbd3">    setCount(c =&gt; c + <span style="padding:0 4px;border:1px solid #5fd3e6aa;border-radius:4px;background:#5fd3e614;color:#eef1f4">1</span>);</span></div>
-          </div></div>
-        <div style="display:flex;flex-direction:column;gap:10px;padding:16px;border:1px solid #262e38;border-radius:10px"><span style="font:500 11px/1 'IBM Plex Mono';color:#8a94a0">NATIVE MODULE STATUS</span>
-          <div style="display:flex;justify-content:space-between;padding:6px 8px;border-radius:5px;background:#151a20;font:400 12px/1 'IBM Plex Mono'"><span>Haptics</span><span style="color:#6b7480">● not loaded</span></div>
-          <div style="display:flex;justify-content:space-between;padding:6px 8px;border-radius:5px;background:#151a20;font:400 12px/1 'IBM Plex Mono'"><span>Storage</span><span style="color:#eef1f4">● loading</span></div>
-          <div style="display:flex;justify-content:space-between;padding:6px 8px;border-radius:5px;background:#151a20;font:400 12px/1 'IBM Plex Mono'"><span>Camera</span><span style="color:#5fd3e6">● ready (new)</span></div>
-          <div style="display:flex;justify-content:space-between;padding:6px 8px;border-radius:5px;background:#151a20;font:400 12px/1 'IBM Plex Mono'"><span>Maps</span><span style="color:#f2b35b">● ready (old, eager)</span></div></div>
-      </div>
-    </div>
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2
+              style="
+                margin: 0;
+                font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                color: #eef1f4;
+              "
+            >
+              Messages
+            </h2>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(
+                  auto-fit,
+                  minmax(min(100%, 260px), 1fr)
+                );
+                gap: 12px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 12px;
+                  padding: 16px;
+                  border: 1px solid #262e38;
+                  border-radius: 10px;
+                "
+              >
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >BRIDGE PACKET · JSON</span
+                >
+                <span
+                  style="
+                    align-self: flex-start;
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #1a1408;
+                    background: #f2b35b;
+                    border-radius: 5px;
+                    padding: 6px 8px;
+                    box-shadow: 0 0 0 3px #f2b35b26;
+                  "
+                  >{"type":"press","target":12}</span
+                >
+                <span
+                  style="
+                    font: 400 13px/1.45 &quot;IBM Plex Sans&quot;;
+                    color: #c4cbd3;
+                  "
+                  >Moves across the dashed wire. Width-limited, ellipsis at
+                  220px.</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 12px;
+                  padding: 16px;
+                  border: 1px solid #262e38;
+                  border-radius: 10px;
+                "
+              >
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >QUEUED IN BRIDGE LANE</span
+                >
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                    max-width: 160px;
+                  "
+                >
+                  <span
+                    style="
+                      font: 500 10.5px/1 &quot;IBM Plex Mono&quot;;
+                      color: #f2b35b;
+                      background: #f2b35b14;
+                      border: 1px solid #f2b35b44;
+                      border-radius: 4px;
+                      padding: 5px 6px;
+                    "
+                    >createView #2</span
+                  ><span
+                    style="
+                      font: 500 10.5px/1 &quot;IBM Plex Mono&quot;;
+                      color: #f2b35b;
+                      background: #f2b35b14;
+                      border: 1px solid #f2b35b44;
+                      border-radius: 4px;
+                      padding: 5px 6px;
+                    "
+                    >setChildren #1</span
+                  >
+                </div>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 12px;
+                  padding: 16px;
+                  border: 1px solid #262e38;
+                  border-radius: 10px;
+                "
+              >
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >JSI DIRECT CALL</span
+                >
+                <div style="position: relative; height: 26px">
+                  <span
+                    style="
+                      position: absolute;
+                      left: 0;
+                      top: 0;
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      color: #5fd3e6;
+                    "
+                    >Battery.getLevel()</span
+                  ><span
+                    style="
+                      position: absolute;
+                      left: 0;
+                      right: 12px;
+                      top: 19px;
+                      height: 2px;
+                      background: #5fd3e6;
+                      box-shadow: 0 0 8px #5fd3e699;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      position: absolute;
+                      right: 6px;
+                      top: 14px;
+                      width: 12px;
+                      height: 12px;
+                      border-radius: 50%;
+                      background: #5fd3e6;
+                    "
+                  ></span>
+                </div>
+                <span
+                  style="
+                    font: 400 13px/1.45 &quot;IBM Plex Sans&quot;;
+                    color: #c4cbd3;
+                  "
+                  >A line that draws from caller to callee. No packet, no
+                  queue.</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 12px;
+                  padding: 16px;
+                  border: 1px solid #262e38;
+                  border-radius: 10px;
+                "
+              >
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >QUEUE DEPTH · OK / OVERLOADED</span
+                >
+                <div
+                  style="
+                    display: flex;
+                    gap: 3px;
+                    flex-wrap: wrap;
+                    max-width: 170px;
+                  "
+                >
+                  <span
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 2px;
+                      background: #f2b35b;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 2px;
+                      background: #f2b35b;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 2px;
+                      background: #f2b35b;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 2px;
+                      background: #f2b35b;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 2px;
+                      background: #f2b35b;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 2px;
+                      background: #f2b35b;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 2px;
+                      background: #f2b35b;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 2px;
+                      background: #f2b35b;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 2px;
+                      background: #f0694f;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 2px;
+                      background: #f0694f;
+                    "
+                  ></span
+                  ><span
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 2px;
+                      background: #f0694f;
+                    "
+                  ></span>
+                </div>
+                <span
+                  style="
+                    font: 400 13px/1.45 &quot;IBM Plex Sans&quot;;
+                    color: #c4cbd3;
+                  "
+                  >Squares turn red past 8 messages.</span
+                >
+              </div>
+            </div>
+          </div>
 
-    <div style="display:flex;flex-direction:column;gap:18px">
-      <h2 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Motion</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px">
-        <div style="padding:16px;border:1px solid #262e38;border-radius:10px;display:flex;flex-direction:column;gap:8px"><span style="font:600 14px/1.2 'IBM Plex Sans';color:#eef1f4">Full motion</span><span style="font:400 14px/1.55 'IBM Plex Sans';color:#c4cbd3">Packets ease across lanes over 70% of a step (2.4 s at 1×). JSI lines draw in 0.3 of a step. Lane and border colors fade over 250 ms. Dropped frames flash a red ring on the phone.</span></div>
-        <div style="padding:16px;border:1px solid #262e38;border-radius:10px;display:flex;flex-direction:column;gap:8px"><span style="font:600 14px/1.2 'IBM Plex Sans';color:#eef1f4">Reduced motion</span><span style="font:400 14px/1.55 'IBM Plex Sans';color:#c4cbd3">Follows the OS setting or the Motion toggle. Packets and lines appear at their destination with no travel. The playground cursor jumps step to step. Scroll lists move in pages, with no red flash. Chapter navigation scrolls instantly.</span></div>
-      </div>
-    </div>
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2
+              style="
+                margin: 0;
+                font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                color: #eef1f4;
+              "
+            >
+              Lanes, frames, code
+            </h2>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(
+                  auto-fit,
+                  minmax(min(100%, 340px), 1fr)
+                );
+                gap: 12px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 12px;
+                  padding: 16px;
+                  border: 1px solid #262e38;
+                  border-radius: 10px;
+                "
+              >
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >LANE · IDLE / ACTIVE</span
+                >
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 8px;
+                  "
+                >
+                  <div
+                    style="
+                      border: 1px solid #262e38;
+                      border-radius: 8px;
+                      background: #151a20;
+                      padding: 10px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 6px;
+                      min-height: 110px;
+                    "
+                  >
+                    <span
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                        font: 600 12.5px/1.2 &quot;IBM Plex Sans&quot;;
+                        color: #e7eaee;
+                      "
+                      ><span
+                        style="
+                          width: 8px;
+                          height: 8px;
+                          border-radius: 2px;
+                          background: #b39dff;
+                        "
+                      ></span
+                      >JS thread</span
+                    ><span
+                      style="
+                        font: 400 11px/1.3 &quot;IBM Plex Mono&quot;;
+                        color: #8a94a0;
+                      "
+                      >runs your React code</span
+                    ><span style="flex: 1"></span
+                    ><span
+                      style="
+                        font: 500 11.5px/1.4 &quot;IBM Plex Mono&quot;;
+                        padding: 6px 7px;
+                        border-radius: 5px;
+                        color: #8a94a0;
+                        border: 1px solid #262e38;
+                      "
+                      >onPress()</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      border: 1px solid #f291c4;
+                      border-radius: 8px;
+                      background: #f291c412;
+                      padding: 10px;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 6px;
+                      min-height: 110px;
+                    "
+                  >
+                    <span
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                        font: 600 12.5px/1.2 &quot;IBM Plex Sans&quot;;
+                        color: #f291c4;
+                      "
+                      ><span
+                        style="
+                          width: 8px;
+                          height: 8px;
+                          border-radius: 2px;
+                          background: #f291c4;
+                        "
+                      ></span
+                      >UI thread</span
+                    ><span
+                      style="
+                        font: 400 11px/1.3 &quot;IBM Plex Mono&quot;;
+                        color: #8a94a0;
+                      "
+                      >draws, gets touches</span
+                    ><span style="flex: 1"></span
+                    ><span
+                      style="
+                        font: 500 11.5px/1.4 &quot;IBM Plex Mono&quot;;
+                        padding: 6px 7px;
+                        border-radius: 5px;
+                        color: #eef1f4;
+                        background: #f291c422;
+                        border: 1px solid #f291c477;
+                      "
+                      >Touch on view #12</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 14px;
+                  padding: 16px;
+                  border: 1px solid #262e38;
+                  border-radius: 10px;
+                "
+              >
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >16.6 MS FRAME BUDGET · OK / TIGHT / DROPPED</span
+                >
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <div
+                    style="
+                      flex: 1;
+                      height: 5px;
+                      background: #262e38;
+                      border-radius: 3px;
+                      overflow: hidden;
+                    "
+                  >
+                    <div
+                      style="height: 100%; width: 30%; background: #f291c4"
+                    ></div>
+                  </div>
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      color: #f291c4;
+                      width: 84px;
+                    "
+                    >5.0 / 16.6</span
+                  >
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <div
+                    style="
+                      flex: 1;
+                      height: 5px;
+                      background: #262e38;
+                      border-radius: 3px;
+                      overflow: hidden;
+                    "
+                  >
+                    <div
+                      style="height: 100%; width: 88%; background: #f291c4"
+                    ></div>
+                  </div>
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      color: #f291c4;
+                      width: 84px;
+                    "
+                    >14.6 / 16.6</span
+                  >
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <div
+                    style="
+                      flex: 1;
+                      height: 5px;
+                      background: #262e38;
+                      border-radius: 3px;
+                      overflow: hidden;
+                    "
+                  >
+                    <div
+                      style="height: 100%; width: 100%; background: #f0694f"
+                    ></div>
+                  </div>
+                  <span
+                    style="
+                      font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                      color: #f0694f;
+                      width: 84px;
+                    "
+                    >dropped</span
+                  >
+                </div>
+                <div style="display: flex; height: 10px; gap: 1px">
+                  <span style="flex: 1; background: #3a4a3f"></span
+                  ><span style="flex: 1; background: #3a4a3f"></span
+                  ><span style="flex: 1; background: #f0694f"></span
+                  ><span style="flex: 1; background: #f0694f"></span
+                  ><span style="flex: 1; background: #3a4a3f"></span
+                  ><span style="flex: 1; background: #3a4a3f"></span
+                  ><span style="flex: 1; background: #3a4a3f"></span
+                  ><span style="flex: 1; background: #f0694f"></span>
+                </div>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 12px;
+                  padding: 16px;
+                  border: 1px solid #262e38;
+                  border-radius: 10px;
+                "
+              >
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >CODE · ACTIVE LINE + EDITABLE PARAMETER</span
+                >
+                <div
+                  style="
+                    background: #0f1317;
+                    border-radius: 6px;
+                    padding: 8px 0;
+                    font: 400 13px/1.75 &quot;IBM Plex Mono&quot;;
+                  "
+                >
+                  <div style="display: flex; white-space: pre">
+                    <span
+                      style="
+                        width: 30px;
+                        text-align: right;
+                        color: #4f5864;
+                        padding-right: 6px;
+                      "
+                      >3</span
+                    ><span style="width: 16px"></span
+                    ><span style="color: #c4cbd3">
+                      const onPress = () =&gt; {</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      white-space: pre;
+                      background: #5fd3e61c;
+                    "
+                  >
+                    <span
+                      style="
+                        width: 30px;
+                        text-align: right;
+                        color: #5fd3e6;
+                        padding-right: 6px;
+                      "
+                      >4</span
+                    ><span
+                      style="width: 16px; color: #5fd3e6; text-align: center"
+                      >▸</span
+                    ><span style="color: #c4cbd3">
+                      Haptics.impact(<span style="color: #b5c98f">'medium'</span
+                      >);</span
+                    >
+                  </div>
+                  <div style="display: flex; white-space: pre">
+                    <span
+                      style="
+                        width: 30px;
+                        text-align: right;
+                        color: #4f5864;
+                        padding-right: 6px;
+                      "
+                      >5</span
+                    ><span style="width: 16px"></span
+                    ><span style="color: #c4cbd3">
+                      setCount(c =&gt; c +
+                      <span
+                        style="
+                          padding: 0 4px;
+                          border: 1px solid #5fd3e6aa;
+                          border-radius: 4px;
+                          background: #5fd3e614;
+                          color: #eef1f4;
+                        "
+                        >1</span
+                      >);</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px;
+                  padding: 16px;
+                  border: 1px solid #262e38;
+                  border-radius: 10px;
+                "
+              >
+                <span
+                  style="
+                    font: 500 11px/1 &quot;IBM Plex Mono&quot;;
+                    color: #8a94a0;
+                  "
+                  >NATIVE MODULE STATUS</span
+                >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 6px 8px;
+                    border-radius: 5px;
+                    background: #151a20;
+                    font: 400 12px/1 &quot;IBM Plex Mono&quot;;
+                  "
+                >
+                  <span>Haptics</span
+                  ><span style="color: #6b7480">● not loaded</span>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 6px 8px;
+                    border-radius: 5px;
+                    background: #151a20;
+                    font: 400 12px/1 &quot;IBM Plex Mono&quot;;
+                  "
+                >
+                  <span>Storage</span
+                  ><span style="color: #eef1f4">● loading</span>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 6px 8px;
+                    border-radius: 5px;
+                    background: #151a20;
+                    font: 400 12px/1 &quot;IBM Plex Mono&quot;;
+                  "
+                >
+                  <span>Camera</span
+                  ><span style="color: #5fd3e6">● ready (new)</span>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 6px 8px;
+                    border-radius: 5px;
+                    background: #151a20;
+                    font: 400 12px/1 &quot;IBM Plex Mono&quot;;
+                  "
+                >
+                  <span>Maps</span
+                  ><span style="color: #f2b35b">● ready (old, eager)</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-    <div style="display:flex;flex-direction:column;gap:18px">
-      <h2 style="margin:0;font:600 22px/1.2 'IBM Plex Sans';color:#eef1f4">Live: split diagram + code panel</h2>
-      <dc-import name="SimPanel" scenario="jsi" mode="old" hint-size="100%,560px"></dc-import>
-      <dc-import name="SimPanel" scenario="jsi" mode="new" reduced="{{ true }}" hint-size="100%,560px"></dc-import>
-      <span style="font:400 13px/1.5 'IBM Plex Mono';color:#a1aab5">Top: Old, full motion. Bottom: New, reduced motion.</span>
-    </div>
-  </div>
-</div>
-</x-dc>
-<script type="text/x-dc" data-dc-script>
-class Component extends DCLogic {
-  renderVals() {
-    return {
-      neutrals: [
-        ['bg', '#0f1216', 'page'], ['panel', '#12161b', 'sim panels'], ['surface', '#151a20', 'cards, lanes'], ['raised', '#1b2129', 'buttons'],
-        ['line', '#262e38', 'borders'], ['line-strong', '#333d49', 'controls'], ['text', '#e7eaee', 'body'], ['text-bright', '#eef1f4', 'headings'],
-        ['text-muted', '#c4cbd3', 'prose'], ['text-dim', '#a1aab5', 'labels'], ['text-faint', '#8a94a0', 'meta, 4.5:1 min']
-      ].map(([n, v, u]) => ({ n, v, u })),
-      accents: [
-        ['Old architecture', '#f2b35b', '#2a2216', 'Bridge, JSON packets, Old toggle'],
-        ['New Architecture', '#5fd3e6', '#11262b', 'JSI, C++ core, Turbo Modules, Codegen'],
-        ['Under load / error', '#f0694f', '#2c1714', 'Overloaded queue, dropped frames, runtime errors'],
-        ['JS thread', '#b39dff', '#211c33', 'Always the JS thread'],
-        ['Shadow thread', '#79d49c', '#16261c', 'Layout, Yoga, background thread'],
-        ['UI thread', '#f291c4', '#2c1824', 'Main thread, host views, frame budget'],
-        ['Native module', '#9fb0c3', '#1c2229', 'Platform code, module init']
-      ].map(([n, v, tint, u]) => ({ n, v, tint, u })),
-      type: [
-        ['Display', 'Plex Sans 600 · 88/0.98 · -3.5%', "600 clamp(40px,6vw,88px)/0.98 'IBM Plex Sans'", '-.035em', 'Across the Bridge'],
-        ['Chapter title', 'Plex Sans 600 · 48/1.08 · -2%', "600 clamp(28px,4vw,48px)/1.08 'IBM Plex Sans'", '-.02em', 'Where it hurt'],
-        ['Section', 'Plex Sans 600 · 22/1.2', "600 22px/1.2 'IBM Plex Sans'", '0', 'How we got here'],
-        ['Lede', 'Plex Sans 400 · 20/1.55', "400 20px/1.55 'IBM Plex Sans'", '0', 'Let’s slow it down and look at what happens underneath.'],
-        ['Prose', 'Plex Sans 400 · 17/1.65', "400 17px/1.65 'IBM Plex Sans'", '0', 'A thread is a single line of work. It does one thing at a time, in order.'],
-        ['Mentor caption', 'Plex Sans 400 · 15/1.6', "400 15px/1.6 'IBM Plex Sans'", '0', 'The bridge only carries text, so the touch is serialized into JSON.'],
-        ['Eyebrow', 'Plex Mono 500 · 12 · +10% caps', "500 12px/1 'IBM Plex Mono'", '.1em', 'CHAPTER 03'],
-        ['Code', 'Plex Mono 400 · 13/1.75', "400 13px/1.75 'IBM Plex Mono'", '0', 'const level = Battery.getLevel();'],
-        ['Packet / meta', 'Plex Mono 500 · 11', "500 11px/1.3 'IBM Plex Mono'", '0', '{"type":"press","target":12}']
-      ].map(([n, spec, font, ls, sample]) => ({ n, spec, font, ls, sample })),
-      chips: [
-        ['idle', '#a1aab5', '#1b2129', 'Nothing has run. Caption shows the intro.'],
-        ['running', '#f2b35b', '#f2b35b1f', 'Playing, Old. Uses the architecture accent.'],
-        ['running', '#5fd3e6', '#5fd3e61f', 'Playing, New.'],
-        ['paused', '#c4cbd3', '#1b2129', 'After Step or Pause.'],
-        ['overloaded', '#f0694f', '#f0694f1f', 'Queue above 8 (course) or 4 (playground), or recent dropped frames.'],
-        ['complete', '#eef1f4', '#2a323c', 'Last step done. Play becomes Replay.']
-      ].map(([l, fg, bg, u]) => ({ l, fg, bg, u }))
-    };
-  }
-}
-</script>
-</body>
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2
+              style="
+                margin: 0;
+                font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                color: #eef1f4;
+              "
+            >
+              Motion
+            </h2>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(
+                  auto-fit,
+                  minmax(min(100%, 340px), 1fr)
+                );
+                gap: 12px;
+              "
+            >
+              <div
+                style="
+                  padding: 16px;
+                  border: 1px solid #262e38;
+                  border-radius: 10px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 8px;
+                "
+              >
+                <span
+                  style="
+                    font: 600 14px/1.2 &quot;IBM Plex Sans&quot;;
+                    color: #eef1f4;
+                  "
+                  >Full motion</span
+                ><span
+                  style="
+                    font: 400 14px/1.55 &quot;IBM Plex Sans&quot;;
+                    color: #c4cbd3;
+                  "
+                  >Packets ease across lanes over 70% of a step (2.4 s at 1×).
+                  JSI lines draw in 0.3 of a step. Lane and border colors fade
+                  over 250 ms. Dropped frames flash a red ring on the
+                  phone.</span
+                >
+              </div>
+              <div
+                style="
+                  padding: 16px;
+                  border: 1px solid #262e38;
+                  border-radius: 10px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 8px;
+                "
+              >
+                <span
+                  style="
+                    font: 600 14px/1.2 &quot;IBM Plex Sans&quot;;
+                    color: #eef1f4;
+                  "
+                  >Reduced motion</span
+                ><span
+                  style="
+                    font: 400 14px/1.55 &quot;IBM Plex Sans&quot;;
+                    color: #c4cbd3;
+                  "
+                  >Follows the OS setting or the Motion toggle. Packets and
+                  lines appear at their destination with no travel. The
+                  playground cursor jumps step to step. Scroll lists move in
+                  pages, with no red flash. Chapter navigation scrolls
+                  instantly.</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h2
+              style="
+                margin: 0;
+                font: 600 22px/1.2 &quot;IBM Plex Sans&quot;;
+                color: #eef1f4;
+              "
+            >
+              Live: split diagram + code panel
+            </h2>
+            <dc-import
+              name="SimPanel"
+              scenario="jsi"
+              mode="old"
+              hint-size="100%,560px"
+            ></dc-import>
+            <dc-import
+              name="SimPanel"
+              scenario="jsi"
+              mode="new"
+              reduced="{{ true }}"
+              hint-size="100%,560px"
+            ></dc-import>
+            <span
+              style="
+                font: 400 13px/1.5 &quot;IBM Plex Mono&quot;;
+                color: #a1aab5;
+              "
+              >Top: Old, full motion. Bottom: New, reduced motion.</span
+            >
+          </div>
+        </div>
+      </div>
+    </x-dc>
+    <script type="text/x-dc" data-dc-script>
+      class Component extends DCLogic {
+        renderVals() {
+          return {
+            neutrals: [
+              ['bg', '#0f1216', 'page'], ['panel', '#12161b', 'sim panels'], ['surface', '#151a20', 'cards, lanes'], ['raised', '#1b2129', 'buttons'],
+              ['line', '#262e38', 'borders'], ['line-strong', '#333d49', 'controls'], ['text', '#e7eaee', 'body'], ['text-bright', '#eef1f4', 'headings'],
+              ['text-muted', '#c4cbd3', 'prose'], ['text-dim', '#a1aab5', 'labels'], ['text-faint', '#8a94a0', 'meta, 4.5:1 min']
+            ].map(([n, v, u]) => ({ n, v, u })),
+            accents: [
+              ['Old architecture', '#f2b35b', '#2a2216', 'Bridge, JSON packets, Old toggle'],
+              ['New Architecture', '#5fd3e6', '#11262b', 'JSI, C++ core, Turbo Modules, Codegen'],
+              ['Under load / error', '#f0694f', '#2c1714', 'Overloaded queue, dropped frames, runtime errors'],
+              ['JS thread', '#b39dff', '#211c33', 'Always the JS thread'],
+              ['Shadow thread', '#79d49c', '#16261c', 'Layout, Yoga, background thread'],
+              ['UI thread', '#f291c4', '#2c1824', 'Main thread, host views, frame budget'],
+              ['Native module', '#9fb0c3', '#1c2229', 'Platform code, module init']
+            ].map(([n, v, tint, u]) => ({ n, v, tint, u })),
+            type: [
+              ['Display', 'Plex Sans 600 · 88/0.98 · -3.5%', "600 clamp(40px,6vw,88px)/0.98 'IBM Plex Sans'", '-.035em', 'React Native Internal'],
+              ['Chapter title', 'Plex Sans 600 · 48/1.08 · -2%', "600 clamp(28px,4vw,48px)/1.08 'IBM Plex Sans'", '-.02em', 'Where it hurt'],
+              ['Section', 'Plex Sans 600 · 22/1.2', "600 22px/1.2 'IBM Plex Sans'", '0', 'How we got here'],
+              ['Lede', 'Plex Sans 400 · 20/1.55', "400 20px/1.55 'IBM Plex Sans'", '0', 'Let’s slow it down and look at what happens underneath.'],
+              ['Prose', 'Plex Sans 400 · 17/1.65', "400 17px/1.65 'IBM Plex Sans'", '0', 'A thread is a single line of work. It does one thing at a time, in order.'],
+              ['Mentor caption', 'Plex Sans 400 · 15/1.6', "400 15px/1.6 'IBM Plex Sans'", '0', 'The bridge only carries text, so the touch is serialized into JSON.'],
+              ['Eyebrow', 'Plex Mono 500 · 12 · +10% caps', "500 12px/1 'IBM Plex Mono'", '.1em', 'CHAPTER 03'],
+              ['Code', 'Plex Mono 400 · 13/1.75', "400 13px/1.75 'IBM Plex Mono'", '0', 'const level = Battery.getLevel();'],
+              ['Packet / meta', 'Plex Mono 500 · 11', "500 11px/1.3 'IBM Plex Mono'", '0', '{"type":"press","target":12}']
+            ].map(([n, spec, font, ls, sample]) => ({ n, spec, font, ls, sample })),
+            chips: [
+              ['idle', '#a1aab5', '#1b2129', 'Nothing has run. Caption shows the intro.'],
+              ['running', '#f2b35b', '#f2b35b1f', 'Playing, Old. Uses the architecture accent.'],
+              ['running', '#5fd3e6', '#5fd3e61f', 'Playing, New.'],
+              ['paused', '#c4cbd3', '#1b2129', 'After Step or Pause.'],
+              ['overloaded', '#f0694f', '#f0694f1f', 'Queue above 8 (course) or 4 (playground), or recent dropped frames.'],
+              ['complete', '#eef1f4', '#2a323c', 'Last step done. Play becomes Replay.']
+            ].map(([l, fg, bg, u]) => ({ l, fg, bg, u }))
+          };
+        }
+      }
+    </script>
+  </body>
 </html>

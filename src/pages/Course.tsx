@@ -118,7 +118,7 @@ export default function Course() {
   }, [active]);
 
   useEffect(() => {
-    document.title = "Across the Bridge";
+    document.title = "React Native Internal";
   }, []);
 
   return (
@@ -469,7 +469,7 @@ export default function Course() {
 
 /** Hero title: two words slide in, then a bridge underline draws amber → cyan. */
 function HeroTitle() {
-  const words = ["Across", "the", "Bridge"];
+  const words = ["React", "Native", "Internal"];
   return (
     <span className="relative inline-block">
       {words.map((w, i) => (
