@@ -5,6 +5,7 @@ export const CHAPTER_TITLES = [
   "JSI: calling native modules directly",
   "Turbo Modules: lazy loading and Codegen",
   "Fabric: render, commit, and mount",
+  "Concurrent rendering: urgent updates first",
   "Migrating to the New Architecture",
   "Review and quiz"
 ] as const;

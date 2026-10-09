@@ -58,6 +58,9 @@ export const C = {
 export const alpha = (color: string, percent: number) =>
   `color-mix(in srgb, ${color} ${percent}%, transparent)`
 
+/** Striped fill for render work that was interrupted and thrown away. */
+export const HATCH = `repeating-linear-gradient(135deg, ${alpha(C.load, 75)} 0 3px, ${alpha(C.load, 25)} 3px 6px)`
+
 export type Mode = 'old' | 'new'
 
 export const isMode = (v: unknown): v is Mode => v === 'old' || v === 'new'

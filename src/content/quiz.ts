@@ -63,6 +63,24 @@ export const QUIZ: QuizItem[] = [
   },
   {
     ch: 6,
+    question: 'The screen update is wrapped in startTransition. The user taps another tab halfway through rendering it. What happens to the half-finished render?',
+    options: [
+      'It finishes first, then the tap is handled',
+      'React throws it away and handles the tap first',
+      'It moves to another thread',
+    ],
+    correct: 1,
+    why: 'Transition renders can be interrupted. React drops the unfinished tree, renders the urgent update, then starts the transition over.',
+  },
+  {
+    ch: 6,
+    question: 'Does concurrent rendering run your components on several threads at once?',
+    options: ['Yes, each transition gets its own thread', 'No, it’s one JS thread working in a better order', 'Only in release builds'],
+    correct: 1,
+    why: 'Concurrent means interruptible, not parallel. React still renders on the JS thread, but it pauses every few milliseconds so urgent work can go first.',
+  },
+  {
+    ch: 7,
     question: 'After you migrate, does a slow JavaScript function get faster?',
     options: ['Yes, JSI compiles it to C++', 'No, only the cost of crossing to native goes down', 'Only in release builds'],
     correct: 1,

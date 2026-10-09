@@ -4,7 +4,7 @@ An interactive course on how React Native works underneath: the old bridge-based
 
 ## Routes
 
-- `/` — the course: seven chapters plus a review section
+- `/` — the course: eight chapters plus a review section
 - `/playground` — full-screen trace visualizer with editable parameters
 
 ## Stack

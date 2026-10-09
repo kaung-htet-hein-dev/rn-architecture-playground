@@ -7,7 +7,7 @@ import { MapCards } from "./wrapup/MapCards";
 import { MigrationNotes } from "./wrapup/MigrationNotes";
 import { PlaygroundCta } from "./wrapup/PlaygroundCta";
 
-/** Chapter 7 body: map, history, migration checklist. */
+/** Chapter 8 body: map, history, migration checklist. */
 export function MigrationWrap() {
   return (
     <>

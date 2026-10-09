@@ -20,6 +20,9 @@ export const GLOSSARY: [string, string, string][] = [
   ['Yoga', 'The layout engine that turns flexbox styles into positions and sizes.', C.shadow],
   ['Shadow tree', 'A C++ copy of your UI with layout information.', C.new],
   ['Render · Commit · Mount', 'Fabric’s phases: build the tree, compute layout and seal it, apply changes to views.', C.new],
+  ['Concurrent rendering', 'React can pause a render, let urgent work go first, and throw unfinished work away. Needs the New Architecture.', C.new],
+  ['Urgent update', 'An update the user expects to see right away, like a tab highlight. React renders it before any transition.', C.js],
+  ['Transition', 'An update marked with startTransition as able to wait. React renders it in slices it can interrupt.', C.new],
   ['Host view', 'A real platform view, like UIView on iOS or View on Android.', C.ui],
   ['Interop layer', 'Lets old-style modules and components run in the New Architecture.', C.new],
 ]

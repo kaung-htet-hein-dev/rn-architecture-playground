@@ -11,6 +11,7 @@ import { Chapter4 } from "./course/Chapter4";
 import { Chapter5 } from "./course/Chapter5";
 import { Chapter6 } from "./course/Chapter6";
 import { Chapter7 } from "./course/Chapter7";
+import { Chapter8 } from "./course/Chapter8";
 import { Review } from "./course/Review";
 
 export default function Course() {
@@ -37,6 +38,7 @@ export default function Course() {
         <Chapter5 />
         <Chapter6 />
         <Chapter7 />
+        <Chapter8 />
         <Review />
       </main>
     </div>
