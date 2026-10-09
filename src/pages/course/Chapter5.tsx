@@ -22,8 +22,8 @@ export function Chapter5() {
             A <T c="new">Turbo Module</T> is a native module built on JSI
             that loads <B>lazily</B>: the first time JS asks for it, not
             before. <T c="new">Codegen</T> is a build-time tool that reads a
-            TypeScript description of the module and writes the matching
-            native code.
+            TypeScript (or Flow) description of the module and writes the
+            matching native interfaces.
           </P>
         }
         how={

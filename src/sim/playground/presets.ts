@@ -70,7 +70,7 @@ export const PRESETS: readonly Preset[] = [
       '  const [y, setY] = useState(0);',
       '  const onScroll = (e) => {',
       '    setY(e.nativeEvent.contentOffset.y);',
-      '    formatHeader(y); // ~§work§ ms of JS',
+      '    formatHeader(e.nativeEvent.contentOffset.y); // ~§work§ ms',
       '  };',
       '  return <ScrollView onScroll={onScroll} scrollEventThrottle={16} />;',
       '}',

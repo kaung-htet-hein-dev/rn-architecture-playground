@@ -46,8 +46,6 @@ export interface JsiCall {
   sig: string
   /** event scheduled onto the JS thread */
   sched?: boolean
-  /** bytes shared by reference (ArrayBuffer) */
-  ref?: number
   cap?: string
 }
 

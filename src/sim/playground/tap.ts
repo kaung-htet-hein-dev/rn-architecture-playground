@@ -58,7 +58,7 @@ export const genTap: PresetGen = (b, P) => {
   } else {
     t = task('js', t, 1.2, 'commit + layout', {
       stack: ['commit'],
-      cap: 'Fabric commits the new shadow tree in C++. Layout runs right here, on the JS thread.',
+      cap: 'Fabric commits the new shadow tree in C++ and runs layout as part of that commit, off the UI thread.',
     })
     b.trees.push({ t, k: 's' })
     t = send(t, 'js', 'ui', 'mount', null, { sig: 'mount(1 mutation)' })

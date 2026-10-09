@@ -167,7 +167,7 @@ export const LIB: Record<ScenarioId, Record<Mode, Scenario>> = {
           l: "ui",
           a: 'Frame shows "2"',
           ui: "2",
-          c: "On the next frame the screen shows 2. One tap cost two trips React Native Internal and four rounds of JSON writing and reading."
+          c: "On the next frame the screen shows 2. One tap cost two trips across the bridge and four rounds of JSON writing and reading."
         }
       ]
     },
@@ -324,7 +324,7 @@ export const LIB: Record<ScenarioId, Record<Mode, Scenario>> = {
           l: "jsi",
           a: "Tree built in C++",
           p: ["js", "shadow", "shadow tree (C++)", "ref"],
-          c: "Instead of JSON commands, React’s output becomes a shadow tree in C++. Through JSI, every thread can reach it."
+          c: "Instead of JSON commands, React builds a shadow tree in C++, calling into it through JSI. Because the tree lives in C++, the other threads can read it too."
         },
         {
           l: "shadow",
@@ -447,7 +447,7 @@ export const LIB: Record<ScenarioId, Record<Mode, Scenario>> = {
   },
   codegen: {
     old: {
-      title: "types React Native Internal · old",
+      title: "types across the bridge · old",
       file: "Battery (JS + Obj-C)",
       lanes: ["js", "bridge", "native"],
       intro:
@@ -481,7 +481,7 @@ export const LIB: Record<ScenarioId, Record<Mode, Scenario>> = {
           p: ["bridge", "native", '{"args":[true]}'],
           q: [],
           err: true,
-          c: "Only now, while the app is running on a user’s phone, does native notice the mismatch. The result is a red error screen in development or a crash in production."
+          c: "Only now, while the app is running on a user’s phone, does native notice the mismatch. In development you get a red error screen. In a release build the call fails at runtime, and depending on the platform that is a crash or a Promise that never settles."
         }
       ]
     },
@@ -546,9 +546,9 @@ export const LIB: Record<ScenarioId, Record<Mode, Scenario>> = {
         {
           l: "out",
           ln: 9,
-          a: "class NativeBatterySpecJSI",
-          p: ["cg", "out", "NativeBatterySpecJSI"],
-          c: "The result is an abstract class: a list of methods your Swift, Kotlin or C++ must provide. If they don’t match, the compiler flags it at build time, before any user sees it."
+          a: "NativeBatterySpec",
+          p: ["cg", "out", "NativeBatterySpec"],
+          c: "The result is a native interface: an Objective-C protocol on iOS, an abstract Java class on Android, or a C++ base class for a C++ module. Your native code implements it, so if a method is missing or has the wrong types, the build fails before any user sees it."
         }
       ]
     }
@@ -708,14 +708,14 @@ export const LIB: Record<ScenarioId, Record<Mode, Scenario>> = {
         {
           l: "core",
           ph: 2,
-          a: "Diff → 3 mutations",
-          c: "Mount: Fabric compares the new tree with what’s on screen and lists the differences, called mutations: create, update, delete."
+          a: "Diff → mutations",
+          c: "Mount: Fabric compares the new tree with what’s on screen and lists the differences, called mutations: create, insert, update, remove, delete. On a first render they are all creates and inserts."
         },
         {
           l: "ui",
           ph: 2,
           a: "Apply to host views",
-          p: ["core", "ui", "3 mutations", "ref"],
+          p: ["core", "ui", "create + insert × 3", "ref"],
           tr: {
             h: [
               [0, "View (host)", 1],

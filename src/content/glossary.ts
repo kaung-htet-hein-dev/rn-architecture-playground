@@ -15,7 +15,7 @@ export const GLOSSARY: [string, string, string][] = [
   ['JSI', 'JavaScript Interface. Lets JS hold references to C++ objects and call them directly.', C.new],
   ['Host object', 'A C++ object JS can use like a normal object.', C.new],
   ['Turbo Module', 'A native module built on JSI that loads the first time it’s used.', C.new],
-  ['Codegen', 'A build-time tool that turns a TypeScript spec into typed native code.', C.new],
+  ['Codegen', 'A build-time tool that turns a TypeScript or Flow spec into typed native interfaces.', C.new],
   ['Fabric', 'The New Architecture’s renderer.', C.new],
   ['Yoga', 'The layout engine that turns flexbox styles into positions and sizes.', C.shadow],
   ['Shadow tree', 'A C++ copy of your UI with layout information.', C.new],

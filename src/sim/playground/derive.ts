@@ -358,7 +358,7 @@ export function inspectorFor(msg: Message): InspectorView {
       { k: 'call', v: msg.sig },
       { k: 'route', v: NM[msg.from] + ' → ' + NM[msg.to] + (msg.sched ? ' (queued for JS thread)' : '') },
       { k: 'at', v: msg.t.toFixed(1) + ' ms' },
-      { k: 'bytes copied', v: msg.ref ? '0 (buffer shared)' : '0' },
+      { k: 'JSON written', v: '0 bytes' },
       { k: 'format', v: 'C++ values' },
     ],
   }

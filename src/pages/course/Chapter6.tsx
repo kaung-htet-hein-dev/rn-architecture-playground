@@ -31,8 +31,8 @@ export function Chapter6() {
           <ModeSwap
             next={
               <P>
-                Because the shadow tree lives in C++ and is shared through
-                JSI, any thread can read it. So you can measure layout right
+                Because the shadow tree lives in C++ and can’t change once
+                it’s committed, any thread can read it safely. So you can measure layout right
                 away, and React can draw urgent updates first. Step through
                 the three phases and watch the three trees fill in.
               </P>

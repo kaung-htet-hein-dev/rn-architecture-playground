@@ -96,7 +96,7 @@ export const OLD_MAP: MapCard[] = [
 ];
 
 export const NOTES = [
-  "Upgrade to a current React Native version. The New Architecture is on by default from 0.76.",
+  "Upgrade to a current React Native version. The New Architecture is on by default from 0.76, and from 0.82 it is the only option.",
   "Check your libraries first. The interop layer lets many old-style modules and components run unchanged while their authors catch up.",
   "Move your own native modules to Turbo Modules: write a TypeScript spec, run Codegen, implement the generated interface.",
   "Search for code built around the bridge: setNativeProps, findNodeHandle, direct UIManager calls. Test those screens closely.",

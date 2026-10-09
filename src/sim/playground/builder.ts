@@ -28,7 +28,6 @@ export interface SendOpts {
   /** new: call signature (else label) */
   sig?: string
   sched?: boolean
-  ref?: number
   cap?: string
 }
 
@@ -90,7 +89,7 @@ export function createBuilder(mode: Mode): Builder {
         return t + d
       }
       b.messages.push(
-        defined({ kind: 'call', t, d: 0.4, from, to, label, sig: o.sig || label, sched: o.sched, ref: o.ref, cap: o.cap }),
+        defined({ kind: 'call', t, d: 0.4, from, to, label, sig: o.sig || label, sched: o.sched, cap: o.cap }),
       )
       return t + 0.4
     },

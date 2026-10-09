@@ -12,7 +12,7 @@ export function Chapter4() {
         why={
           <P>
             You call <B>native modules</B> all the time: code written in
-            Swift, Kotlin or Java that JS can use, like reading the battery
+            Objective-C, Swift, Kotlin or Java that JS can use, like reading the battery
             level. On the bridge, even a tiny question becomes a round trip
             of messages.
           </P>

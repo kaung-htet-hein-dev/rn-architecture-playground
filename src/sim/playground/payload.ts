@@ -1,6 +1,6 @@
 import { cl, type PresetGen } from './builder'
 
-/** Large payload: JSON string over the bridge (old) vs shared ArrayBuffer through JSI (new). */
+/** Large payload: JSON string over the bridge (old) vs direct value conversion through JSI (new). */
 export const genPayload: PresetGen = (b, P) => {
   const { old, task, send } = b
   const R = Math.round(cl(P.rows, 1, 50000, 2000))
@@ -32,15 +32,15 @@ export const genPayload: PresetGen = (b, P) => {
     t = task('native', t, 6, 'write to disk')
     t = send(t, 'native', 'js', 'resolve', '{"callId":9,"result":true}')
   } else {
-    t = task('js', t, bytes / 250000 + 0.5, 'pack ArrayBuffer', {
+    t = task('js', t, bytes / 60000 + 0.5, 'convert args', {
       ln: 1,
-      stack: ['saveRows', 'pack'],
-      cap: 'New: the rows are packed into an ArrayBuffer, raw bytes that JS and C++ can both read.',
+      stack: ['saveRows', 'convert args'],
+      cap: 'New: the Turbo Module reads each row straight out of JS memory through JSI and builds native arrays and maps. No JSON string is written or parsed, but the data is still copied once.',
     })
-    send(t, 'js', 'native', 'Db.saveRows', null, { sig: 'Db.saveRows(buffer)', ref: bytes })
+    send(t, 'js', 'native', 'Db.saveRows', null, { sig: 'Db.saveRows(rows)' })
     b.modules.push({ t, n: 'Db', s: 'loading' }, { t: t + 1, n: 'Db', s: 'ready' })
-    t = task('native', t + 0.4, bytes / 400000 + 1.5, 'read buffer', {
-      cap: 'Native reads the same memory JS wrote. Nothing is copied into text.',
+    t = task('native', t + 0.4, 1.5, 'saveRows()', {
+      cap: 'Native gets ready-made objects, so it can start saving right away.',
     })
     t = task('native', t, 6, 'write to disk')
     t = send(t, 'native', 'js', 'resolve', null, { sig: 'resolve(true)' })
@@ -48,7 +48,7 @@ export const genPayload: PresetGen = (b, P) => {
   t = task('js', t, 1, 'showToast', {
     ln: 2,
     stack: ['showToast'],
-    cap: old ? 'Saved. Most of that time went into writing and reading JSON.' : 'Saved. What’s left is mostly the disk write itself.',
+    cap: old ? 'Saved. Most of that time went into writing and reading JSON.' : 'Saved. What’s left is one copy of the data and the disk write.',
   })
   b.uiPatches.push({ t, status: 'Saved ✓' })
   return { metric: { l: 'Time to saved', v: t, u: 'ms' } }

@@ -150,7 +150,7 @@ Both sides merge pending events into the latest one. That is real behaviour in b
 | Animation                  | duration, native, busy                                      | Without the native driver, frames freeze while JS is busy. With it, the UI thread animates alone.                                      |
 | Measuring layout           | gap                                                         | Old: mounts at top 0, async measure round trip, jump (wrong-place frames). New: synchronous measure in `useLayoutEffect` before mount. |
 | Heavy JS loop              | iterations (busy = N / 250000 ms, capped at 800) + tap rate | Taps wait in both architectures.                                                                                                       |
-| Large payload              | rows (× 140 bytes)                                          | Old: stringify, transit, parse. New: shared ArrayBuffer through JSI.                                                                   |
+| Large payload              | rows (× 140 bytes)                                          | Old: stringify, transit, parse. New: values converted directly via JSI, no JSON.                                                                 |
 
 **Playback:** a full trace plays in about 9 s at 1× (`c += dt × speed × total / 9000`). Reduced motion jumps to the next step point every 900 ms. Step forward and back move to the next or previous point. The scrubber runs 0–1000. Compare renders Old and New lane groups on one shared time scale. Tapping the phone restarts and plays; scrolling on the phone does the same in the scroll preset.
 
@@ -183,7 +183,7 @@ Both sides merge pending events into the latest one. That is real behaviour in b
   - Legend.
 - **Right**
   - Metrics: dropped frames, queue depth (now / max), the preset metric, bytes serialized. Shows two columns in Compare.
-  - Message inspector: the selected or latest message. Old shows route, time, in-flight, size and the JSON payload. New shows the call, route (marked "queued for JS thread" if scheduled) and "bytes copied 0".
+  - Message inspector: the selected or latest message. Old shows route, time, in-flight, size and the JSON payload. New shows the call, route (marked "queued for JS thread" if scheduled) and "JSON written 0 bytes".
   - Native module status: not loaded `#6b7480`, loading `#eef1f4`, ready (amber in Old, cyan in New).
   - Element, Shadow and Host trees.
 
