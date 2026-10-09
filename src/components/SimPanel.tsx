@@ -28,7 +28,8 @@ function SimPanelInner({
   mode: Mode;
 }) {
   const sim = useStepSim(scenario, mode);
-  const { sc, view, state, accent, compact } = sim;
+  const { sc, view, state, accent } = sim;
+  const started = state.step >= 0;
 
   return (
     <SimFrame label={sc.title} fadeIn>
@@ -38,46 +39,47 @@ function SimPanelInner({
         title={sc.title}
         titleClassName="truncate font-mono text-[13px] leading-[1.2] font-medium text-text-muted"
         right={
-          <StepJumper
-            count={sim.stepCount}
-            state={state}
-            accent={accent}
-            onJump={sim.jump}
-          />
+          started && (
+            <StepJumper
+              count={sim.stepCount}
+              state={state}
+              accent={accent}
+              onJump={sim.jump}
+            />
+          )
         }
       />
 
-      <div className={`flex flex-wrap ${compact ? "flex-col" : ""}`}>
-        <div
-          className={`flex min-w-0 flex-col gap-4 p-5 ${compact ? "flex-none" : "flex-[1_1_520px]"}`}
-        >
+      <div className="flex">
+        <div className="flex min-w-0 flex-1 flex-col gap-4 p-5">
           {view.phases.length > 0 && (
             <PhaseChips phases={view.phases} accent={accent} />
           )}
           <ThreadLanes
             lanes={view.lanes}
             gridCols={view.gridCols}
-            height={compact ? 240 : 270}
+            height={270}
             packet={view.packet}
-            wire={mode === "new" ? "#5fd3e655" : "#f2b35b55"}
-            compact={compact}
+            wire={mode === "new" ? "#58c4dc55" : "#f2b35b55"}
           />
           {sc.trees && <TreeViews trees={view.trees} accent={accent} />}
         </div>
         <CodePanel
-          className={`shadow-[-1px_0_0_#2d3642,0_-1px_0_#2d3642] ${compact ? "flex-none" : "flex-[1_1_340px]"}`}
+          className="w-[400px] flex-none shadow-[-1px_0_0_#30363d]"
           file={sc.file}
           lines={sc.code}
           active={view.activeLines}
           accent={accent}
           open={sim.codeOpen}
+          muted={!started}
+          wrap
           onToggle={sim.toggleCode}
         />
       </div>
 
+      <MentorCaption accent={accent} text={view.caption} id={view.stepKey} />
       <SimControls
         label={sc.title}
-        accent={accent}
         playLabel={sim.playLabel}
         onPlay={sim.onPlay}
         onStep={sim.onStep}
@@ -85,13 +87,13 @@ function SimPanelInner({
         speed={sim.speed}
         onSpeed={sim.setSpeed}
         onReset={sim.onReset}
+        started={started}
         meta={
-          state.step < 0
-            ? `${sim.stepCount} steps`
-            : `step ${state.step + 1} / ${sim.stepCount}`
+          started
+            ? `Step ${state.step + 1} of ${sim.stepCount}`
+            : `${sim.stepCount} steps`
         }
       />
-      <MentorCaption accent={accent} text={view.caption} id={view.stepKey} />
     </SimFrame>
   );
 }

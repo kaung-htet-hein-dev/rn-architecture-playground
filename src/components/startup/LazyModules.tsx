@@ -48,7 +48,7 @@ export function LazyModules({ show, lazy, reduced, onLoad }: Props) {
                   {ls === "loading" && !reduced && (
                     <motion.span
                       aria-hidden="true"
-                      className="absolute inset-y-0 left-0 bg-[#5fd3e61f]"
+                      className="absolute inset-y-0 left-0 bg-[#58c4dc1f]"
                       initial={{ width: "0%" }}
                       animate={{ width: "100%" }}
                       transition={{ duration: (d * LAZY_SLOWDOWN) / 1000, ease: "linear" }}

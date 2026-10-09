@@ -17,28 +17,42 @@ export function Reveal({ children, className = '', delay = 0 }: { children: Reac
   )
 }
 
-export function ChapterHead({ n, title, children }: { n: number; title: ReactNode; children?: ReactNode }) {
+/** Reading width for prose; sims and grids use the wider section width. */
+export const PROSE_W = 'max-w-[780px]'
+
+export function ChapterHead({
+  n,
+  title,
+  eyebrow,
+  children,
+}: {
+  n: number
+  title: ReactNode
+  /** replaces "Chapter 0n" */
+  eyebrow?: string
+  children?: ReactNode
+}) {
   return (
-    <Reveal className="flex flex-col gap-3.5">
-      <span className="eyebrow">Chapter {String(n).padStart(2, '0')}</span>
+    <Reveal className={`flex flex-col gap-3.5 ${PROSE_W}`}>
+      <span className="eyebrow">{eyebrow ?? `Chapter ${String(n).padStart(2, '0')}`}</span>
       <h2 className="h2">{title}</h2>
       {children}
     </Reveal>
   )
 }
 
-/** Why / What / How grid. */
+/** Why / What / How, read top to bottom with the label in a left gutter. */
 export function WhyWhatHow({ why, what, how }: { why: ReactNode; what: ReactNode; how: ReactNode }) {
-  const cols: [string, ReactNode][] = [
-    ['WHY', why],
-    ['WHAT', what],
-    ['HOW', how],
+  const rows: [string, ReactNode][] = [
+    ['Why', why],
+    ['What', what],
+    ['How', how],
   ]
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-x-11 gap-y-6">
-      {cols.map(([k, body], i) => (
-        <Reveal key={k} delay={i * 0.08} className="flex flex-col gap-2.5">
-          <span className="font-mono text-xs leading-none font-semibold tracking-[.1em] text-text-dim">{k}</span>
+    <div className={`flex flex-col gap-7 ${PROSE_W}`}>
+      {rows.map(([k, body], i) => (
+        <Reveal key={k} delay={i * 0.06} className="grid grid-cols-[64px_minmax(0,1fr)] gap-x-6">
+          <span className="pt-[6px] text-sm leading-none font-semibold text-text-faint">{k}</span>
           {body}
         </Reveal>
       ))}
@@ -50,19 +64,18 @@ interface SectionProps {
   id: string
   label: string
   children: ReactNode
-  first?: boolean
   last?: boolean
   gap?: number
 }
 
-export function ChapterSection({ id, label, children, first, last, gap = 44 }: SectionProps) {
+export function ChapterSection({ id, label, children, last, gap = 48 }: SectionProps) {
   return (
     <section
       id={id}
       aria-label={label}
-      className={`scroll-mt-[58px] px-5 ${last ? 'pt-24 pb-[120px]' : first ? 'pt-[72px] pb-24' : 'py-24'} ${last ? '' : 'border-b border-line-soft'}`}
+      className={`scroll-mt-[58px] px-10 ${last ? 'pt-28 pb-[140px]' : 'py-28'} ${last ? '' : 'border-b border-line-soft'}`}
     >
-      <div className="mx-auto flex max-w-[1240px] flex-col" style={{ gap }}>
+      <div className="mx-auto flex max-w-[1100px] flex-col" style={{ gap }}>
         {children}
       </div>
     </section>

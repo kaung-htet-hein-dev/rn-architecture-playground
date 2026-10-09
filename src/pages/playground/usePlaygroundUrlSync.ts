@@ -6,9 +6,9 @@ type UrlSyncState = Parameters<typeof writePlaygroundSearch>[1];
 
 const DEBOUNCE_MS = 200;
 
-/** Keep `?preset=&compare=&rate=&at=&tab=` in sync, debounced. */
+/** Keep `?preset=&compare=&rate=&at=` in sync, debounced. */
 export function usePlaygroundUrlSync(state: UrlSyncState) {
-  const { preset, compare, rate, at, tab } = state;
+  const { preset, compare, rate, at } = state;
   useEffect(() => {
     const id = window.setTimeout(() => {
       replaceUrl((url) => {
@@ -16,11 +16,10 @@ export function usePlaygroundUrlSync(state: UrlSyncState) {
           preset,
           compare,
           rate,
-          at,
-          tab
+          at
         });
       });
     }, DEBOUNCE_MS);
     return () => window.clearTimeout(id);
-  }, [preset, compare, rate, at, tab]);
+  }, [preset, compare, rate, at]);
 }

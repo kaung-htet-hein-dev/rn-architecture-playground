@@ -24,7 +24,6 @@ import {
   treeViews,
   type Params,
   type Playback,
-  type PlaygroundTab,
   type PresetId,
   type Trace
 } from "../../sim/playground";
@@ -62,7 +61,6 @@ export function usePlayground() {
   const [preset, setPreset] = useState<PresetId>(boot.preset ?? "tap");
   const [compare, setCompare] = useState(!!boot.compare);
   const [rate, setRate] = useState(boot.rate ?? DEFAULT_RATE);
-  const [tab, setTab] = useState<PlaygroundTab>(boot.tab ?? "threads");
   const [edits, setEdits] = useState<Partial<Record<PresetId, Params>>>({});
   const [sel, setSel] = useState<Selection | null>(null);
 
@@ -158,8 +156,7 @@ export function usePlayground() {
     preset,
     compare,
     rate,
-    at: !running && started && c > 0 ? c / T : null,
-    tab
+    at: !running && started && c > 0 ? c / T : null
   });
 
   /* ── derived view data ── */
@@ -167,10 +164,10 @@ export function usePlayground() {
   const entries = traces.map((tr, i) => ({ tr, snap: snaps[i] }));
   const heads = compare
     ? [
-        { t: "OLD", c: C.old },
-        { t: "NEW", c: C.new }
+        { t: "Old", c: C.old },
+        { t: "New", c: C.new }
       ]
-    : [{ t: mode === "new" ? "NEW" : "OLD", c: accent }];
+    : [{ t: mode === "new" ? "New" : "Old", c: accent }];
   const selMsg = sel ? (traces[sel.g]?.messages[sel.i] ?? null) : null;
   const msg = pickMessage(primary, c, selMsg);
   const inspKey = !msg
@@ -187,8 +184,6 @@ export function usePlayground() {
     P,
     compare,
     rate,
-    tab,
-    setTab,
     sel,
     traces,
     snaps,

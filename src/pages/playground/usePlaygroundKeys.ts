@@ -9,8 +9,6 @@ interface Handlers {
 /** True when the focused control should keep the key for itself. */
 function keyBelongsToControl(e: KeyboardEvent): boolean {
   const el = e.target as HTMLElement | null;
-  // A focused tab owns the arrow keys (PanelTabs moves between tabs).
-  if (el?.getAttribute("role") === "tab") return e.key !== " ";
   if (!el || !/^(INPUT|SELECT|TEXTAREA|BUTTON|A)$/.test(el.tagName)) {
     return false;
   }

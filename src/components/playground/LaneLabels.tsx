@@ -34,7 +34,7 @@ export function LaneLabels({ lanes }: { lanes: LaneReadout[] }) {
                 />
               </div>
               <span
-                className="font-mono text-[11px] leading-none font-medium whitespace-nowrap"
+                className="font-mono text-xs leading-none font-medium whitespace-nowrap"
                 style={{ color: ln.textColor }}
               >
                 {ln.text}
@@ -42,7 +42,7 @@ export function LaneLabels({ lanes }: { lanes: LaneReadout[] }) {
             </div>
           ) : (
             <span
-              className="truncate font-mono text-[11.5px] leading-[1.1] whitespace-nowrap"
+              className="truncate font-mono text-xs leading-[1.1] whitespace-nowrap"
               style={{ color: ln.textColor }}
             >
               {ln.text}
@@ -50,7 +50,7 @@ export function LaneLabels({ lanes }: { lanes: LaneReadout[] }) {
           )}
         </div>
       ))}
-      <div className="flex h-[22px] items-center font-mono text-[11px] leading-none text-text-faint">
+      <div className="flex h-[22px] items-center font-mono text-xs leading-none text-text-faint">
         frames · 16.6 ms
       </div>
     </div>

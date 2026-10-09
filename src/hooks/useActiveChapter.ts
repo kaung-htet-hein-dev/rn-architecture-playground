@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
-import { CHAPTER_COUNT, chapterId } from "../app/chapters";
+import { CHAPTER_COUNT, INTRO, sectionId } from "../app/chapters";
 
 /** A chapter is active once its top edge passes this line below the viewport top. */
 const ACTIVE_LINE_PX = 180;
-/** Mobile address-bar show/hide fires resize while scrolling; wait it out. */
+/** Re-measure after window resizes settle. */
 const RESIZE_DEBOUNCE_MS = 150;
 
 /**
- * Index of the chapter crossing the active line. Uses an IntersectionObserver
+ * Index of the chapter crossing the active line (INTRO for the hero). Uses an IntersectionObserver
  * on a 1px band, so scrolling never forces layout reads on the main thread.
  */
 export function useActiveChapter(): number {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(INTRO);
 
   useEffect(() => {
-    const ids = Array.from({ length: CHAPTER_COUNT }, (_, i) => chapterId(i));
+    const ids = Array.from({ length: CHAPTER_COUNT + 1 }, (_, i) => sectionId(i - 1));
     const crossing = new Set<number>();
     let io: IntersectionObserver | null = null;
 
@@ -29,7 +29,7 @@ export function useActiveChapter(): number {
             if (e.isIntersecting) crossing.add(i);
             else crossing.delete(i);
           }
-          if (crossing.size) setActive(Math.max(...crossing));
+          if (crossing.size) setActive(Math.max(...crossing) - 1);
         },
         { rootMargin: `-${ACTIVE_LINE_PX}px 0px -${bottom}px 0px` }
       );

@@ -1,6 +1,7 @@
 import { CHAPTER_TITLES, chapterId } from "../../app/chapters";
 import { ChapterHead, ChapterSection, Reveal, WhyWhatHow } from "../../components/Chapter";
 import { B, P } from "../../components/Prose";
+import { ChapterCheck } from "../../components/Quiz";
 import { ScrollRace } from "../../components/ScrollRace";
 
 export function Chapter3() {
@@ -39,6 +40,7 @@ export function Chapter3() {
       <Reveal>
         <ScrollRace />
       </Reveal>
+      <ChapterCheck ch={2} />
     </ChapterSection>
   );
 }

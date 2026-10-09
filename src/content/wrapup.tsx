@@ -14,21 +14,21 @@ export const NEW_MAP: MapCard[] = [
     name: "JS thread",
     c: "#b39dff",
     bd: "#b39dff66",
-    bg: "#171d24",
+    bg: "#242526",
     body: "React and your code. Holds host objects for modules it has used."
   },
   {
     name: "JSI",
-    c: "#5fd3e6",
-    bd: "#5fd3e6",
-    bg: "#11262b",
+    c: "#58c4dc",
+    bd: "#58c4dc",
+    bg: "#222f34",
     body: "Direct calls between JS and C++. Sync or async, no JSON."
   },
   {
     name: "C++ core",
-    c: "#5fd3e6",
-    bd: "#5fd3e666",
-    bg: "#171d24",
+    c: "#58c4dc",
+    bd: "#58c4dc66",
+    bg: "#242526",
     mono: true,
     body: (
       <>
@@ -44,14 +44,14 @@ export const NEW_MAP: MapCard[] = [
     name: "Background thread",
     c: "#79d49c",
     bd: "#79d49c66",
-    bg: "#171d24",
+    bg: "#242526",
     body: "Yoga layout in C++ during commit, off the UI thread. Can run synchronously for urgent work."
   },
   {
     name: "UI thread",
     c: "#f291c4",
     bd: "#f291c466",
-    bg: "#171d24",
+    bg: "#242526",
     body: "Applies mutations to host views, handles touches."
   }
 ];
@@ -61,35 +61,35 @@ export const OLD_MAP: MapCard[] = [
     name: "JS thread",
     c: "#b39dff",
     bd: "#b39dff66",
-    bg: "#171d24",
+    bg: "#242526",
     body: "React and your code. Reaches native only by sending JSON messages."
   },
   {
     name: "Bridge",
     c: "#f2b35b",
     bd: "#f2b35b",
-    bg: "#2a2216",
+    bg: "#302a23",
     body: "Async JSON messages, sent in batches. The only way across."
   },
   {
     name: "Shadow thread",
     c: "#79d49c",
     bd: "#79d49c66",
-    bg: "#171d24",
+    bg: "#242526",
     body: "Its own copy of the tree. Yoga layout."
   },
   {
     name: "UI thread",
     c: "#f291c4",
     bd: "#f291c466",
-    bg: "#171d24",
+    bg: "#242526",
     body: "Creates views, handles touches."
   },
   {
     name: "Native modules",
     c: "#9fb0c3",
     bd: "#9fb0c366",
-    bg: "#171d24",
+    bg: "#242526",
     body: "Mostly created at launch. Nothing checks their types."
   }
 ];

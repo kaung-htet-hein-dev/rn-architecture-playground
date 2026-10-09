@@ -1,15 +1,12 @@
 @import 'tailwindcss';
 @import './tokens.css';
 
-@import '@fontsource/ibm-plex-sans/latin-400.css';
-@import '@fontsource/ibm-plex-sans/latin-500.css';
-@import '@fontsource/ibm-plex-sans/latin-600.css';
-@import '@fontsource/ibm-plex-sans/latin-700.css';
-@import '@fontsource/ibm-plex-mono/latin-400.css';
-@import '@fontsource/ibm-plex-mono/latin-500.css';
-@import '@fontsource/ibm-plex-mono/latin-600.css';
-
 @layer base {
+  body {
+    /* reactnative.dev base size; set on body so rem-based spacing stays at 16px */
+    font-size: 17px;
+    line-height: 1.65;
+  }
   html,
   body {
     margin: 0;
@@ -21,7 +18,7 @@
   }
   a {
     color: var(--color-text);
-    text-decoration-color: #4a5562;
+    text-decoration-color: #4e5668;
     text-underline-offset: 3px;
   }
   a:hover {
@@ -29,13 +26,13 @@
     text-decoration-color: currentColor;
   }
   ::selection {
-    background: #5fd3e633;
+    background: #61dafb40;
   }
   button {
     cursor: pointer;
   }
   :focus-visible {
-    outline: 2px solid var(--color-text-bright);
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
   p,
@@ -72,6 +69,36 @@
   .prose-atb strong {
     color: var(--color-text-bright);
     font-weight: 600;
+  }
+  /* reactnative.dev home buttons (dark theme) */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9px;
+    background: var(--color-primary);
+    color: var(--color-bg);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover {
+    background: var(--color-primary-hover);
+    color: var(--color-bg);
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9px;
+    border: 1px solid var(--color-btn-border);
+    background: var(--color-bg);
+    color: var(--color-text-bright);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .btn-secondary:hover {
+    background: #1f1f21;
+    color: var(--color-text-bright);
   }
   .btn {
     height: 34px;

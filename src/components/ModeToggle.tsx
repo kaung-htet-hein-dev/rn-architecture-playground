@@ -4,7 +4,7 @@ import type { Mode } from "../sim/colors";
 
 const STYLE: Record<Mode, { bg: string; fg: string }> = {
   old: { bg: "#f2b35b", fg: "#1a1408" },
-  new: { bg: "#5fd3e6", fg: "#071a1e" }
+  new: { bg: "#58c4dc", fg: "#1b1b1d" }
 };
 
 /** Old / New segmented toggle with a sliding pill. */
@@ -33,8 +33,8 @@ export function ModeToggle({
               setMode(m);
               if (m !== mode) onChange?.(m);
             }}
-            className="relative h-[30px] rounded-[5px] px-2 text-[12.5px] leading-none font-semibold transition-colors duration-200 sm:px-3"
-            style={{ color: on ? STYLE[m].fg : "#b1b9c3" }}
+            className="relative h-[30px] rounded-[5px] px-3 text-[13px] leading-none font-semibold transition-colors duration-200"
+            style={{ color: on ? STYLE[m].fg : "#bec3c9" }}
           >
             {on && (
               <motion.span
@@ -59,7 +59,7 @@ export function BrandMark() {
       aria-hidden="true"
     >
       <svg viewBox="0 0 32 32" className="size-full" fill="none">
-        <g stroke="#61DAFB" strokeWidth="1.7">
+        <g stroke="#58c4dc" strokeWidth="1.7">
           <ellipse cx="16" cy="16" rx="14" ry="5.5" />
           <ellipse
             cx="16"
@@ -76,7 +76,7 @@ export function BrandMark() {
             transform="rotate(120 16 16)"
           />
         </g>
-        <circle cx="16" cy="16" r="2.2" fill="#61DAFB" />
+        <circle cx="16" cy="16" r="2.2" fill="#58c4dc" />
       </svg>
     </span>
   );

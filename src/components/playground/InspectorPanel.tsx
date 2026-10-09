@@ -1,3 +1,4 @@
+import { useState, type ReactNode } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { C } from '../../sim/colors'
 import type { InspectorView, MetricRow, ModuleRow, TreeView } from '../../sim/playground'
@@ -13,26 +14,48 @@ interface Props {
   trees: TreeView[]
 }
 
-const Eyebrow = ({ children, id }: { children: string; id?: string }) => (
-  <h2 id={id} className="m-0 text-[13px] leading-none font-semibold text-text-muted">
-    {children}
-  </h2>
-)
+interface SectionProps {
+  title: string
+  defaultOpen?: boolean
+  /** opens the section whenever it changes to a value other than "none" */
+  revealKey?: string
+  children: ReactNode
+}
+
+/** Collapsible inspector section; the summary doubles as its heading. */
+function Section({ title, defaultOpen = false, revealKey, children }: SectionProps) {
+  const [open, setOpen] = useState(defaultOpen)
+  const [seen, setSeen] = useState(revealKey)
+  if (seen !== revealKey) {
+    setSeen(revealKey)
+    if (revealKey && revealKey !== 'none') setOpen(true)
+  }
+  return (
+    <details open={open} onToggle={(e) => setOpen(e.currentTarget.open)} className="group px-5">
+      <summary className="flex cursor-pointer list-none items-center justify-between py-4 text-[13px] leading-none font-semibold text-text-muted hover:text-text [&::-webkit-details-marker]:hidden">
+        <h2 className="m-0 text-[inherit] leading-none font-semibold">{title}</h2>
+        <span aria-hidden="true" className="text-text-faint transition-transform duration-200 group-open:rotate-90">
+          ›
+        </span>
+      </summary>
+      <div className="flex flex-col gap-3.5 pb-5">{children}</div>
+    </details>
+  )
+}
 
 /** Right column: metrics, message inspector, native module status, trees. */
 export function InspectorPanel({ accent, heads, metrics, insp, inspKey, mods, trees }: Props) {
   const cols = heads.length
   return (
     <div className="flex flex-col divide-y divide-line-soft">
-      <section aria-labelledby="pg-metrics" className="flex flex-col gap-3.5 px-5 py-5">
-        <Eyebrow id="pg-metrics">Metrics</Eyebrow>
+      <Section title="Metrics" defaultOpen>
         <div
           className="grid items-baseline gap-x-4 gap-y-3"
           style={{ gridTemplateColumns: `minmax(0,1fr) repeat(${cols}, auto)` }}
         >
           <span />
           {heads.map((h) => (
-            <span key={h.t} className="text-right font-mono text-[11px] leading-none font-semibold" style={{ color: h.c }}>
+            <span key={h.t} className="text-right font-mono text-xs leading-none font-semibold" style={{ color: h.c }}>
               {h.t}
             </span>
           ))}
@@ -40,10 +63,9 @@ export function InspectorPanel({ accent, heads, metrics, insp, inspKey, mods, tr
             <MetricLine key={m.l} m={m} />
           ))}
         </div>
-      </section>
+      </Section>
 
-      <section aria-labelledby="pg-insp" className="flex flex-col gap-3.5 px-5 py-5">
-        <Eyebrow id="pg-insp">Message inspector</Eyebrow>
+      <Section title="Message inspector" revealKey={inspKey}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={inspKey}
@@ -67,7 +89,7 @@ export function InspectorPanel({ accent, heads, metrics, insp, inspKey, mods, tr
                   </div>
                 ))}
                 {insp.payload != null && (
-                  <pre className="m-0 max-h-[140px] overflow-auto rounded-[6px] border border-line bg-bg p-2 font-mono text-[11.5px] leading-normal break-all whitespace-pre-wrap text-old">
+                  <pre className="m-0 max-h-[140px] overflow-auto rounded-[6px] border border-line bg-bg p-2 font-mono text-xs leading-normal break-all whitespace-pre-wrap text-old">
                     {insp.payload}
                   </pre>
                 )}
@@ -79,10 +101,9 @@ export function InspectorPanel({ accent, heads, metrics, insp, inspKey, mods, tr
             )}
           </motion.div>
         </AnimatePresence>
-      </section>
+      </Section>
 
-      <section aria-labelledby="pg-mods" className="flex flex-col gap-3.5 px-5 py-5">
-        <Eyebrow id="pg-mods">Native modules</Eyebrow>
+      <Section title="Native modules">
         {mods.length > 0 ? (
           <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
             {mods.map((md) => (
@@ -107,17 +128,16 @@ export function InspectorPanel({ accent, heads, metrics, insp, inspKey, mods, tr
         ) : (
           <p className="m-0 text-[13px] leading-normal text-text-dim">This preset doesn’t call a native module.</p>
         )}
-      </section>
+      </Section>
 
-      <section aria-labelledby="pg-trees" className="flex flex-col gap-3.5 px-5 py-5">
-        <Eyebrow id="pg-trees">Trees</Eyebrow>
+      <Section title="Trees">
         {trees.map((tr) => (
           <div
             key={tr.key}
             className="rounded-lg border bg-surface p-3.5 transition-colors duration-250"
             style={{ borderColor: tr.updated ? accent : C.line }}
           >
-            <div className="mb-2.5 flex justify-between gap-2 font-mono text-[11.5px] leading-none font-medium text-text-dim">
+            <div className="mb-2.5 flex justify-between gap-2 font-mono text-xs leading-none font-medium text-text-dim">
               <span>{tr.title}</span>
               <span style={{ color: tr.updated ? accent : C.faint }}>{tr.updated ? 'updated' : tr.built ? '' : 'not built'}</span>
             </div>
@@ -132,7 +152,7 @@ export function InspectorPanel({ accent, heads, metrics, insp, inspKey, mods, tr
             ))}
           </div>
         ))}
-      </section>
+      </Section>
     </div>
   )
 }

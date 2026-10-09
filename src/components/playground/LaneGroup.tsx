@@ -64,7 +64,7 @@ export function LaneGroup({
             <div
               key={b.key}
               title={b.label}
-              className="absolute box-border flex h-[26px] min-w-[3px] items-center overflow-hidden rounded-[4px] border px-1.5 font-mono text-[11.5px] leading-none font-medium whitespace-nowrap"
+              className="absolute box-border flex h-[26px] min-w-[3px] items-center overflow-hidden rounded-[4px] border px-1.5 font-mono text-xs leading-none font-medium whitespace-nowrap"
               style={{
                 top: b.top,
                 left: b.l + "%",

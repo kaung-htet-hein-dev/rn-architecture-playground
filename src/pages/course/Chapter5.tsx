@@ -1,6 +1,7 @@
 import { CHAPTER_TITLES, chapterId } from "../../app/chapters";
 import { ChapterHead, ChapterSection, Reveal, T, WhyWhatHow } from "../../components/Chapter";
 import { B, P } from "../../components/Prose";
+import { ChapterCheck } from "../../components/Quiz";
 import { StartupBars } from "../../components/StartupBars";
 import { SimPanel } from "../../components/SimPanel";
 
@@ -37,9 +38,17 @@ export function Chapter5() {
       <Reveal>
         <StartupBars />
       </Reveal>
+      <Reveal className="max-w-[780px]">
+        <P>
+          Lazy loading changes <B>when</B> a module is created. Codegen
+          solves a different problem: making sure JS and native agree on what
+          the module looks like. Step through it below.
+        </P>
+      </Reveal>
       <Reveal>
         <SimPanel scenario="codegen" />
       </Reveal>
+      <ChapterCheck ch={4} />
     </ChapterSection>
   );
 }

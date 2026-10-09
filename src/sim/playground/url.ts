@@ -1,8 +1,6 @@
 import { isPresetId } from './presets'
 import type { PresetId } from './types'
 
-export type PlaygroundTab = 'code' | 'threads' | 'inspect'
-export const TABS: readonly PlaygroundTab[] = ['code', 'threads', 'inspect']
 export const DEFAULT_RATE = 60
 export const RATE_MIN = 10
 export const RATE_MAX = 120
@@ -13,10 +11,7 @@ export interface PlaygroundUrlState {
   rate?: number
   /** 0..1 of total */
   at?: number
-  tab?: PlaygroundTab
 }
-
-const isTab = (v: unknown): v is PlaygroundTab => typeof v === 'string' && (TABS as readonly string[]).includes(v)
 
 /** Strict number parse: the whole string must be numeric. */
 function num(v: string | null): number | null {
@@ -26,7 +21,7 @@ function num(v: string | null): number | null {
 }
 
 /**
- * Validate `?preset=&compare=1&rate=&at=0..1&tab=`. Invalid values are ignored.
+ * Validate `?preset=&compare=1&rate=&at=0..1`. Invalid values are ignored.
  * (`?mode=` and `?motion=` are owned by SettingsProvider.)
  */
 export function parsePlaygroundSearch(search: string): PlaygroundUrlState {
@@ -39,8 +34,6 @@ export function parsePlaygroundSearch(search: string): PlaygroundUrlState {
   if (rate != null && rate >= RATE_MIN && rate <= RATE_MAX) out.rate = Math.round(rate)
   const at = num(q.get('at'))
   if (at != null && at >= 0 && at <= 1) out.at = at
-  const tab = q.get('tab')
-  if (isTab(tab)) out.tab = tab
   return out
 }
 
@@ -54,7 +47,6 @@ export function writePlaygroundSearch(search: string, s: Required<Omit<Playgroun
   else q.delete('rate')
   if (s.at != null) q.set('at', String(Math.round(s.at * 1000) / 1000))
   else q.delete('at')
-  if (s.tab !== 'threads') q.set('tab', s.tab)
-  else q.delete('tab')
+  q.delete('tab')
   return q.toString()
 }

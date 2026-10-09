@@ -1,6 +1,7 @@
 import { CHAPTER_TITLES, chapterId } from "../../app/chapters";
 import { ChapterHead, ChapterSection, Reveal, T, WhyWhatHow } from "../../components/Chapter";
 import { B, P } from "../../components/Prose";
+import { ChapterCheck } from "../../components/Quiz";
 import { SimPanel } from "../../components/SimPanel";
 
 export function Chapter4() {
@@ -37,6 +38,7 @@ export function Chapter4() {
       <Reveal>
         <SimPanel scenario="jsi" />
       </Reveal>
+      <ChapterCheck ch={3} />
     </ChapterSection>
   );
 }

@@ -3,7 +3,7 @@ import type { Speed } from '../../sim/clock'
 import { C, type SimStatus } from '../../sim/colors'
 import { RATE_MAX, RATE_MIN } from '../../sim/playground'
 import { SpeedToggle } from '../SimControls'
-import { AccentButton } from '../ui/AccentButton'
+import { PrimaryButton } from '../ui/PrimaryButton'
 import { StateChip } from '../StateChip'
 
 interface Props {
@@ -39,9 +39,9 @@ export function ControlsBar(p: Props) {
           <button type="button" aria-label="Step back" onClick={p.onBack} className={stepBtn}>
             ‹ Back
           </button>
-          <AccentButton accent={p.accent} onClick={p.onPlay} className="h-10 min-w-[92px] rounded-[7px] px-4">
+          <PrimaryButton onClick={p.onPlay} className="h-10 min-w-[92px] px-4">
             {p.playLabel}
-          </AccentButton>
+          </PrimaryButton>
           <button type="button" aria-label="Step forward" onClick={p.onFwd} className={stepBtn}>
             Step ›
           </button>
@@ -55,7 +55,7 @@ export function ControlsBar(p: Props) {
           aria-label="Scrubber"
           aria-valuetext={time}
           className="min-w-[140px] flex-[1_1_200px]"
-          style={{ accentColor: p.accent }}
+          style={{ accentColor: C.primary }}
         />
         <span className="min-w-[120px] text-right font-mono text-xs leading-none font-medium text-text-muted tabular-nums">
           {time}

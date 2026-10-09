@@ -78,19 +78,19 @@ export const LN: Record<LaneId, LaneDef> = {
   jsi: {
     name: "JSI",
     sub: "direct C++ calls",
-    c: "#5fd3e6",
+    c: "#58c4dc",
     k: "jsi",
     narrow: true
   },
   shadow: { name: "Shadow thread", sub: "layout with Yoga", c: "#79d49c" },
   ui: { name: "UI thread", sub: "draws, gets touches", c: "#f291c4" },
   native: { name: "Native module", sub: "platform code", c: "#9fb0c3" },
-  core: { name: "C++ core", sub: "Fabric, shared tree", c: "#5fd3e6" },
-  spec: { name: "TS spec", sub: "you write this", c: "#cbd1d8" },
+  core: { name: "C++ core", sub: "Fabric, shared tree", c: "#58c4dc" },
+  spec: { name: "TS spec", sub: "you write this", c: "#ccd0d5" },
   cg: {
     name: "Codegen",
     sub: "runs at build time",
-    c: "#5fd3e6",
+    c: "#58c4dc",
     narrow: true
   },
   out: { name: "Native interface", sub: "generated for you", c: "#9fb0c3" }

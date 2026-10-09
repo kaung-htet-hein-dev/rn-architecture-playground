@@ -16,7 +16,7 @@ export function PlaygroundCta() {
       </div>
       <Link
         to={`/playground?mode=${mode}`}
-        className="relative flex h-[42px] items-center rounded-lg bg-text px-[18px] text-sm leading-none font-semibold text-bg no-underline transition-transform hover:text-bg active:scale-[.97]"
+        className="btn-primary relative h-[42px] px-[18px] text-sm leading-none"
       >
         Open the Playground
       </Link>

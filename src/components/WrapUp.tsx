@@ -7,8 +7,8 @@ import { MapCards } from "./wrapup/MapCards";
 import { MigrationNotes } from "./wrapup/MigrationNotes";
 import { PlaygroundCta } from "./wrapup/PlaygroundCta";
 
-/** Chapter 7 body: map, history, migration checklist, recap, quiz, glossary. */
-export function WrapUp() {
+/** Chapter 7 body: map, history, migration checklist. */
+export function MigrationWrap() {
   return (
     <>
       <Reveal>
@@ -18,6 +18,14 @@ export function WrapUp() {
         <Timeline />
       </Reveal>
       <MigrationNotes />
+    </>
+  );
+}
+
+/** Review section body: recap, every question, glossary, playground link. */
+export function ReviewWrap() {
+  return (
+    <>
       <ChapterSummary />
       <Reveal>
         <Quiz />

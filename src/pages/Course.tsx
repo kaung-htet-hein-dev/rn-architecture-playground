@@ -1,5 +1,6 @@
 import { chapterId } from "../app/chapters";
 import { ChapterNav } from "../components/course/ChapterNav";
+import { CourseHero } from "../components/course/CourseHero";
 import { TopBar } from "../components/TopBar";
 import { useChapterDeepLink, useChapterScroll } from "../hooks/useChapterNav";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
@@ -10,6 +11,7 @@ import { Chapter4 } from "./course/Chapter4";
 import { Chapter5 } from "./course/Chapter5";
 import { Chapter6 } from "./course/Chapter6";
 import { Chapter7 } from "./course/Chapter7";
+import { Review } from "./course/Review";
 
 export default function Course() {
   const go = useChapterScroll();
@@ -26,7 +28,8 @@ export default function Course() {
       </a>
       <TopBar onGo={go} />
       <ChapterNav onGo={go} />
-      <main className="min-[1200px]:pl-56">
+      <main className="pl-56">
+        <CourseHero onGo={go} />
         <Chapter1 />
         <Chapter2 />
         <Chapter3 />
@@ -34,6 +37,7 @@ export default function Course() {
         <Chapter5 />
         <Chapter6 />
         <Chapter7 />
+        <Review />
       </main>
     </div>
   );

@@ -34,7 +34,7 @@ export function LaneTracks({ traces, snaps, c, T, sel, onPick }: Props) {
             {ticks.map((tk) => (
               <span
                 key={tk.t}
-                className="absolute -translate-x-1/2 font-mono text-[11px] leading-none whitespace-nowrap text-text-faint"
+                className="absolute -translate-x-1/2 font-mono text-xs leading-none whitespace-nowrap text-text-faint"
                 style={{ left: tk.l + "%" }}
               >
                 {tk.t}

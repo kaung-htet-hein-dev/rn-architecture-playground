@@ -1,30 +1,32 @@
 /** Fixed palette (PROMPT rule 5). Used where colors are computed at runtime (alpha suffixes, per-lane tints). */
 export const C = {
-  bg: '#0f1216',
-  panel: '#13181e',
-  surface: '#171d24',
-  raised: '#1f262f',
-  codeBg: '#12171c',
-  line: '#2d3642',
-  lineSoft: '#232b35',
-  lineStrong: '#3d4856',
-  track: '#303944',
-  text: '#e7eaee',
-  bright: '#eef1f4',
-  prose: '#d5dae0',
-  muted: '#cbd1d8',
-  dim: '#b1b9c3',
-  faint: '#9aa4b0',
-  ghost: '#808a96',
-  gutter: '#626b77',
+  bg: '#1b1b1d',
+  panel: '#20232a',
+  surface: '#242526',
+  raised: '#282c34',
+  codeBg: '#1e2025',
+  line: '#30363d',
+  lineSoft: '#282c36',
+  lineStrong: '#404756',
+  track: '#373940',
+  text: '#e3e3e3',
+  bright: '#f6f7f9',
+  prose: '#dadde1',
+  muted: '#ccd0d5',
+  dim: '#bec3c9',
+  faint: '#969faf',
+  ghost: '#858993',
+  gutter: '#606770',
   old: '#f2b35b',
   oldInk: '#1a1408',
-  oldTint: '#2a2216',
-  new: '#5fd3e6',
-  newInk: '#071a1e',
-  newTint: '#11262b',
+  oldTint: '#302a23',
+  new: '#58c4dc',
+  /** reactnative.dev primary: controls in both modes */
+  primary: '#58c4dc',
+  newInk: '#1b1b1d',
+  newTint: '#222f34',
   load: '#f0694f',
-  loadTint: '#2c1714',
+  loadTint: '#33201f',
   js: '#b39dff',
   shadow: '#79d49c',
   ui: '#f291c4',
@@ -46,20 +48,20 @@ export interface ChipStyle {
 }
 
 /** Status chip colors shared by every simulation header. */
-export function chipFor(status: SimStatus, acc: string, errorLabel = 'runtime error'): ChipStyle {
+export function chipFor(status: SimStatus, acc: string, errorLabel = 'Runtime error'): ChipStyle {
   switch (status) {
     case 'error':
       return { label: errorLabel, fg: C.load, bg: C.load + '1f' }
     case 'overloaded':
-      return { label: 'overloaded', fg: C.load, bg: C.load + '1f' }
+      return { label: 'Overloaded', fg: C.load, bg: C.load + '1f' }
     case 'running':
-      return { label: 'running', fg: acc, bg: acc + '1f' }
+      return { label: 'Running', fg: acc, bg: acc + '1f' }
     case 'idle':
-      return { label: 'idle', fg: C.dim, bg: C.raised }
+      return { label: 'Idle', fg: C.dim, bg: C.raised }
     case 'complete':
-      return { label: 'complete', fg: C.bright, bg: C.track }
+      return { label: 'Complete', fg: C.bright, bg: C.track }
     default:
-      return { label: 'paused', fg: C.muted, bg: C.raised }
+      return { label: 'Paused', fg: C.muted, bg: C.raised }
   }
 }
 

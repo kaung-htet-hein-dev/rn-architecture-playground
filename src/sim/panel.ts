@@ -121,7 +121,7 @@ export interface PanelView {
 export function derivePanel(
   sc: Scenario,
   s: StepState,
-  opts: { reduced: boolean; compact: boolean; error: boolean }
+  opts: { reduced: boolean; error: boolean }
 ): PanelView {
   const { step, p } = s;
   const cur = step >= 0 ? sc.steps[step] : null;
@@ -149,7 +149,7 @@ export function derivePanel(
     const hist = done
       .map((x, i) => ({ x, i }))
       .filter(({ x }) => x.l === id && x.a)
-      .slice(opts.compact ? -1 : -2);
+      .slice(-2);
     return {
       id,
       name: L.name,
@@ -163,7 +163,7 @@ export function derivePanel(
         key: id + i
       })),
       isJsi: L.k === "jsi",
-      queue: L.k === "bridge" ? queue.slice(0, opts.compact ? 2 : 4) : [],
+      queue: L.k === "bridge" ? queue.slice(0, 4) : [],
       screen: sc.screen && id === "ui" ? screen : null
     };
   });

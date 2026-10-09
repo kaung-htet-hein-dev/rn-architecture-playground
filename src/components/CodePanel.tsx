@@ -13,11 +13,15 @@ interface Props {
   /** optional custom renderer per line (playground editable params) */
   renderLine?: (line: string, index: number) => ReactNode
   fontSize?: number
+  /** wrap long lines instead of scrolling sideways (narrow columns) */
+  wrap?: boolean
+  /** fade the code until the sim starts, so the diagram reads first */
+  muted?: boolean
   className?: string
 }
 
 /** Code panel: line numbers, ▸ marker, accent active line(s). */
-export function CodePanel({ file, lines, active, accent, open, onToggle, renderLine, fontSize = 13, className = '' }: Props) {
+export function CodePanel({ file, lines, active, accent, open, onToggle, renderLine, fontSize = 13, wrap = false, muted = false, className = '' }: Props) {
   const toks = lines.map(tokenize)
   return (
     <div className={`flex min-w-0 flex-col bg-code-bg ${className}`}>
@@ -30,19 +34,22 @@ export function CodePanel({ file, lines, active, accent, open, onToggle, renderL
         )}
       </div>
       {open && (
-        <div className="overflow-x-auto py-4 font-mono leading-[1.75]" style={{ fontSize }}>
+        <div
+          className={`overflow-x-auto py-4 font-mono leading-[1.75] transition-opacity duration-300 ${muted ? 'opacity-50' : ''}`}
+          style={{ fontSize }}
+        >
           {lines.map((line, i) => {
             const on = !!active && i >= active[0] && i <= active[1]
             return (
               <div
                 key={i}
-                className="flex min-w-max pr-4 whitespace-pre transition-[background] duration-200"
+                className={`flex pr-4 transition-[background] duration-200 ${wrap ? 'whitespace-pre-wrap break-words' : 'min-w-max whitespace-pre'}`}
                 style={{ background: on ? accent + '1c' : 'transparent' }}
                 aria-current={on && active && i === active[0] ? 'step' : undefined}
               >
                 <span
                   className="w-10 flex-none pr-2 text-right select-none"
-                  style={{ color: on ? accent : '#626b77' }}
+                  style={{ color: on ? accent : '#606770' }}
                   aria-hidden="true"
                 >
                   {i + 1}
@@ -50,7 +57,7 @@ export function CodePanel({ file, lines, active, accent, open, onToggle, renderL
                 <span className="w-4 flex-none text-center" style={{ color: accent }} aria-hidden="true">
                   {on && active && i === active[0] ? '▸' : ''}
                 </span>
-                <span>
+                <span className="min-w-0">
                   {renderLine
                     ? renderLine(line, i)
                     : toks[i].map((tk, j) => (

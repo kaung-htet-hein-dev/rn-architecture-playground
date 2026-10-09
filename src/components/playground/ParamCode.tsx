@@ -45,7 +45,7 @@ export function ParamCode({
             onChange={(e) => onParam(name, e.target.value)}
             spellCheck={false}
             aria-label={`${name} (line ${li + 1})`}
-            className="mx-px box-content rounded-[4px] border border-[#5fd3e6aa] bg-[#5fd3e614] px-1 font-mono text-[12.5px] leading-normal font-medium text-text-bright outline-none focus:border-new"
+            className="mx-px box-content rounded-[4px] border border-[#58c4dcaa] bg-[#58c4dc14] px-1 font-mono text-[12.5px] leading-normal font-medium text-text-bright outline-none focus:border-new"
             style={{ width: Math.max(2, v.length + 0.5) + "ch" }}
           />
         );
@@ -64,6 +64,7 @@ export function ParamCode({
         active={active}
         accent={accent}
         open
+        wrap
         fontSize={12.5}
         renderLine={renderLine}
       />

@@ -22,15 +22,15 @@ export function PhoneFrame({ frame, flash, over, ry, rows, reduced, label }: Pro
     <div
       role="img"
       aria-label={`${label} phone: JS rendered to y = ${ry}`}
-      className={`relative box-border h-[400px] w-[212px] rounded-[30px] border-2 bg-[#0b0e11] p-2.5 ${
+      className={`relative box-border h-[400px] w-[212px] rounded-[30px] border-2 bg-[#151517] p-2.5 ${
         reduced ? '' : 'transition-[box-shadow,border-color] duration-[120ms,250ms]'
       }`}
       style={{ borderColor: frame, boxShadow: glow }}
     >
-      <div className="relative h-full overflow-hidden rounded-[22px] bg-[#13181e]">
+      <div className="relative h-full overflow-hidden rounded-[22px] bg-[#20232a]">
         <div className="absolute inset-x-0 top-0 z-[2] flex h-[52px] flex-col justify-center gap-[5px] border-b border-track bg-raised px-3.5">
           <span className="text-[13px] leading-none font-semibold text-text-bright">Orders</span>
-          <span className="font-mono text-[10.5px] leading-none text-text-dim">JS rendered to y = {ry}</span>
+          <span className="font-mono text-xs leading-none text-text-dim">JS rendered to y = {ry}</span>
         </div>
         {rows.map((r) => (
           <div
@@ -39,12 +39,12 @@ export function PhoneFrame({ frame, flash, over, ry, rows, reduced, label }: Pro
             className={`absolute inset-x-2.5 box-border flex h-11 flex-col justify-center gap-[5px] rounded-lg px-2.5 ${
               reduced ? '' : 'transition-colors duration-200'
             }`}
-            style={{ top: r.top, background: r.filled ? C.raised : '#171c22' }}
+            style={{ top: r.top, background: r.filled ? C.raised : '#26292f' }}
           >
-            <span className="text-[11.5px] leading-none font-medium" style={{ color: r.filled ? C.text : '#171c22' }}>
+            <span className="text-xs leading-none font-medium" style={{ color: r.filled ? C.text : '#26292f' }}>
               {r.t1}
             </span>
-            <span className="font-mono text-[10px] leading-none" style={{ color: r.filled ? C.dim : '#171c22' }}>
+            <span className="font-mono text-xs leading-none" style={{ color: r.filled ? C.dim : '#26292f' }}>
               {r.t2}
             </span>
           </div>

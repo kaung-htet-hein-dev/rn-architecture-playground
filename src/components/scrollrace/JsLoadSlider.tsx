@@ -13,7 +13,7 @@ export function JsLoadSlider({ value, work, color, onChange }: Props) {
   return (
     <label
       htmlFor={id}
-      className="flex min-w-[220px] flex-[1_1_260px] items-center gap-3 sm:ml-2"
+      className="flex min-w-[220px] flex-[1_1_260px] items-center gap-3 ml-2"
     >
       <span className="font-mono text-xs leading-none font-medium whitespace-nowrap text-text-dim">
         JS load

@@ -7,33 +7,32 @@ interface Props {
   height: number
   packet: PacketView | null
   wire: string
-  compact: boolean
 }
 
 /** Thread lane columns + wire + JSON packet / JSI line overlay. */
-export function ThreadLanes({ lanes, gridCols, height, packet, wire, compact }: Props) {
+export function ThreadLanes({ lanes, gridCols, height, packet, wire }: Props) {
   return (
     <div className="relative grid gap-2" style={{ gridTemplateColumns: gridCols, height }}>
       {lanes.map((ln) => (
-        <Lane key={ln.id} ln={ln} compact={compact} />
+        <Lane key={ln.id} ln={ln} />
       ))}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute top-[62px] right-[10%] left-[10%] h-0 border-t border-dashed transition-colors duration-250"
         style={{ borderColor: wire }}
       />
-      {packet?.kind === 'json' && <Packet label={packet.label} x={packet.x} maxW={compact ? 110 : 220} />}
-      {packet?.kind === 'ref' && <JsiLine packet={packet} maxW={compact ? 110 : 220} />}
+      {packet?.kind === 'json' && <Packet label={packet.label} x={packet.x} maxW={220} />}
+      {packet?.kind === 'ref' && <JsiLine packet={packet} maxW={220} />}
     </div>
   )
 }
 
-function Lane({ ln, compact }: { ln: LaneView; compact: boolean }) {
+function Lane({ ln }: { ln: LaneView }) {
   const c = ln.tone
   return (
     <div
       className="flex min-w-0 flex-col overflow-hidden rounded-lg border transition-[background,border-color] duration-250"
-      style={{ borderColor: ln.active ? c : '#2d3642', background: ln.active ? c + '12' : '#171d24' }}
+      style={{ borderColor: ln.active ? c : '#30363d', background: ln.active ? c + '12' : '#242526' }}
       aria-label={`${ln.name}${ln.active ? ' (active)' : ''}`}
       role="group"
     >
@@ -42,15 +41,15 @@ function Lane({ ln, compact }: { ln: LaneView; compact: boolean }) {
           <span className="size-2 flex-none rounded-[2px]" style={{ background: ln.color }} />
           <span
             className="truncate text-[13.5px] leading-[1.2] font-semibold transition-colors duration-250"
-            style={{ color: ln.active ? c : '#e7eaee' }}
+            style={{ color: ln.active ? c : '#e3e3e3' }}
           >
             {ln.name}
           </span>
         </div>
-        {!compact && <div className="mt-1 truncate font-mono text-xs leading-[1.3] text-text-dim">{ln.sub}</div>}
+        <div className="mt-1 truncate font-mono text-xs leading-[1.3] text-text-dim">{ln.sub}</div>
       </div>
       <div className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-hidden px-2 pt-[34px] pb-2">
-        {ln.isJsi && <div className="text-center font-mono text-[11px] leading-[1.4] text-text-faint">no JSON</div>}
+        {ln.isJsi && <div className="text-center font-mono text-xs leading-[1.4] text-text-faint">no JSON</div>}
         <AnimatePresence initial={false}>
           {ln.queue.map((q) => (
             <motion.div
@@ -60,7 +59,7 @@ function Lane({ ln, compact }: { ln: LaneView; compact: boolean }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.85 }}
               transition={{ duration: 0.2 }}
-              className="truncate rounded-[4px] border border-[#f2b35b44] bg-[#f2b35b14] px-1.5 py-[5px] font-mono text-[10.5px] leading-none font-medium text-old"
+              className="truncate rounded-[4px] border border-[#f2b35b44] bg-[#f2b35b14] px-1.5 py-[5px] font-mono text-xs leading-none font-medium text-old"
             >
               {q}
             </motion.div>
@@ -76,11 +75,11 @@ function Lane({ ln, compact }: { ln: LaneView; compact: boolean }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.22 }}
-              className="rounded-[5px] border px-[7px] py-1.5 font-mono text-[11.5px] leading-[1.4] font-medium break-words transition-colors duration-250"
+              className="rounded-[5px] border px-[7px] py-1.5 font-mono text-xs leading-[1.4] font-medium break-words transition-colors duration-250"
               style={{
-                color: ac.live ? '#eef1f4' : '#9aa4b0',
+                color: ac.live ? '#f6f7f9' : '#969faf',
                 background: ac.live ? c + '22' : 'transparent',
-                borderColor: ac.live ? c + '77' : '#2d3642',
+                borderColor: ac.live ? c + '77' : '#30363d',
               }}
             >
               {ac.text}
@@ -89,7 +88,7 @@ function Lane({ ln, compact }: { ln: LaneView; compact: boolean }) {
         </AnimatePresence>
         {ln.screen !== null && (
           <div className="flex flex-col items-center gap-1 rounded-[10px] border border-line-strong bg-bg p-2">
-            <span className="font-mono text-[10px] leading-none font-medium tracking-[.08em] text-text-faint">SCREEN</span>
+            <span className="text-xs leading-none font-medium text-text-faint">Screen</span>
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
                 key={ln.screen}
@@ -114,7 +113,7 @@ export function Packet({ label, x, maxW }: { label: string; x: number; maxW: num
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute top-[50px] -translate-x-1/2 truncate rounded-[5px] bg-old px-2 py-1.5 font-mono text-[11px] leading-none font-medium text-old-ink shadow-[0_0_0_3px_#f2b35b26]"
+      className="pointer-events-none absolute top-[50px] -translate-x-1/2 truncate rounded-[5px] bg-old px-2 py-1.5 font-mono text-xs leading-none font-medium text-old-ink shadow-[0_0_0_3px_#f2b35b26]"
       style={{ left: `${x}%`, maxWidth: maxW }}
     >
       {label}
@@ -130,7 +129,7 @@ export function JsiLine({ packet, maxW }: { packet: PacketView; maxW: number }) 
     <>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-[61px] h-0.5 bg-new shadow-[0_0_8px_#5fd3e699]"
+        className="pointer-events-none absolute top-[61px] h-0.5 bg-new shadow-[0_0_8px_#58c4dc99]"
         style={{ left: `${l}%`, width: `${w}%` }}
       />
       <div
@@ -140,7 +139,7 @@ export function JsiLine({ packet, maxW }: { packet: PacketView; maxW: number }) 
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-10 -translate-x-1/2 truncate rounded-[3px] bg-bg px-1.5 py-0.5 font-mono text-[11px] leading-none font-medium text-new"
+        className="pointer-events-none absolute top-10 -translate-x-1/2 truncate rounded-[3px] bg-bg px-1.5 py-0.5 font-mono text-xs leading-none font-medium text-new"
         style={{ left: `${packet.mid}%`, maxWidth: maxW }}
       >
         {packet.label}

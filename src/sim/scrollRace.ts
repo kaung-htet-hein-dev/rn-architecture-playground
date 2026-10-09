@@ -232,7 +232,7 @@ export function sideView(s: RaceState, key: SideKey, opts: { reduced: boolean; r
     rows: phoneRows(scrollY, opts.reduced ? Math.floor(d.ry / 60) * 60 : d.ry),
     dropped: d.dropped,
     dropPct: s.f ? Math.round((d.dropped / s.f) * 100) + '%' : '0%',
-    qLabel: old ? 'NEXT BRIDGE BATCH' : 'NEXT UPDATE',
+    qLabel: old ? 'Next bridge batch' : 'Next update',
     qbox: Array.from({ length: q }, (_, i) => (old && i >= 5 ? C.load : color)),
     qText: old ? q + ' JSON messages · ' + d.ser.toFixed(1) + ' ms' : q + ' rows · no JSON',
     qWarn: old && q > 5,

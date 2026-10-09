@@ -120,7 +120,7 @@ export function statusOf(o: { snap: Snapshot; started: boolean; running: boolean
 }
 
 export function captionOf(pr: Preset, snap: Snapshot, started: boolean, c: number): string {
-  if (!started && c === 0) return pr.desc + ' Press Play, step with the arrow keys, or tap the phone.'
+  if (!started && c === 0) return 'Press Play, step with the arrow keys, or tap the phone.'
   return snap.cap || pr.desc
 }
 

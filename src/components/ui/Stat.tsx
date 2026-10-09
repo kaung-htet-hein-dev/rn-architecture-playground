@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 export function StatLabel({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <dt
-      className={`font-mono text-[11px] leading-none font-medium tracking-[.08em] text-text-faint ${className}`}
+      className={`text-[13px] leading-none font-medium text-text-faint ${className}`}
     >
       {children}
     </dt>

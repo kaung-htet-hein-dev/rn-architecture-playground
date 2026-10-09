@@ -6,12 +6,12 @@ export interface Tok {
 }
 
 export const TOK_COLOR: Record<TokKind, string> = {
-  comment: '#808a96',
+  comment: '#858993',
   string: '#b5c98f',
-  tag: '#eef1f4',
+  tag: '#f6f7f9',
   keyword: '#8fa6c9',
-  number: '#cbd1d8',
-  plain: '#cbd1d8',
+  number: '#ccd0d5',
+  plain: '#ccd0d5',
 }
 
 const RE =

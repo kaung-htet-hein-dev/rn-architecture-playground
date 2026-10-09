@@ -79,9 +79,9 @@ function StartupBarsInner({ mode }: { mode: Mode }) {
         ))}
       </div>
 
+      <MentorCaption accent={acc} text={sim.caption} />
       <SimControls
         label="App startup"
-        accent={acc}
         playLabel={sim.playLabel}
         onPlay={sim.onPlay}
         onStep={sim.onStep}
@@ -89,8 +89,8 @@ function StartupBarsInner({ mode }: { mode: Mode }) {
         speed={sim.speed}
         onSpeed={sim.setSpeed}
         onReset={sim.onReset}
+        started={sim.status !== 'idle'}
       />
-      <MentorCaption accent={acc} text={sim.caption} />
     </SimFrame>
   )
 }

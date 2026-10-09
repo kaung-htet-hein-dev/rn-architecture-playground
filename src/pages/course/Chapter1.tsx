@@ -1,14 +1,13 @@
 import { CHAPTER_TITLES, chapterId } from "../../app/chapters";
 import { ChapterHead, ChapterSection, Reveal, T, WhyWhatHow } from "../../components/Chapter";
 import { B, P } from "../../components/Prose";
+import { ChapterCheck } from "../../components/Quiz";
 import { ModeSwap } from "../../components/course/ModeSwap";
-import { CourseHero } from "../../components/course/CourseHero";
 import { SimPanel } from "../../components/SimPanel";
 
 export function Chapter1() {
   return (
-    <ChapterSection id={chapterId(0)} label={`01 ${CHAPTER_TITLES[0]}`} first>
-      <CourseHero />
+    <ChapterSection id={chapterId(0)} label={`01 ${CHAPTER_TITLES[0]}`}>
       <ChapterHead n={1} title={CHAPTER_TITLES[0]} />
       <WhyWhatHow
         why={
@@ -62,6 +61,7 @@ export function Chapter1() {
         </strong>{" "}
         in the top bar to replay this exact tap in the other architecture.
       </p>
+      <ChapterCheck ch={0} />
     </ChapterSection>
   );
 }

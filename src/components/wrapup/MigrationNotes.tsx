@@ -4,7 +4,7 @@ import { TitledBlock } from "../ui/TitledBlock";
 export function MigrationNotes() {
   return (
     <TitledBlock title="Migration notes">
-      <ol className="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-3.5 p-0">
+      <ol className="m-0 flex max-w-[780px] list-none flex-col gap-3 p-0">
         {NOTES.map((n, i) => (
           <li
             key={i}

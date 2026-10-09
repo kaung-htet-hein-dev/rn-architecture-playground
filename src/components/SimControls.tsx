@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react'
 import { SPEEDS, type Speed } from '../sim/clock'
-import { AccentButton } from './ui/AccentButton'
+import { PrimaryButton } from './ui/PrimaryButton'
 
 interface Props {
-  accent: string
   playLabel: string
   onPlay: () => void
   onStep: () => void
@@ -18,28 +17,32 @@ interface Props {
   label?: string
   /** Step button text (default "Step") */
   stepLabel?: string
+  /** false while idle: speed and reset stay hidden (space kept, so nothing shifts) */
+  started?: boolean
 }
 
-export function SimControls({ accent, playLabel, onPlay, onStep, stepDisabled, speed, onSpeed, onReset, meta, children, label, stepLabel = 'Step' }: Props) {
+export function SimControls({ playLabel, onPlay, onStep, stepDisabled, speed, onSpeed, onReset, meta, children, label, stepLabel = 'Step', started = true }: Props) {
   return (
     <div
       role="group"
       aria-label={label ? `${label} controls` : 'Simulation controls'}
-      className="flex flex-wrap items-center gap-2.5 border-t border-line px-5 py-3.5"
+      className="flex flex-wrap items-center gap-2.5 border-t border-line-soft px-5 py-3.5"
     >
-      <AccentButton accent={accent} onClick={onPlay} className="h-[34px] min-w-[84px] rounded-[6px] px-3.5">
+      <PrimaryButton onClick={onPlay} className="h-[34px] min-w-[84px] px-3.5">
         {playLabel}
-      </AccentButton>
+      </PrimaryButton>
       <button type="button" className="btn" onClick={onStep} disabled={stepDisabled}>
         {stepLabel}
       </button>
-      <SpeedToggle speed={speed} onSpeed={onSpeed} />
-      <button type="button" className="btn" onClick={onReset}>
-        Reset
-      </button>
+      <div className={`flex items-center gap-2.5 transition-opacity duration-200 ${started ? '' : 'invisible opacity-0'}`} inert={!started}>
+        <SpeedToggle speed={speed} onSpeed={onSpeed} />
+        <button type="button" className="btn" onClick={onReset}>
+          Reset
+        </button>
+      </div>
       {children}
       <span className="flex-1" />
-      {meta != null && <span className="font-mono text-xs leading-none text-text-faint">{meta}</span>}
+      {meta != null && <span className="text-[13px] leading-none text-text-faint tabular-nums">{meta}</span>}
     </div>
   )
 }
@@ -55,7 +58,7 @@ export function SpeedToggle({ speed, onSpeed }: { speed: Speed; onSpeed: (s: Spe
           aria-label={`Speed ${v}×`}
           onClick={() => onSpeed(v)}
           className="h-8 px-2.5 font-mono text-xs leading-none font-medium transition-colors"
-          style={{ background: v === speed ? '#303944' : 'transparent', color: v === speed ? '#eef1f4' : '#b1b9c3' }}
+          style={{ background: v === speed ? '#373940' : 'transparent', color: v === speed ? '#f6f7f9' : '#bec3c9' }}
         >
           {v}×
         </button>

@@ -18,9 +18,9 @@ export function MentorCaption({ accent, text, id, className = '' }: Props) {
   const [live, setLive] = useState({ key, text })
   if (live.key !== key) setLive({ key, text })
   return (
-    <div className={`flex min-h-[76px] gap-3 border-t border-line-soft bg-code-bg px-5 pt-4 pb-5 ${className}`}>
+    <div className={`flex min-h-[84px] gap-3.5 border-t border-line bg-code-bg px-6 py-5 ${className}`}>
       <span className="w-[3px] flex-none rounded-[2px] transition-colors duration-250" style={{ background: accent }} />
-      <div className="relative max-w-[860px] flex-1">
+      <div className="relative max-w-[760px] flex-1">
         <AnimatePresence mode="wait" initial={false}>
           <motion.p
             key={key}
@@ -28,7 +28,7 @@ export function MentorCaption({ accent, text, id, className = '' }: Props) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.18 }}
-            className="m-0 text-[15px] leading-[1.6] text-text-prose"
+            className="m-0 text-[16.5px] leading-[1.6] text-text-bright"
             aria-hidden="true"
           >
             {text}

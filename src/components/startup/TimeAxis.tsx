@@ -8,7 +8,7 @@ export function TimeAxis() {
       {TICKS.map((v) => (
         <span
           key={v}
-          className="absolute -translate-x-1/2 font-mono text-[11px] leading-none whitespace-nowrap text-text-faint"
+          className="absolute -translate-x-1/2 font-mono text-xs leading-none whitespace-nowrap text-text-faint"
           style={{ left: `${(v / AXIS_MS) * 100}%` }}
         >
           {v}

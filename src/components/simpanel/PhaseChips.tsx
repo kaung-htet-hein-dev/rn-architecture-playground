@@ -21,7 +21,7 @@ export function PhaseChips({
             color: ph.on ? accent : ph.past ? C.muted : C.faint
           }}
         >
-          <span className="font-mono text-[11px] leading-none">{ph.n}</span>
+          <span className="font-mono text-xs leading-none">{ph.n}</span>
           {ph.t}
         </div>
       ))}

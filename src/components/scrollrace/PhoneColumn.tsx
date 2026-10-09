@@ -37,7 +37,7 @@ export function PhoneColumn({ ph, frames, selected, reduced }: Props) {
       </div>
       <dl className="m-0 flex min-w-[160px] flex-[1_1_160px] flex-col gap-3.5 pt-7 tabular-nums">
         <div className="flex flex-col gap-1">
-          <StatLabel>DROPPED FRAMES</StatLabel>
+          <StatLabel>Dropped frames</StatLabel>
           <dd className="m-0 flex flex-col gap-1">
             <span
               className="font-mono text-[28px] leading-none font-semibold"
@@ -77,7 +77,7 @@ export function PhoneColumn({ ph, frames, selected, reduced }: Props) {
           </dd>
         </div>
         <div className="flex flex-col gap-1">
-          <StatLabel>JS IS BEHIND BY</StatLabel>
+          <StatLabel>JS is behind by</StatLabel>
           <dd
             className="m-0 font-mono text-lg leading-none font-semibold"
             style={{ color: ph.lagWarn ? C.load : C.bright }}
@@ -86,7 +86,7 @@ export function PhoneColumn({ ph, frames, selected, reduced }: Props) {
           </dd>
         </div>
         <div className="flex flex-col gap-1">
-          <StatLabel>COST PER EVENT</StatLabel>
+          <StatLabel>Cost per event</StatLabel>
           <dd className="m-0 font-mono text-[12.5px] leading-[1.45] text-text-muted">
             {ph.cost}
           </dd>

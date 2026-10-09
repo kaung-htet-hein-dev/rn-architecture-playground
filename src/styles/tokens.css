@@ -1,34 +1,41 @@
-/* Design tokens from REQUIREMENTS.md §7, exposed to Tailwind via @theme. */
+/* Design tokens, exposed to Tailwind via @theme. Neutrals, primary and fonts follow
+   reactnative.dev (Docusaurus dark theme); lane and Old/New colors are course-specific. */
 @theme {
-  --color-bg: #0f1216;
-  --color-panel: #13181e;
-  --color-surface: #171d24;
-  --color-raised: #1f262f;
-  --color-raised-hover: #27303a;
-  --color-code-bg: #12171c;
-  --color-line: #2d3642;
-  --color-line-soft: #232b35;
-  --color-line-strong: #3d4856;
-  --color-line-lane: #27303a;
-  --color-track: #303944;
+  --color-bg: #1b1b1d;
+  --color-panel: #20232a;
+  --color-surface: #242526;
+  --color-raised: #282c34;
+  --color-raised-hover: #373940;
+  --color-code-bg: #1e2025;
+  --color-line: #30363d;
+  --color-line-soft: #282c36;
+  --color-line-strong: #404756;
+  --color-line-lane: #282c36;
+  --color-track: #373940;
 
-  --color-text: #e7eaee;
-  --color-text-bright: #eef1f4;
-  --color-text-prose: #d5dae0;
-  --color-text-muted: #cbd1d8;
-  --color-text-dim: #b1b9c3;
-  --color-text-faint: #9aa4b0;
-  --color-text-ghost: #808a96;
-  --color-text-gutter: #626b77;
+  --color-text: #e3e3e3;
+  --color-text-bright: #f6f7f9;
+  --color-text-prose: #dadde1;
+  --color-text-muted: #ccd0d5;
+  --color-text-dim: #bec3c9;
+  --color-text-faint: #969faf;
+  --color-text-ghost: #858993;
+  --color-text-gutter: #606770;
+
+  /* reactnative.dev: --brand, dark --home-button-primary / -hover, --home-button-secondary-border */
+  --color-brand: #61dafb;
+  --color-primary: #58c4dc;
+  --color-primary-hover: #71d6ec;
+  --color-btn-border: #4e5668;
 
   --color-old: #f2b35b;
-  --color-old-tint: #2a2216;
+  --color-old-tint: #302a23;
   --color-old-ink: #1a1408;
-  --color-new: #5fd3e6;
-  --color-new-tint: #11262b;
-  --color-new-ink: #071a1e;
+  --color-new: #58c4dc;
+  --color-new-tint: #222f34;
+  --color-new-ink: #1b1b1d;
   --color-load: #f0694f;
-  --color-load-tint: #2c1714;
+  --color-load-tint: #33201f;
   --color-ok: #79d49c;
   --color-ok-text: #9fe0b4;
   --color-bad-text: #f5a08f;
@@ -40,14 +47,16 @@
 
   --color-syn-keyword: #8fa6c9;
   --color-syn-string: #b5c98f;
-  --color-syn-comment: #808a96;
-  --color-syn-tag: #eef1f4;
-  --color-syn-default: #cbd1d8;
+  --color-syn-comment: #858993;
+  --color-syn-tag: #f6f7f9;
+  --color-syn-default: #ccd0d5;
 
-  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  /* reactnative.dev --ifm-font-family-base / --ifm-font-family-monospace. Optimistic Display is
+     Meta's own typeface and is not bundled; browsers without it fall through to system-ui. */
+  --font-sans: 'Optimistic Display', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
-  --radius-card: 12px;
+  --radius-card: 9px;
   --radius-sub: 10px;
   --radius-lane: 8px;
   --radius-btn: 6px;
