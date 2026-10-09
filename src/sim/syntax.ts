@@ -1,3 +1,4 @@
+import { C } from './colors'
 /** Syntax tokenizer ported from SimPanel.dc.html `tok()`. */
 export type TokKind = 'comment' | 'string' | 'tag' | 'keyword' | 'number' | 'plain'
 export interface Tok {
@@ -6,12 +7,12 @@ export interface Tok {
 }
 
 export const TOK_COLOR: Record<TokKind, string> = {
-  comment: '#858993',
-  string: '#b5c98f',
-  tag: '#f6f7f9',
-  keyword: '#8fa6c9',
-  number: '#ccd0d5',
-  plain: '#ccd0d5',
+  comment: C.synComment,
+  string: C.synString,
+  tag: C.synTag,
+  keyword: C.synKeyword,
+  number: C.synNumber,
+  plain: C.synDefault,
 }
 
 const RE =

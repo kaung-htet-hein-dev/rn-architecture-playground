@@ -7,7 +7,7 @@ interface Props {
   className?: string;
 }
 
-/** Primary transport button (Play / Pause): React Native primary in both modes. Callers set size. */
+/** Primary transport button (Play / Pause): reactnative.dev button color in both modes. Callers set size. */
 export function PrimaryButton({ onClick, children, className = "" }: Props) {
   return (
     <motion.button

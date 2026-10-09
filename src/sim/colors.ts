@@ -1,37 +1,62 @@
-/** Fixed palette (PROMPT rule 5). Used where colors are computed at runtime (alpha suffixes, per-lane tints). */
+const v = (name: string) => `var(--color-${name})`
+
+/**
+ * Runtime palette for inline styles. Every entry points at a token in src/styles/tokens.css,
+ * so there are no color values in TypeScript. Use `alpha()` for translucent variants.
+ */
 export const C = {
-  bg: '#1b1b1d',
-  panel: '#20232a',
-  surface: '#242526',
-  raised: '#282c34',
-  codeBg: '#1e2025',
-  line: '#30363d',
-  lineSoft: '#282c36',
-  lineStrong: '#404756',
-  track: '#373940',
-  text: '#e3e3e3',
-  bright: '#f6f7f9',
-  prose: '#dadde1',
-  muted: '#ccd0d5',
-  dim: '#bec3c9',
-  faint: '#969faf',
-  ghost: '#858993',
-  gutter: '#606770',
-  old: '#f2b35b',
-  oldInk: '#1a1408',
-  oldTint: '#302a23',
-  new: '#58c4dc',
-  /** reactnative.dev primary: controls in both modes */
-  primary: '#58c4dc',
-  newInk: '#1b1b1d',
-  newTint: '#222f34',
-  load: '#f0694f',
-  loadTint: '#33201f',
-  js: '#b39dff',
-  shadow: '#79d49c',
-  ui: '#f291c4',
-  native: '#9fb0c3',
+  bg: v('bg'),
+  panel: v('panel'),
+  surface: v('surface'),
+  raised: v('raised'),
+  raisedHover: v('raised-hover'),
+  codeBg: v('code-bg'),
+  codeHighlight: v('code-highlight'),
+  skeleton: v('skeleton'),
+  line: v('line'),
+  lineSoft: v('line-soft'),
+  lineStrong: v('line-strong'),
+  track: v('track'),
+  text: v('text'),
+  bright: v('text-bright'),
+  prose: v('text-prose'),
+  muted: v('text-muted'),
+  dim: v('text-dim'),
+  faint: v('text-faint'),
+  ghost: v('text-ghost'),
+  gutter: v('text-gutter'),
+  brand: v('brand'),
+  primary: v('primary'),
+  /** reactnative.dev home button color: Play and other controls in both modes */
+  button: v('button'),
+  logo: v('logo'),
+  old: v('old'),
+  oldInk: v('old-ink'),
+  oldTint: v('old-tint'),
+  new: v('new'),
+  newInk: v('new-ink'),
+  newTint: v('new-tint'),
+  load: v('load'),
+  loadTint: v('load-tint'),
+  ok: v('ok'),
+  okText: v('ok-text'),
+  okFrame: v('ok-frame'),
+  badText: v('bad-text'),
+  js: v('js'),
+  shadow: v('shadow'),
+  ui: v('ui'),
+  native: v('native'),
+  synKeyword: v('syn-keyword'),
+  synString: v('syn-string'),
+  synComment: v('syn-comment'),
+  synTag: v('syn-tag'),
+  synNumber: v('syn-number'),
+  synDefault: v('syn-default'),
 } as const
+
+/** `color` at `percent` opacity; works with the var() entries in `C`. */
+export const alpha = (color: string, percent: number) =>
+  `color-mix(in srgb, ${color} ${percent}%, transparent)`
 
 export type Mode = 'old' | 'new'
 
@@ -51,11 +76,11 @@ export interface ChipStyle {
 export function chipFor(status: SimStatus, acc: string, errorLabel = 'Runtime error'): ChipStyle {
   switch (status) {
     case 'error':
-      return { label: errorLabel, fg: C.load, bg: C.load + '1f' }
+      return { label: errorLabel, fg: C.load, bg: alpha(C.load, 12) }
     case 'overloaded':
-      return { label: 'Overloaded', fg: C.load, bg: C.load + '1f' }
+      return { label: 'Overloaded', fg: C.load, bg: alpha(C.load, 12) }
     case 'running':
-      return { label: 'Running', fg: acc, bg: acc + '1f' }
+      return { label: 'Running', fg: acc, bg: alpha(acc, 12) }
     case 'idle':
       return { label: 'Idle', fg: C.dim, bg: C.raised }
     case 'complete':

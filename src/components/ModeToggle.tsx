@@ -1,13 +1,8 @@
 import { motion } from "motion/react";
 import { useSettings } from "../app/SettingsProvider";
-import type { Mode } from "../sim/colors";
+import { C, type Mode } from "../sim/colors";
 
-const STYLE: Record<Mode, { bg: string; fg: string }> = {
-  old: { bg: "#f2b35b", fg: "#1a1408" },
-  new: { bg: "#58c4dc", fg: "#1b1b1d" }
-};
-
-/** Old / New segmented toggle with a sliding pill. */
+/** Old / New segmented toggle; the selected pill uses the reactnative.dev button color in both modes. */
 export function ModeToggle({
   layoutId = "mode-pill",
   onChange
@@ -33,14 +28,12 @@ export function ModeToggle({
               setMode(m);
               if (m !== mode) onChange?.(m);
             }}
-            className="relative h-[30px] rounded-[5px] px-3 text-[13px] leading-none font-semibold transition-colors duration-200"
-            style={{ color: on ? STYLE[m].fg : "#bec3c9" }}
+            className={`relative h-[30px] rounded-[5px] px-3 text-[13px] leading-none font-semibold transition-colors duration-200 ${on ? "text-button-text" : "text-text-dim hover:text-text"}`}
           >
             {on && (
               <motion.span
                 layoutId={layoutId}
-                className="absolute inset-0 rounded-[5px]"
-                style={{ background: STYLE[m].bg }}
+                className="absolute inset-0 rounded-[5px] bg-button"
                 transition={{ type: "spring", stiffness: 500, damping: 38 }}
               />
             )}
@@ -59,7 +52,7 @@ export function BrandMark() {
       aria-hidden="true"
     >
       <svg viewBox="0 0 32 32" className="size-full" fill="none">
-        <g stroke="#58c4dc" strokeWidth="1.7">
+        <g style={{ stroke: C.logo }} strokeWidth="1.7">
           <ellipse cx="16" cy="16" rx="14" ry="5.5" />
           <ellipse
             cx="16"
@@ -76,7 +69,7 @@ export function BrandMark() {
             transform="rotate(120 16 16)"
           />
         </g>
-        <circle cx="16" cy="16" r="2.2" fill="#58c4dc" />
+        <circle cx="16" cy="16" r="2.2" style={{ fill: C.logo }} />
       </svg>
     </span>
   );

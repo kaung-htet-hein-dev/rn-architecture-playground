@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { QUIZ } from '../content/quiz'
 import { answerQuiz, useQuizAnswers } from '../hooks/useQuizAnswers'
+import { C, alpha } from "../sim/colors"
 
-const OK = '#79d49c'
-const BAD = '#f0694f'
+const OK = C.ok
+const BAD = C.load
 
 interface QuestionProps {
   index: number
@@ -46,8 +47,8 @@ function QuizQuestion({ index, question, options, correct, why, answer, onAnswer
               transition={{ duration: 0.3 }}
               className="min-h-10 rounded-[7px] border px-3.5 py-2 text-left text-sm leading-[1.35] text-text transition-colors duration-200 hover:bg-raised"
               style={{
-                borderColor: isOk ? OK : sel ? BAD : '#404756',
-                background: isOk ? OK + '14' : sel ? BAD + '14' : undefined,
+                borderColor: isOk ? OK : sel ? BAD : C.lineStrong,
+                background: isOk ? alpha(OK, 8) : sel ? alpha(BAD, 8) : undefined,
               }}
             >
               {o}
@@ -64,7 +65,7 @@ function QuizQuestion({ index, question, options, correct, why, answer, onAnswer
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
             className="m-0 overflow-hidden text-sm leading-[1.55]"
-            style={{ color: good ? '#9fe0b4' : '#f5a08f' }}
+            style={{ color: good ? C.okText : C.badText }}
           >
             {(good ? 'Right. ' : 'Not quite. ') + why}
           </motion.p>
@@ -103,7 +104,7 @@ export function ChapterCheck({ ch }: { ch: number }) {
   if (!indices.length) return null
   return (
     <section aria-label="Check yourself" className="flex max-w-[780px] flex-col gap-4">
-      <h3 className="m-0 text-lg leading-tight font-semibold text-text-bright">Check yourself</h3>
+      <h3 className="h3">Check yourself</h3>
       <QuestionList indices={indices} />
     </section>
   )

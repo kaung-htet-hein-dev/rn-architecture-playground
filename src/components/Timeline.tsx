@@ -44,7 +44,7 @@ export function Timeline() {
                 onChange={(e) => setDate(i, e.target.value)}
                 aria-label={`Release date for React Native ${v}`}
                 maxLength={maxLength}
-                className="box-border w-full rounded-[5px] border border-dashed border-[#404756] bg-transparent px-2 py-1.5 font-mono text-[13px] leading-none font-medium text-text-bright outline-none focus:border-solid focus:border-text-dim"
+                className="box-border w-full rounded-[5px] border border-dashed border-line-strong bg-transparent px-2 py-1.5 font-mono text-[13px] leading-none font-medium text-text-bright outline-none focus:border-solid focus:border-text-dim"
               />
               <span className="font-mono text-xl leading-none font-semibold" style={{ color: c }}>
                 {v}

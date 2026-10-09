@@ -3,7 +3,7 @@ import { useSettings } from "../app/SettingsProvider";
 import { CHAPTER_COUNT, INTRO, sectionId } from "../app/chapters";
 import { readParam, replaceUrl } from "../lib/url";
 
-const DEFAULT_HEADER_PX = 58;
+const DEFAULT_HEADER_PX = 60;
 const DEEP_LINK_DELAY_MS = 300;
 
 /** Scroll to a chapter, leaving room for the sticky header. */

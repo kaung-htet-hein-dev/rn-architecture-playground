@@ -1,6 +1,6 @@
 import { useSettings } from '../app/SettingsProvider'
 import { useStartupSim } from '../hooks/useStartupSim'
-import { accentOf, C, type Mode } from '../sim/colors'
+import { accentOf, C, type Mode, alpha } from '../sim/colors'
 import { PLAN } from '../sim/startup'
 import { MentorCaption } from './MentorCaption'
 import { SimControls } from './SimControls'
@@ -17,7 +17,7 @@ function startupRows(isNew: boolean, doneOld: boolean, doneNew: boolean): Startu
       key: 'old',
       name: 'Old · every module created at launch',
       c: C.old,
-      bd: isNew ? C.line : C.old + '88',
+      bd: isNew ? C.line : alpha(C.old, 53),
       segs: PLAN.old,
       end: PLAN.oldEnd,
       done: doneOld,
@@ -31,7 +31,7 @@ function startupRows(isNew: boolean, doneOld: boolean, doneNew: boolean): Startu
       key: 'new',
       name: 'New · Turbo Modules load when first used',
       c: C.new,
-      bd: isNew ? C.new + '88' : C.line,
+      bd: isNew ? alpha(C.new, 53) : C.line,
       segs: PLAN.nw,
       end: PLAN.newEnd,
       done: doneNew,

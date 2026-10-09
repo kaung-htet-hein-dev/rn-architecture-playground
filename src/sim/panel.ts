@@ -1,4 +1,4 @@
-import { C, easeInOutQuad, type SimStatus } from "./colors";
+import { C, easeInOutQuad, type SimStatus, alpha } from "./colors";
 import { LN, type LaneId, type Scenario, type TreeNode } from "./scenarios";
 
 /** Step-playback state for SimPanel (REQUIREMENTS §3 Playback model). */
@@ -254,6 +254,6 @@ export function segFill(i: number, s: StepState, acc: string) {
   return i < s.step || (i === s.step && s.p >= 1)
     ? acc
     : i === s.step
-      ? acc + "88"
+      ? alpha(acc, 53)
       : C.track;
 }

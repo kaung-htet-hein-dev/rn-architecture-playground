@@ -1,62 +1,104 @@
-/* Design tokens, exposed to Tailwind via @theme. Neutrals, primary and fonts follow
-   reactnative.dev (Docusaurus dark theme); lane and Old/New colors are course-specific. */
-@theme {
-  --color-bg: #1b1b1d;
-  --color-panel: #20232a;
-  --color-surface: #242526;
-  --color-raised: #282c34;
-  --color-raised-hover: #373940;
-  --color-code-bg: #1e2025;
-  --color-line: #30363d;
-  --color-line-soft: #282c36;
-  --color-line-strong: #404756;
-  --color-line-lane: #282c36;
-  --color-track: #373940;
+/*
+ * The only place color and type values live. Tailwind reads these through @theme (bg-panel,
+ * text-primary, border-old/30, ...) and runtime styles read them through `C` in
+ * src/sim/colors.ts as var(--color-*). `static` keeps every variable in the output.
+ *
+ * Values are reactnative.dev's dark theme (Docusaurus/Infima + the site's own overrides).
+ * The comment after each value names the reactnative.dev variable it comes from.
+ * The site has no colors for Old/New or for threads, so those reuse its theme tokens:
+ * Old = warning, New = brand, threads = its dark Prism code theme.
+ */
+@theme static {
+  /* Surfaces */
+  --color-bg: #1b1b1d; /* --ifm-background-color */
+  --color-panel: #20232a; /* --deepdark (navbar, table heads) */
+  --color-surface: #242526; /* --ifm-background-surface-color */
+  --color-raised: #282c34; /* --dark */
+  --color-raised-hover: #373940; /* --light */
+  --color-code-bg: #282c34; /* prism darkTheme plain.backgroundColor */
+  --color-code-highlight: #646464; /* --docusaurus-highlighted-code-line-bg (dark) */
+  --color-phone-body: #151517; /* --home-hero-floor-background */
+  --color-skeleton: #404756; /* --home-hero-devices-skeleton-element */
 
-  --color-text: #e3e3e3;
-  --color-text-bright: #f6f7f9;
-  --color-text-prose: #dadde1;
-  --color-text-muted: #ccd0d5;
-  --color-text-dim: #bec3c9;
-  --color-text-faint: #969faf;
-  --color-text-ghost: #858993;
-  --color-text-gutter: #606770;
+  /* Lines */
+  --color-line: rgb(225 227 230 / 0.15); /* code block / title borders (dark) */
+  --color-line-soft: rgb(255 255 255 / 0.1); /* --docusaurus-collapse-button-bg-hover (hr) */
+  --color-line-strong: #4e5668; /* --home-button-secondary-border */
+  --color-track: #373940; /* --light */
 
-  /* reactnative.dev: --brand, dark --home-button-primary / -hover, --home-button-secondary-border */
-  --color-brand: #61dafb;
-  --color-primary: #58c4dc;
-  --color-primary-hover: #71d6ec;
-  --color-btn-border: #4e5668;
+  /* Text */
+  --color-white: #ffffff; /* --ifm-color-white */
+  --color-text: #e3e3e3; /* --ifm-color-content */
+  --color-text-bright: #ffffff; /* --ifm-color-content-secondary */
+  --color-text-prose: #e3e3e3; /* --ifm-font-color-base */
+  --color-text-muted: #dadde1; /* --ifm-menu-color (gray-300) */
+  --color-text-dim: #c0c1c4; /* --home-secondary-text */
+  --color-text-faint: #858993; /* --subtle */
+  --color-text-ghost: #7f8497; /* --docsearch-muted-color, code block title */
+  --color-text-gutter: #757575; /* prism comment, used for line numbers */
 
-  --color-old: #f2b35b;
-  --color-old-tint: #302a23;
-  --color-old-ink: #1a1408;
-  --color-new: #58c4dc;
-  --color-new-tint: #222f34;
-  --color-new-ink: #1b1b1d;
-  --color-load: #f0694f;
-  --color-load-tint: #33201f;
-  --color-ok: #79d49c;
-  --color-ok-text: #9fe0b4;
-  --color-bad-text: #f5a08f;
+  /* Brand and actions */
+  --color-brand: #61dafb; /* --brand, prose links */
+  --color-primary: #06bcee; /* --ifm-color-primary, active menu item */
+  --color-link-hover: rgb(8 126 164 / 0.8); /* --ifm-color-primary-75, link underline */
+  --color-button: #58c4dc; /* --home-button-primary */
+  --color-button-hover: #71d6ec; /* --home-button-primary-hover */
+  --color-button-text: #1b1b1d; /* --home-button-primary-text */
+  --color-logo: #58c4dc; /* --logo */
+  --color-btn-border: #4e5668; /* --home-button-secondary-border */
+  --color-btn-secondary-hover: #1f1f21; /* --home-button-secondary-hover */
 
-  --color-js: #b39dff;
-  --color-shadow: #79d49c;
-  --color-ui: #f291c4;
-  --color-native: #9fb0c3;
+  /* Architectures */
+  --color-old: #ffe564; /* --ifm-color-warning */
+  --color-old-tint: #4d3800; /* --ifm-color-warning-contrast-background */
+  --color-old-ink: #1b1b1d; /* --home-button-primary-text */
+  --color-new: #61dafb; /* --brand */
+  --color-new-tint: #193c47; /* --ifm-color-info-contrast-background */
+  --color-new-ink: #1b1b1d; /* --home-button-primary-text */
 
-  --color-syn-keyword: #8fa6c9;
-  --color-syn-string: #b5c98f;
-  --color-syn-comment: #858993;
-  --color-syn-tag: #f6f7f9;
-  --color-syn-default: #ccd0d5;
+  /* Status */
+  --color-load: #fa383e; /* --ifm-color-danger */
+  --color-load-tint: #4b1113; /* --ifm-color-danger-contrast-background */
+  --color-ok: #00a400; /* --ifm-color-success */
+  --color-ok-text: #80d280; /* --ifm-color-success-lightest */
+  --color-ok-frame: #003100; /* --ifm-color-success-contrast-background */
+  --color-bad-text: #fd9c9f; /* --ifm-color-danger-lightest */
 
-  /* reactnative.dev --ifm-font-family-base / --ifm-font-family-monospace. Optimistic Display is
-     Meta's own typeface and is not bundled; browsers without it fall through to system-ui. */
-  --font-sans: 'Optimistic Display', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Threads: reactnative.dev dark Prism theme */
+  --color-js: #977cdc; /* string */
+  --color-shadow: #86d9ca; /* function */
+  --color-ui: #dfab5c; /* tag */
+  --color-native: #77b7d7; /* keyword */
+
+  /* Syntax: reactnative.dev dark Prism theme */
+  --color-syn-keyword: #77b7d7;
+  --color-syn-string: #977cdc;
+  --color-syn-comment: #757575;
+  --color-syn-tag: #dfab5c;
+  --color-syn-number: #c64640;
+  --color-syn-default: #ffffff;
+
+  /* Type: --ifm-font-family-base / --ifm-font-family-monospace. Optimistic Display is Meta's
+     typeface and is not bundled; browsers without it fall through to system-ui. */
+  --font-sans: 'Optimistic Display', system-ui, -apple-system, sans-serif;
   --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  /* --ifm-font-weight-*: Infima's semibold is 500 */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 500;
+  --font-weight-bold: 700;
 
-  --radius-card: 9px;
+  /* Sizes */
+  --text-base-rn: 17px; /* --ifm-font-size-base */
+  --leading-base-rn: 1.65; /* --ifm-line-height-base */
+  --leading-heading: 1.25; /* --ifm-heading-line-height */
+  --text-code: 14.45px; /* --ifm-code-font-size: 85% of 17px */
+  --leading-code: 1.6; /* --ifm-pre-line-height */
+  --header-h: 60px; /* --ifm-navbar-height: 3.75rem */
+
+  --radius-card: 9px; /* --ifm-global-radius */
+  --radius-code: 6.4px; /* --ifm-code-border-radius: .4rem */
   --radius-sub: 10px;
   --radius-lane: 8px;
   --radius-btn: 6px;

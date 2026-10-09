@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import type { LaneView, PacketView } from '../sim/panel'
+import { C, alpha } from "../sim/colors"
 
 interface Props {
   lanes: LaneView[]
@@ -32,16 +33,16 @@ function Lane({ ln }: { ln: LaneView }) {
   return (
     <div
       className="flex min-w-0 flex-col overflow-hidden rounded-lg border transition-[background,border-color] duration-250"
-      style={{ borderColor: ln.active ? c : '#30363d', background: ln.active ? c + '12' : '#242526' }}
+      style={{ borderColor: ln.active ? c : C.line, background: ln.active ? alpha(c, 7) : C.surface }}
       aria-label={`${ln.name}${ln.active ? ' (active)' : ''}`}
       role="group"
     >
-      <div className="box-border min-h-11 border-b border-line-lane px-3 pt-3 pb-2.5">
+      <div className="box-border min-h-11 border-b border-line-soft px-3 pt-3 pb-2.5">
         <div className="flex min-w-0 items-center gap-1.5">
           <span className="size-2 flex-none rounded-[2px]" style={{ background: ln.color }} />
           <span
             className="truncate text-[13.5px] leading-[1.2] font-semibold transition-colors duration-250"
-            style={{ color: ln.active ? c : '#e3e3e3' }}
+            style={{ color: ln.active ? c : C.text }}
           >
             {ln.name}
           </span>
@@ -59,7 +60,7 @@ function Lane({ ln }: { ln: LaneView }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.85 }}
               transition={{ duration: 0.2 }}
-              className="truncate rounded-[4px] border border-[#f2b35b44] bg-[#f2b35b14] px-1.5 py-[5px] font-mono text-xs leading-none font-medium text-old"
+              className="truncate rounded-[4px] border border-old/27 bg-old/8 px-1.5 py-[5px] font-mono text-xs leading-none font-medium text-old"
             >
               {q}
             </motion.div>
@@ -77,9 +78,9 @@ function Lane({ ln }: { ln: LaneView }) {
               transition={{ duration: 0.22 }}
               className="rounded-[5px] border px-[7px] py-1.5 font-mono text-xs leading-[1.4] font-medium break-words transition-colors duration-250"
               style={{
-                color: ac.live ? '#f6f7f9' : '#969faf',
-                background: ac.live ? c + '22' : 'transparent',
-                borderColor: ac.live ? c + '77' : '#30363d',
+                color: ac.live ? C.bright : C.faint,
+                background: ac.live ? alpha(c, 13) : 'transparent',
+                borderColor: ac.live ? alpha(c, 47) : C.line,
               }}
             >
               {ac.text}
@@ -113,7 +114,7 @@ export function Packet({ label, x, maxW }: { label: string; x: number; maxW: num
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute top-[50px] -translate-x-1/2 truncate rounded-[5px] bg-old px-2 py-1.5 font-mono text-xs leading-none font-medium text-old-ink shadow-[0_0_0_3px_#f2b35b26]"
+      className="pointer-events-none absolute top-[50px] -translate-x-1/2 truncate rounded-[5px] bg-old px-2 py-1.5 font-mono text-xs leading-none font-medium text-old-ink ring-3 ring-old/15"
       style={{ left: `${x}%`, maxWidth: maxW }}
     >
       {label}
@@ -129,8 +130,8 @@ export function JsiLine({ packet, maxW }: { packet: PacketView; maxW: number }) 
     <>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-[61px] h-0.5 bg-new shadow-[0_0_8px_#58c4dc99]"
-        style={{ left: `${l}%`, width: `${w}%` }}
+        className="pointer-events-none absolute top-[61px] h-0.5 bg-new"
+        style={{ left: `${l}%`, width: `${w}%`, boxShadow: `0 0 8px ${alpha(C.new, 60)}` }}
       />
       <div
         aria-hidden="true"

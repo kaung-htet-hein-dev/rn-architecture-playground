@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { C } from "../../sim/colors";
+import { C, alpha } from "../../sim/colors";
 import { PLAN } from "../../sim/startup";
 import { LAZY_SLOWDOWN, type LazyState } from "../../hooks/useStartupSim";
 
@@ -41,14 +41,14 @@ export function LazyModules({ show, lazy, reduced, onLoad }: Props) {
                   className="relative h-[30px] overflow-hidden rounded-[6px] border px-2.5 font-mono text-xs leading-none font-medium"
                   style={{
                     borderColor: ls ? C.new : C.lineStrong,
-                    background: ls === "ready" ? C.new + "1f" : "transparent",
+                    background: ls === "ready" ? alpha(C.new, 12) : "transparent",
                     color: ls ? C.new : C.muted
                   }}
                 >
                   {ls === "loading" && !reduced && (
                     <motion.span
                       aria-hidden="true"
-                      className="absolute inset-y-0 left-0 bg-[#58c4dc1f]"
+                      className="absolute inset-y-0 left-0 bg-new/12"
                       initial={{ width: "0%" }}
                       animate={{ width: "100%" }}
                       transition={{ duration: (d * LAZY_SLOWDOWN) / 1000, ease: "linear" }}

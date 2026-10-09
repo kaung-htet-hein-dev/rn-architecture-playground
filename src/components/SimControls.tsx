@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { SPEEDS, type Speed } from '../sim/clock'
 import { PrimaryButton } from './ui/PrimaryButton'
+import { C } from "../sim/colors"
 
 interface Props {
   playLabel: string
@@ -58,7 +59,7 @@ export function SpeedToggle({ speed, onSpeed }: { speed: Speed; onSpeed: (s: Spe
           aria-label={`Speed ${v}×`}
           onClick={() => onSpeed(v)}
           className="h-8 px-2.5 font-mono text-xs leading-none font-medium transition-colors"
-          style={{ background: v === speed ? '#373940' : 'transparent', color: v === speed ? '#f6f7f9' : '#bec3c9' }}
+          style={{ background: v === speed ? C.track : 'transparent', color: v === speed ? C.bright : C.dim }}
         >
           {v}×
         </button>

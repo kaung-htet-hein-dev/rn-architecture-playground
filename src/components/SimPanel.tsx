@@ -10,6 +10,7 @@ import { SimControls } from "./SimControls";
 import { ThreadLanes } from "./ThreadLanes";
 import { TreeViews } from "./TreeViews";
 import { SimFrame, SimHeader } from "./ui/SimFrame";
+import { C, alpha } from "../sim/colors";
 
 /**
  * Reusable thread-lanes + code panel. Switching mode remounts the inner panel,
@@ -60,12 +61,12 @@ function SimPanelInner({
             gridCols={view.gridCols}
             height={270}
             packet={view.packet}
-            wire={mode === "new" ? "#58c4dc55" : "#f2b35b55"}
+            wire={mode === "new" ? alpha(C.new, 33) : alpha(C.old, 33)}
           />
           {sc.trees && <TreeViews trees={view.trees} accent={accent} />}
         </div>
         <CodePanel
-          className="w-[400px] flex-none shadow-[-1px_0_0_#30363d]"
+          className="w-[400px] flex-none border-l border-line"
           file={sc.file}
           lines={sc.code}
           active={view.activeLines}

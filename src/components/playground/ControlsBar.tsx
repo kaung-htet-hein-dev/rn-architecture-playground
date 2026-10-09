@@ -55,7 +55,7 @@ export function ControlsBar(p: Props) {
           aria-label="Scrubber"
           aria-valuetext={time}
           className="min-w-[140px] flex-[1_1_200px]"
-          style={{ accentColor: C.primary }}
+          style={{ accentColor: C.button }}
         />
         <span className="min-w-[120px] text-right font-mono text-xs leading-none font-medium text-text-muted tabular-nums">
           {time}

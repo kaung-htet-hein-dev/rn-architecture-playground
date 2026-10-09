@@ -11,18 +11,18 @@ export function TopBar({ onGo }: Props) {
   const { mode } = useSettings();
   const pgHref = `/playground?mode=${mode}`;
   return (
-    <header className="sticky top-0 z-30 border-b border-line bg-[#20232aee] backdrop-blur-[10px]">
-      <div className="flex w-full min-h-[58px] items-center gap-[18px] px-5 py-2">
+    <header className="sticky top-0 z-30 border-b border-line bg-panel/93 backdrop-blur-[10px]">
+      <div className="flex w-full min-h-(--header-h) items-center gap-[18px] px-5 py-2">
         <a
           href="#intro"
           onClick={(e) => {
             e.preventDefault();
             onGo(INTRO);
           }}
-          className="flex flex-none items-center gap-2.5 text-text-bright no-underline hover:text-white"
+          className="flex flex-none items-center gap-2.5 border-0 text-text-bright no-underline hover:text-white"
         >
           <BrandMark />
-          <span className="text-[15px] leading-none font-semibold tracking-[-.01em]">
+          <span className="text-[17px] leading-none font-bold">
             React Native Internal
           </span>
         </a>

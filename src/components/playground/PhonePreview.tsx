@@ -24,11 +24,11 @@ export function PhonePreview({ preset, ui, P, accent, started, running, live, on
   }
   return (
     <div className="flex flex-col items-center gap-2 pt-1 pb-2">
-      <div className="box-border h-[400px] w-[220px] rounded-[30px] border-2 border-line-strong bg-[#151517] p-[9px]">
+      <div className="box-border h-[400px] w-[220px] rounded-[30px] border-2 border-line-strong bg-phone-body p-[9px]">
         <div
           onWheel={onWheel}
           onTouchMove={onWheel}
-          className="relative h-full overflow-hidden rounded-[22px] bg-[#20232a]"
+          className="relative h-full overflow-hidden rounded-[22px] bg-panel"
         >
           <Screen preset={preset} ui={ui} P={P} accent={accent} started={started} live={live} onRun={onRun} />
         </div>

@@ -1,4 +1,4 @@
-import type { Mode } from "./colors";
+import { C, type Mode } from "./colors";
 
 /** Typed port of SimPanel.dc.html `static LN` / `static LIB`. Copy is verbatim. */
 
@@ -67,33 +67,33 @@ export interface Scenario {
 export type ScenarioId = "tap" | "map" | "jsi" | "codegen" | "fabric";
 
 export const LN: Record<LaneId, LaneDef> = {
-  js: { name: "JS thread", sub: "runs your React code", c: "#b39dff" },
+  js: { name: "JS thread", sub: "runs your React code", c: C.js },
   bridge: {
     name: "Bridge",
     sub: "queue of JSON text",
-    c: "#f2b35b",
+    c: C.old,
     k: "bridge",
     narrow: true
   },
   jsi: {
     name: "JSI",
     sub: "direct C++ calls",
-    c: "#58c4dc",
+    c: C.new,
     k: "jsi",
     narrow: true
   },
-  shadow: { name: "Shadow thread", sub: "layout with Yoga", c: "#79d49c" },
-  ui: { name: "UI thread", sub: "draws, gets touches", c: "#f291c4" },
-  native: { name: "Native module", sub: "platform code", c: "#9fb0c3" },
-  core: { name: "C++ core", sub: "Fabric, shared tree", c: "#58c4dc" },
-  spec: { name: "TS spec", sub: "you write this", c: "#ccd0d5" },
+  shadow: { name: "Shadow thread", sub: "layout with Yoga", c: C.shadow },
+  ui: { name: "UI thread", sub: "draws, gets touches", c: C.ui },
+  native: { name: "Native module", sub: "platform code", c: C.native },
+  core: { name: "C++ core", sub: "Fabric, shared tree", c: C.new },
+  spec: { name: "TS spec", sub: "you write this", c: C.muted },
   cg: {
     name: "Codegen",
     sub: "runs at build time",
-    c: "#58c4dc",
+    c: C.new,
     narrow: true
   },
-  out: { name: "Native interface", sub: "generated for you", c: "#9fb0c3" }
+  out: { name: "Native interface", sub: "generated for you", c: C.native }
 };
 
 export const LIB: Record<ScenarioId, Record<Mode, Scenario>> = {

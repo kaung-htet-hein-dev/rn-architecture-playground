@@ -38,7 +38,7 @@ function HeroTitle() {
       ))}
       <motion.span
         aria-hidden="true"
-        className="absolute -bottom-2 left-0 h-[3px] w-full origin-left rounded-full"
+        className="absolute -bottom-1 left-0 h-[3px] w-full origin-left rounded-full"
         style={{ background: `linear-gradient(90deg,${C.old},${C.new})` }}
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
@@ -105,23 +105,23 @@ export function CourseHero({ onGo }: { onGo: (i: number) => void }) {
     <section
       id="intro"
       aria-label={INTRO_TITLE}
-      className="flex min-h-[calc(100dvh-58px)] scroll-mt-[58px] flex-col justify-center border-b border-line-soft px-10 py-16"
+      className="flex min-h-[calc(100dvh-var(--header-h))] scroll-mt-(--header-h) flex-col justify-center border-b border-line-soft px-10 py-16"
     >
       <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-12">
         <div className="flex max-w-[860px] flex-col gap-5">
           <motion.span
-            className="text-[15px] leading-none font-medium text-text-dim"
+            className="eyebrow"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
             A course for React Native developers
           </motion.span>
-          <h1 className="m-0 text-[clamp(44px,7.4vw,88px)] leading-[0.98] font-bold tracking-[-.02em] text-text-bright">
+          <h1 className="m-0 text-[40px] leading-heading font-bold text-text">
             <HeroTitle />
           </h1>
           <motion.p
-            className="m-0 max-w-[680px] text-[clamp(17px,1.6vw,20px)] leading-[1.55] text-text-muted"
+            className="m-0 max-w-[760px] text-[28px] leading-[1.4] font-medium text-text-dim"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}

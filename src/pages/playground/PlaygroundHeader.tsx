@@ -16,10 +16,10 @@ export function PlaygroundHeader({
   onModeChange
 }: Props) {
   return (
-    <header className="flex min-h-[60px] flex-none flex-wrap items-center gap-4 border-b border-line bg-panel px-6 py-2">
+    <header className="flex min-h-(--header-h) flex-none flex-wrap items-center gap-4 border-b border-line bg-panel px-6 py-2">
       <Link
         to={"/?mode=" + mode}
-        className="flex items-center gap-2.5 text-text-bright no-underline hover:text-white"
+        className="flex items-center gap-2.5 border-0 text-text-bright no-underline hover:text-white"
       >
         <BrandMark />
         <span className="text-sm leading-none font-semibold">

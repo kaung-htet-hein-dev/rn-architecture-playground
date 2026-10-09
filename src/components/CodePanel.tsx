@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { tokenize, TOK_COLOR } from '../sim/syntax'
+import { C } from '../sim/colors'
 
 interface Props {
   file: string
@@ -12,7 +13,6 @@ interface Props {
   onToggle?: () => void
   /** optional custom renderer per line (playground editable params) */
   renderLine?: (line: string, index: number) => ReactNode
-  fontSize?: number
   /** wrap long lines instead of scrolling sideways (narrow columns) */
   wrap?: boolean
   /** fade the code until the sim starts, so the diagram reads first */
@@ -20,13 +20,13 @@ interface Props {
   className?: string
 }
 
-/** Code panel: line numbers, ▸ marker, accent active line(s). */
-export function CodePanel({ file, lines, active, accent, open, onToggle, renderLine, fontSize = 13, wrap = false, muted = false, className = '' }: Props) {
+/** Code panel in reactnative.dev's dark Prism style: line numbers, ▸ marker, highlighted active line(s). */
+export function CodePanel({ file, lines, active, accent, open, onToggle, renderLine, wrap = false, muted = false, className = '' }: Props) {
   const toks = lines.map(tokenize)
   return (
     <div className={`flex min-w-0 flex-col bg-code-bg ${className}`}>
-      <div className="flex items-center justify-between gap-2 border-b border-line-lane px-5 py-3">
-        <span className="font-mono text-xs leading-none font-medium text-text-dim">{file}</span>
+      <div className="flex items-center justify-between gap-2 border-b border-line px-5 py-3">
+        <span className="font-mono text-[13px] leading-none text-text-ghost">{file}</span>
         {onToggle && (
           <button type="button" className="btn-ghost" onClick={onToggle} aria-expanded={open}>
             {open ? 'Hide code' : 'Show code'}
@@ -35,8 +35,7 @@ export function CodePanel({ file, lines, active, accent, open, onToggle, renderL
       </div>
       {open && (
         <div
-          className={`overflow-x-auto py-4 font-mono leading-[1.75] transition-opacity duration-300 ${muted ? 'opacity-50' : ''}`}
-          style={{ fontSize }}
+          className={`overflow-x-auto py-4 font-mono text-code leading-code text-syn-default transition-opacity duration-300 ${muted ? 'opacity-50' : ''}`}
         >
           {lines.map((line, i) => {
             const on = !!active && i >= active[0] && i <= active[1]
@@ -44,12 +43,12 @@ export function CodePanel({ file, lines, active, accent, open, onToggle, renderL
               <div
                 key={i}
                 className={`flex pr-4 transition-[background] duration-200 ${wrap ? 'whitespace-pre-wrap break-words' : 'min-w-max whitespace-pre'}`}
-                style={{ background: on ? accent + '1c' : 'transparent' }}
+                style={{ background: on ? C.codeHighlight : 'transparent' }}
                 aria-current={on && active && i === active[0] ? 'step' : undefined}
               >
                 <span
                   className="w-10 flex-none pr-2 text-right select-none"
-                  style={{ color: on ? accent : '#606770' }}
+                  style={{ color: on ? accent : C.gutter }}
                   aria-hidden="true"
                 >
                   {i + 1}

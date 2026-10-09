@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { C, alpha } from "../sim/colors";
 
 export interface MapCard {
   name: string;
@@ -12,23 +13,23 @@ export interface MapCard {
 export const NEW_MAP: MapCard[] = [
   {
     name: "JS thread",
-    c: "#b39dff",
-    bd: "#b39dff66",
-    bg: "#242526",
+    c: C.js,
+    bd: alpha(C.js, 40),
+    bg: C.surface,
     body: "React and your code. Holds host objects for modules it has used."
   },
   {
     name: "JSI",
-    c: "#58c4dc",
-    bd: "#58c4dc",
-    bg: "#222f34",
+    c: C.new,
+    bd: C.new,
+    bg: C.newTint,
     body: "Direct calls between JS and C++. Sync or async, no JSON."
   },
   {
     name: "C++ core",
-    c: "#58c4dc",
-    bd: "#58c4dc66",
-    bg: "#242526",
+    c: C.new,
+    bd: alpha(C.new, 40),
+    bg: C.surface,
     mono: true,
     body: (
       <>
@@ -42,16 +43,16 @@ export const NEW_MAP: MapCard[] = [
   },
   {
     name: "Background thread",
-    c: "#79d49c",
-    bd: "#79d49c66",
-    bg: "#242526",
+    c: C.shadow,
+    bd: alpha(C.shadow, 40),
+    bg: C.surface,
     body: "Yoga layout in C++ during commit, off the UI thread. Can run synchronously for urgent work."
   },
   {
     name: "UI thread",
-    c: "#f291c4",
-    bd: "#f291c466",
-    bg: "#242526",
+    c: C.ui,
+    bd: alpha(C.ui, 40),
+    bg: C.surface,
     body: "Applies mutations to host views, handles touches."
   }
 ];
@@ -59,37 +60,37 @@ export const NEW_MAP: MapCard[] = [
 export const OLD_MAP: MapCard[] = [
   {
     name: "JS thread",
-    c: "#b39dff",
-    bd: "#b39dff66",
-    bg: "#242526",
+    c: C.js,
+    bd: alpha(C.js, 40),
+    bg: C.surface,
     body: "React and your code. Reaches native only by sending JSON messages."
   },
   {
     name: "Bridge",
-    c: "#f2b35b",
-    bd: "#f2b35b",
-    bg: "#302a23",
+    c: C.old,
+    bd: C.old,
+    bg: C.oldTint,
     body: "Async JSON messages, sent in batches. The only way across."
   },
   {
     name: "Shadow thread",
-    c: "#79d49c",
-    bd: "#79d49c66",
-    bg: "#242526",
+    c: C.shadow,
+    bd: alpha(C.shadow, 40),
+    bg: C.surface,
     body: "Its own copy of the tree. Yoga layout."
   },
   {
     name: "UI thread",
-    c: "#f291c4",
-    bd: "#f291c466",
-    bg: "#242526",
+    c: C.ui,
+    bd: alpha(C.ui, 40),
+    bg: C.surface,
     body: "Creates views, handles touches."
   },
   {
     name: "Native modules",
-    c: "#9fb0c3",
-    bd: "#9fb0c366",
-    bg: "#242526",
+    c: C.native,
+    bd: alpha(C.native, 40),
+    bg: C.surface,
     body: "Mostly created at launch. Nothing checks their types."
   }
 ];

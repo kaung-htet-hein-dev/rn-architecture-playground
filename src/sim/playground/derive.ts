@@ -1,4 +1,4 @@
-import { accentOf, C, type SimStatus } from '../colors'
+import { accentOf, C, type SimStatus, alpha } from '../colors'
 import { FRAME_MS, type LineRef, type Message, type PhoneState, type Preset, type Task, type Trace } from './types'
 
 /* ───────────── playback ───────────── */
@@ -239,8 +239,8 @@ export function laneGeometry(tr: Trace, c: number, T: number, selected: number |
       w: Math.max(0.3, X(e.d)),
       top: LANE_INDEX[e.lane] * LANE_H + 13,
       label: e.label,
-      bg: act ? col : past ? col + '40' : 'transparent',
-      bd: past ? col : col + '40',
+      bg: act ? col : past ? alpha(col, 25) : 'transparent',
+      bd: past ? col : alpha(col, 25),
       fg: act ? C.bg : past ? C.bright : C.faint,
     }
   })
@@ -261,8 +261,8 @@ export function laneGeometry(tr: Trace, c: number, T: number, selected: number |
         w: Math.max(0.5, X(m.d)),
         top: LANE_H + 9 + r * 12,
         label: m.label + ' · ' + m.bytes + ' B',
-        bg: live ? C.old : past ? C.old + '66' : 'transparent',
-        bd: isSel ? C.bright : past ? C.old : C.old + '44',
+        bg: live ? C.old : past ? alpha(C.old, 40) : 'transparent',
+        bd: isSel ? C.bright : past ? C.old : alpha(C.old, 27),
       })
     } else {
       const a = LANE_INDEX[m.from]
@@ -273,7 +273,7 @@ export function laneGeometry(tr: Trace, c: number, T: number, selected: number |
         top: Math.min(a, b) * LANE_H + LANE_H / 2,
         h: Math.abs(a - b) * LANE_H,
         dot: b * LANE_H + LANE_H / 2 - 4,
-        c: isSel ? C.bright : past ? C.new : C.new + '40',
+        c: isSel ? C.bright : past ? C.new : alpha(C.new, 25),
         label: m.sig,
       })
     }
@@ -339,7 +339,7 @@ export function inspectorFor(msg: Message): InspectorView {
     return {
       kind: 'Bridge message · async',
       c: C.old,
-      bd: C.old + '55',
+      bd: alpha(C.old, 33),
       payload: msg.payload,
       rows: [
         { k: 'route', v: NM[msg.from] + ' → bridge → ' + NM[msg.to] },
@@ -352,7 +352,7 @@ export function inspectorFor(msg: Message): InspectorView {
   return {
     kind: msg.sched ? 'JSI event · scheduled on JS thread' : 'JSI call · direct',
     c: C.new,
-    bd: C.new + '55',
+    bd: alpha(C.new, 33),
     payload: null,
     rows: [
       { k: 'call', v: msg.sig },

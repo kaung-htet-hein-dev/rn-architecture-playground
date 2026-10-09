@@ -128,7 +128,7 @@ export function LaneGroup({
                 top: LANE_H * 5 + 4,
                 left: fr.l + "%",
                 width: fr.w + "%",
-                background: fr.dropped ? C.load : "#3a4a3f"
+                background: fr.dropped ? C.load : C.okFrame
               }}
             />
           ))}

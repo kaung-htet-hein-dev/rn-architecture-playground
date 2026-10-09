@@ -3,9 +3,9 @@
 
 @layer base {
   body {
-    /* reactnative.dev base size; set on body so rem-based spacing stays at 16px */
-    font-size: 17px;
-    line-height: 1.65;
+    /* --ifm-font-size-base / --ifm-line-height-base; on body so rem spacing stays at 16px */
+    font-size: var(--text-base-rn);
+    line-height: var(--leading-base-rn);
   }
   html,
   body {
@@ -13,20 +13,21 @@
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sans);
+    font-weight: var(--font-weight-normal);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  /* reactnative.dev dark prose links: brand color, underline drawn as a bottom border on hover */
   a {
-    color: var(--color-text);
-    text-decoration-color: #4e5668;
-    text-underline-offset: 3px;
+    color: var(--color-brand);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
   }
   a:hover {
-    color: #ffffff;
-    text-decoration-color: currentColor;
+    border-bottom-color: var(--color-link-hover);
   }
   ::selection {
-    background: #61dafb40;
+    background: color-mix(in srgb, var(--color-brand) 25%, transparent);
   }
   button {
     cursor: pointer;
@@ -40,74 +41,85 @@
   dd {
     text-wrap: pretty;
   }
+  strong,
+  b {
+    font-weight: var(--font-weight-bold);
+  }
 }
 
 @layer components {
   .eyebrow {
-    font: 500 12px/1 var(--font-mono);
-    letter-spacing: 0.1em;
-    color: var(--color-text-dim);
-    text-transform: uppercase;
+    font-size: 15px;
+    line-height: 1;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-faint);
   }
+  /* page title: --ifm-h1-font-size 3rem (.markdown h1), heading weight 700 / line-height 1.25 */
   .h2 {
     margin: 0;
-    font: 600 clamp(30px, 4.2vw, 48px) / 1.08 var(--font-sans);
-    letter-spacing: -0.02em;
-    color: var(--color-text-bright);
+    font-size: 48px;
+    line-height: var(--leading-heading);
+    font-weight: var(--font-weight-bold);
+    color: inherit;
     text-wrap: balance;
   }
+  /* section heading: --ifm-h3-font-size 1.5rem (.markdown > h3) */
   .h3 {
     margin: 0;
-    font: 600 22px/1.2 var(--font-sans);
-    color: var(--color-text-bright);
+    font-size: 24px;
+    line-height: var(--leading-heading);
+    font-weight: var(--font-weight-bold);
+    color: inherit;
   }
   .prose-atb {
     margin: 0;
-    font: 400 17px/1.65 var(--font-sans);
+    font-size: var(--text-base-rn);
+    line-height: var(--leading-base-rn);
+    font-weight: var(--font-weight-normal);
     color: var(--color-text-prose);
   }
-  .prose-atb strong {
-    color: var(--color-text-bright);
-    font-weight: 600;
-  }
   /* reactnative.dev home buttons (dark theme) */
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    border-radius: 9px;
-    background: var(--color-primary);
-    color: var(--color-bg);
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.15s;
-  }
-  .btn-primary:hover {
-    background: var(--color-primary-hover);
-    color: var(--color-bg);
-  }
+  .btn-primary,
   .btn-secondary {
     display: inline-flex;
     align-items: center;
-    border-radius: 9px;
-    border: 1px solid var(--color-btn-border);
-    background: var(--color-bg);
-    color: var(--color-text-bright);
-    font-weight: 600;
+    border-radius: var(--radius-card);
+    font-weight: var(--font-weight-semibold);
     text-decoration: none;
     transition: background 0.15s;
   }
+  .btn-primary,
+  .btn-primary:hover {
+    color: var(--color-button-text);
+    border-bottom: 0;
+  }
+  .btn-primary {
+    background: var(--color-button);
+  }
+  .btn-primary:hover {
+    background: var(--color-button-hover);
+  }
+  .btn-secondary,
   .btn-secondary:hover {
-    background: #1f1f21;
+    border: 1px solid var(--color-btn-border);
     color: var(--color-text-bright);
+  }
+  .btn-secondary {
+    background: var(--color-bg);
+  }
+  .btn-secondary:hover {
+    background: var(--color-btn-secondary-hover);
   }
   .btn {
     height: 34px;
     padding: 0 12px;
-    border-radius: 6px;
+    border-radius: var(--radius-card);
     border: 1px solid var(--color-line-strong);
     background: var(--color-raised);
     color: var(--color-text);
-    font: 500 13px/1 var(--font-sans);
+    font-size: 13px;
+    line-height: 1;
+    font-weight: var(--font-weight-semibold);
     transition: background 0.15s;
   }
   .btn:hover {
@@ -120,11 +132,13 @@
   .btn-ghost {
     height: 28px;
     padding: 0 10px;
-    border-radius: 6px;
+    border-radius: var(--radius-card);
     border: 1px solid var(--color-line-strong);
     background: transparent;
     color: var(--color-text-muted);
-    font: 500 12px/1 var(--font-sans);
+    font-size: 12px;
+    line-height: 1;
+    font-weight: var(--font-weight-semibold);
     transition: background 0.15s;
   }
   .btn-ghost:hover {

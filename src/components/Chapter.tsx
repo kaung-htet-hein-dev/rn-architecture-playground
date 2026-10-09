@@ -73,7 +73,7 @@ export function ChapterSection({ id, label, children, last, gap = 48 }: SectionP
     <section
       id={id}
       aria-label={label}
-      className={`scroll-mt-[58px] px-10 ${last ? 'pt-28 pb-[140px]' : 'py-28'} ${last ? '' : 'border-b border-line-soft'}`}
+      className={`scroll-mt-(--header-h) px-10 ${last ? 'pt-28 pb-[140px]' : 'py-28'} ${last ? '' : 'border-b border-line-soft'}`}
     >
       <div className="mx-auto flex max-w-[1100px] flex-col" style={{ gap }}>
         {children}

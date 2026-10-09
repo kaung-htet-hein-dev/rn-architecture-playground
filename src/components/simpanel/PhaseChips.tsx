@@ -1,4 +1,4 @@
-import { C } from "../../sim/colors";
+import { C, alpha } from "../../sim/colors";
 import type { PanelView } from "../../sim/panel";
 
 /** Row of phase chips (Render · Commit · Mount) highlighting the current one. */
@@ -17,7 +17,7 @@ export function PhaseChips({
           className="flex items-center gap-2 rounded-[6px] border px-3 py-[7px] text-[13px] leading-none font-medium transition-colors duration-250"
           style={{
             borderColor: ph.on ? accent : C.lineStrong,
-            background: ph.on ? accent + "1f" : "transparent",
+            background: ph.on ? alpha(accent, 12) : "transparent",
             color: ph.on ? accent : ph.past ? C.muted : C.faint
           }}
         >
