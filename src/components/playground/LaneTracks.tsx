@@ -27,7 +27,7 @@ export function LaneTracks({ traces, snaps, c, T, sel, onPick }: Props) {
         style={{ minWidth: trackWidth + 180 }}
       >
         <div className="grid grid-cols-[164px_minmax(0,1fr)] gap-x-4">
-          <span className="text-[13px] leading-none font-semibold text-text-muted">
+          <span className="sticky left-0 z-10 -ml-6 -mr-4 bg-bg pr-4 pl-6 text-[13px] leading-none font-semibold text-text-muted">
             Threads over time
           </span>
           <div className="relative h-3.5" aria-hidden="true">

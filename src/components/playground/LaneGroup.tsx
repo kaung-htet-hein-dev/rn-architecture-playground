@@ -33,7 +33,7 @@ export function LaneGroup({
   const name = o ? "Old architecture" : "New Architecture";
   return (
     <section aria-label={name} className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="sticky left-6 flex w-fit flex-wrap items-center gap-3">
         <span
           className="flex items-center gap-2 text-sm leading-none font-semibold"
           style={{ color: col }}
@@ -46,7 +46,9 @@ export function LaneGroup({
         </span>
       </div>
       <div className="grid grid-cols-[164px_minmax(0,1fr)] gap-x-4">
-        <LaneLabels lanes={lanes} />
+        <div className="sticky left-0 z-10 -ml-6 -mr-4 bg-bg pr-4 pl-6">
+          <LaneLabels lanes={lanes} />
+        </div>
         <div
           className="relative border-l border-line"
           style={{ height: TRACK_H }}
