@@ -19,7 +19,7 @@ export default function App() {
               </Suspense>
             }
           />
-          <Route path="*" element={<Course />} />
+          <Route path="*" element={<Course notFound />} />
         </Routes>
       </SettingsProvider>
     </BrowserRouter>

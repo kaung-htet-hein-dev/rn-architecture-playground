@@ -4,15 +4,76 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>React Native Internal</title>
+    <title>React Native Internal: bridge, JSI, Fabric and Turbo Modules</title>
     <meta
       name="description"
-      content="An interactive course on React Native's old architecture and the New Architecture: JSI, Turbo Modules, Codegen and Fabric."
+      content="An interactive course on React Native's old architecture and the New Architecture: JSI, Turbo Modules, Codegen and Fabric. Step through simulations of threads, bridge traffic and rendering."
     />
+    <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#1b1b1d" />
+    <link rel="canonical" href="https://kaung.reactnative.workers.dev/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="React Native Internal" />
+    <meta property="og:url" content="https://kaung.reactnative.workers.dev/" />
+    <meta property="og:title" content="React Native Internal: bridge, JSI, Fabric and Turbo Modules" />
+    <meta
+      property="og:description"
+      content="An interactive course on React Native's old architecture and the New Architecture: JSI, Turbo Modules, Codegen and Fabric. Step through simulations of threads, bridge traffic and rendering."
+    />
+    <meta property="og:image" content="https://kaung.reactnative.workers.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="React Native Internal, an interactive course on the bridge, JSI, Turbo Modules, Codegen and Fabric" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="React Native Internal: bridge, JSI, Fabric and Turbo Modules" />
+    <meta
+      name="twitter:description"
+      content="An interactive course on React Native's old architecture and the New Architecture: JSI, Turbo Modules, Codegen and Fabric. Step through simulations of threads, bridge traffic and rendering."
+    />
+    <meta name="twitter:image" content="https://kaung.reactnative.workers.dev/og-image.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": "React Native Internal",
+        "description": "An interactive course on how React Native works underneath: the old bridge-based architecture and the New Architecture (JSI, Turbo Modules, Codegen, Fabric).",
+        "url": "https://kaung.reactnative.workers.dev/",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "educationalLevel": "Intermediate",
+        "teaches": ["React Native architecture", "JSI", "Turbo Modules", "Codegen", "Fabric", "Concurrent rendering"],
+        "hasCourseInstance": {
+          "@type": "CourseInstance",
+          "courseMode": "online",
+          "courseWorkload": "PT2H"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <main style="font-family: sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem">
+        <p><strong>React Native Internal</strong></p>
+        <p>
+          An interactive course on React Native's old architecture and the New Architecture: JSI,
+          Turbo Modules, Codegen and Fabric. It needs JavaScript to run the simulations.
+        </p>
+        <ol>
+          <li>What happens when you tap a button</li>
+          <li>React Native threads and the old bridge</li>
+          <li>How bridge traffic can drop frames</li>
+          <li>JSI: calling native modules directly</li>
+          <li>Turbo Modules: lazy loading and Codegen</li>
+          <li>Fabric: render, commit, and mount</li>
+          <li>Concurrent rendering: urgent updates first</li>
+          <li>Migrating to the New Architecture</li>
+          <li>Review and quiz</li>
+        </ol>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

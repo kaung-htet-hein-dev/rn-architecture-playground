@@ -1,3 +1,4 @@
+import { usePageMeta } from "../hooks/usePageMeta";
 import { InspectorPanel } from "../components/playground/InspectorPanel";
 import { ControlsBar } from "../components/playground/ControlsBar";
 import { LaneTracks } from "../components/playground/LaneTracks";
@@ -12,6 +13,12 @@ import { usePlayground } from "./playground/usePlayground";
 const PRESET_OPTIONS = PRESETS.map((p) => ({ value: p.id, label: p.name }));
 
 export default function Playground() {
+  usePageMeta({
+    title: "React Native Playground: trace the bridge, JSI and Fabric",
+    description:
+      "Run React Native architecture scenarios with your own numbers and watch thread lanes, bridge traffic and frame timing change in a live trace.",
+    path: "/playground",
+  });
   const pg = usePlayground();
   const { actions } = pg;
 
