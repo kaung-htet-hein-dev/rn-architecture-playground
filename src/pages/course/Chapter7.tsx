@@ -1,7 +1,6 @@
 import { CHAPTER_TITLES, chapterId } from "../../app/chapters";
 import { ChapterHead, ChapterSection, Reveal, T, WhyWhatHow } from "../../components/Chapter";
 import { ConcurrentSim } from "../../components/ConcurrentSim";
-import { PriorityDiagram } from "../../components/PriorityDiagram";
 import { B, P } from "../../components/Prose";
 import { ChapterCheck } from "../../components/Quiz";
 import { ModeSwap } from "../../components/course/ModeSwap";
@@ -40,27 +39,22 @@ export function Chapter7() {
                 <T c="new">Fabric</T> is what makes this work on React
                 Native. A committed shadow tree never changes, so React can
                 build the next one on the side and drop it if a tap comes
-                in. The first diagram shows how React orders the work when
-                you tap Photos, then Map. The two phones after it get those
-                same taps with one line of code different.
+                in. The two phones below get the same taps, Photos then Map,
+                with one line of code different.
               </P>
             }
             old={
               <P>
                 The <T c="old">old architecture</T> runs React in legacy
                 mode, where every update renders synchronously.
-                startTransition is there, but it does nothing. The diagram
-                shows the Map tap waiting for the whole Photos render, and
-                the phones after it both wait the same time. Then flip to
-                New and play them again.
+                startTransition is there, but it does nothing. Both phones
+                below make the Map tap wait for the whole Photos render.
+                Then flip to New and play them again.
               </P>
             }
           />
         }
       />
-      <Reveal>
-        <PriorityDiagram />
-      </Reveal>
       <Reveal>
         <ConcurrentSim />
       </Reveal>
