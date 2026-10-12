@@ -18,8 +18,8 @@ const SLICE_EDGE = `inset -1px 0 0 ${C.panel}`;
 const TICK_MS = 50;
 
 const LEGEND: [string, string][] = [
-  [C.js, "Must finish once started"],
-  [C.new, "startTransition: React can pause or drop it"]
+  [C.js, "Can’t be stopped"],
+  [C.new, "Can pause or drop (startTransition)"]
 ];
 
 /** What each phone's JS thread did, on one shared time axis, with the two taps marked across both. */
@@ -29,7 +29,7 @@ export function JsTimeline({ lanes, t, end }: Props) {
 
   return (
     <div className="flex flex-col gap-3 px-6 pt-5 pb-4">
-      <span className="text-[13px] leading-none font-semibold text-text">What each JS thread is doing</span>
+      <span className="text-[13px] leading-none font-semibold text-text">What each phone’s JS thread is doing</span>
       <div className="grid grid-cols-[120px_minmax(0,1fr)] gap-x-3">
         <span />
         <div className="relative h-5">
@@ -46,7 +46,7 @@ export function JsTimeline({ lanes, t, end }: Props) {
 
         <div className="flex flex-col gap-2">
           {lanes.map((ln) => (
-            <span key={ln.name} className="flex h-10 items-center font-mono text-xs leading-none text-text-dim">
+            <span key={ln.name} className="flex h-10 items-center text-xs leading-none text-text-dim">
               {ln.name}
             </span>
           ))}

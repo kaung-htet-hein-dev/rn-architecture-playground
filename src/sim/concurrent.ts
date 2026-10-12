@@ -87,7 +87,6 @@ export interface Phone {
   transition: Transition | null
   shown: { bar: TabId; content: TabId }
   blocks: Block[]
-  thrownMs: number
   nextId: number
 }
 
@@ -100,7 +99,6 @@ const initialPhone = (sliced: boolean): Phone => ({
   transition: null,
   shown: { bar: 'feed', content: 'feed' },
   blocks: [],
-  thrownMs: 0,
   nextId: 1,
 })
 
@@ -171,7 +169,6 @@ function startNext(s: Phone): Phone {
       s = {
         ...s,
         blocks: s.blocks.map((x) => (x.work === tr.work ? { ...x, dropped: true } : x)),
-        thrownMs: s.thrownMs + tr.done,
         transition: { ...tr, done: 0 },
       }
     }
@@ -214,10 +211,8 @@ export interface Race {
   left: Phone[]
   right: Phone[]
   end: number
-  /** times the Step button stops at */
+  /** times the Next step button stops at: mid-Photos, just after the Map tap, the end */
   stops: number[]
-  /** left phone: Map tap handled, Map tab lit */
-  leftMapStart: number
   leftMapShown: number
   rightMapShown: number
 }
@@ -229,8 +224,11 @@ export function buildRace(concurrent: boolean): Race {
   const end = Math.max(last(left).t, last(right).t) + TAIL_MS
   const lm = mapTap(last(left))
   const rm = mapTap(last(right))
-  const stops = [...new Set([...SCRIPT.map((d) => d.at), rm.shown!, lm.start!, lm.shown!, end])].sort((a, b) => a - b)
-  return { concurrent, left, right, end, stops, leftMapStart: lm.start!, leftMapShown: lm.shown!, rightMapShown: rm.shown! }
+  const [photosAt, mapAt] = SCRIPT.map((d) => d.at)
+  // stop once the right phone has lit Map (new), or while both still wait (old)
+  const mapStop = concurrent ? rm.shown! + 5 : mapAt + 10
+  const stops = [Math.round((photosAt + mapAt) / 2), mapStop, end]
+  return { concurrent, left, right, end, stops, leftMapShown: lm.shown!, rightMapShown: rm.shown! }
 }
 
 /** A phone at time t (it stays at its last frame once settled). */
@@ -247,7 +245,7 @@ export function mapWait(p: Phone): { ms: number; done: boolean; handling: boolea
   return tp.shown != null ? { ms: tp.shown - tp.at, done: true, handling } : { ms: p.t - tp.at, done: false, handling }
 }
 
-export type CaptionKind = 'intro' | 'photos' | 'map' | 'late' | 'done'
+export type CaptionKind = 'intro' | 'photos' | 'map' | 'done'
 
 export function caption(r: Race, t: number): { kind: CaptionKind; text: string; warn?: boolean } {
   const [photosAt, mapAt] = SCRIPT.map((d) => d.at)
@@ -256,41 +254,34 @@ export function caption(r: Race, t: number): { kind: CaptionKind; text: string; 
   if (t < photosAt)
     return {
       kind: 'intro',
-      text: 'Both phones run the same app. Only one line of code is different. Press Play: you’ll tap Photos, a slow screen, then change your mind and tap Map.',
+      text: 'Two phones, same app, one line of code different. You’ll tap Photos, a slow screen, then change your mind and tap Map. Press Play.',
     }
   if (t < mapAt)
     return r.concurrent
       ? {
           kind: 'photos',
-          text: 'You tap Photos. Left: React renders the tab bar and the whole Photos screen as one big job. Right: the tab bar lights up first, then Photos renders in small pieces.',
+          text: 'You tapped Photos. Look at the tab bars: the right phone lights up Photos at once. The left one stays on Feed until the whole screen is built.',
         }
       : {
           kind: 'photos',
-          text: 'You tap Photos. On the old architecture both phones render the tab bar and the whole Photos screen as one big job. startTransition on the right changes nothing.',
+          text: 'You tapped Photos. On the old architecture both phones build the whole screen in one go. startTransition does nothing here.',
         }
-  if (t < r.leftMapStart)
+  if (t < r.leftMapShown)
     return r.concurrent
       ? {
           kind: 'map',
-          text: 'You tap Map while Photos is still rendering. Right: React stops, throws the unfinished Photos work away, and lights up Map at once. Left: the tap has to wait, because React can’t stop a render halfway.',
+          text: 'You tapped Map. Right: React drops the half-built Photos screen and shows Map. Left: React can’t stop halfway, so Map waits.',
           warn: true,
         }
       : {
           kind: 'map',
-          text: 'You tap Map while Photos is still rendering. Neither phone can stop a render halfway, so the tap waits on both.',
+          text: 'You tapped Map. Neither phone can stop halfway through Photos, so Map waits on both.',
           warn: true,
         }
-  if (t < r.leftMapShown)
-    return {
-      kind: 'late',
-      text: r.concurrent
-        ? 'Left: Photos is finally done, and only now does React handle the Map tap. The right phone finished long ago.'
-        : 'Photos is finally done, and only now do the phones handle the Map tap.',
-    }
   return r.concurrent
     ? {
         kind: 'done',
-        text: `Same taps, same work. Map lit up after ${lWait} ms on the left and ${rWait} ms on the right. startTransition let React drop work nobody needed any more.`,
+        text: `Map lit up after ${lWait} ms on the left and ${rWait} ms on the right. One line of code made the difference.`,
       }
     : {
         kind: 'done',
@@ -301,5 +292,8 @@ export function caption(r: Race, t: number): { kind: CaptionKind; text: string; 
 
 export const CODE: Record<Strategy, string[]> = {
   setState: ['setSelected(next);', 'setContent(next);'],
-  transition: ['setSelected(next);', 'startTransition(() => {', '  setContent(next);', '});'],
+  transition: ['setSelected(next);', 'startTransition(() => setContent(next));'],
 }
+
+/** The line that differs between the two phones. */
+export const DIFF_LINE = 1

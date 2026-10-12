@@ -1,7 +1,7 @@
 import { useSettings } from "../app/SettingsProvider";
 import { useConcurrentSim } from "../hooks/useConcurrentSim";
-import { accentOf, C, type Mode } from "../sim/colors";
-import { CODE, mapWait, type Phone, type Strategy } from "../sim/concurrent";
+import { accentOf, alpha, C, type Mode } from "../sim/colors";
+import { CODE, DIFF_LINE, mapWait, type Phone, type Strategy } from "../sim/concurrent";
 import { tokenize, TOK_COLOR } from "../sim/syntax";
 import { JsTimeline } from "./concurrent/JsTimeline";
 import { TabPhone } from "./concurrent/TabPhone";
@@ -20,8 +20,8 @@ export function ConcurrentSim() {
 }
 
 const SIDES: { strategy: Strategy; title: string; lane: string }[] = [
-  { strategy: "setState", title: "Without startTransition", lane: "setState" },
-  { strategy: "transition", title: "With startTransition", lane: "startTransition" }
+  { strategy: "setState", title: "Without startTransition", lane: "Left phone" },
+  { strategy: "transition", title: "With startTransition", lane: "Right phone" }
 ];
 
 function ConcurrentSimInner({ mode }: { mode: Mode }) {
@@ -71,6 +71,7 @@ function ConcurrentSimInner({ mode }: { mode: Mode }) {
         onStep={sim.onStep}
         stepLabel="Next step"
         stepDisabled={sim.done}
+        meta={`Step ${sim.step} of ${sim.race.stops.length}`}
         speed={sim.speed}
         onSpeed={sim.setSpeed}
         onReset={sim.onReset}
@@ -86,9 +87,13 @@ function PhoneSide({ title, code, note, phone }: { title: string; code: string[]
     <div className="flex flex-col gap-4 px-6 py-5">
       <div className="flex flex-col gap-2.5">
         <span className="text-[15px] leading-none font-semibold text-text-bright">{title}</span>
-        <pre className="m-0 min-h-[106px] rounded-[6px] bg-code-bg px-3.5 py-2.5 font-mono text-[13px] leading-[1.6]">
+        <pre className="m-0 rounded-[6px] bg-code-bg py-2.5 font-mono text-[13px] leading-[1.6]">
           {code.map((line, i) => (
-            <div key={i}>
+            <div
+              key={i}
+              className="border-l-2 px-3"
+              style={i === DIFF_LINE ? { borderColor: C.new, background: alpha(C.new, 10) } : { borderColor: "transparent" }}
+            >
               {tokenize(line).map((tk, j) => (
                 <span key={j} style={{ color: TOK_COLOR[tk.k] }}>
                   {tk.t}
@@ -109,25 +114,19 @@ function PhoneSide({ title, code, note, phone }: { title: string; code: string[]
           t={phone.t}
           frame={C.lineStrong}
         />
-        <dl className="m-0 flex min-w-0 flex-col gap-5 pt-2 tabular-nums">
-          <div className="flex flex-col gap-1.5">
-            <StatLabel>{wait && !wait.done ? "Map tap waiting for" : "Map tab lit up after"}</StatLabel>
-            <dd className="m-0 flex flex-col gap-1">
-              <span
-                className="font-mono text-[28px] leading-none font-semibold"
-                style={{ color: !wait ? C.faint : wait.done ? (wait.ms > 50 ? C.load : C.okText) : C.load }}
-              >
-                {!wait ? "–" : `${wait.ms} ms`}
-              </span>
-              <span className="text-xs leading-[1.4] text-text-dim">
-                {!wait ? "after you tap Map" : wait.done ? "from the tap" : wait.handling ? "JS is rendering Map" : "JS is busy with Photos"}
-              </span>
-            </dd>
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <StatLabel>Work thrown away</StatLabel>
-            <dd className="m-0 font-mono text-lg leading-none font-semibold text-text-bright">{phone.thrownMs} ms</dd>
-          </div>
+        <dl className="m-0 flex min-w-0 flex-col gap-1.5 pt-2 tabular-nums">
+          <StatLabel>{wait && !wait.done ? "Map tap waiting for" : "Map tab lit up after"}</StatLabel>
+          <dd className="m-0 flex flex-col gap-1">
+            <span
+              className="font-mono text-[28px] leading-none font-semibold"
+              style={{ color: !wait ? C.faint : wait.done ? (wait.ms > 50 ? C.load : C.okText) : C.load }}
+            >
+              {!wait ? "–" : `${wait.ms} ms`}
+            </span>
+            <span className="text-xs leading-[1.4] text-text-dim">
+              {!wait ? "after you tap Map" : wait.done ? "from the tap" : wait.handling ? "JS is rendering Map" : "JS is busy with Photos"}
+            </span>
+          </dd>
         </dl>
       </div>
     </div>

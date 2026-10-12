@@ -23,6 +23,8 @@ export function useConcurrentSim(mode: Mode) {
     right: phoneAt(race.right, t),
     status,
     caption: caption(race, t),
+    /** steps passed so far, out of race.stops.length */
+    step: race.stops.filter((x) => t >= x).length,
     playLabel: running ? "Pause" : t === 0 ? "Play" : done ? "Replay" : "Resume",
     done,
     started: t > 0,
